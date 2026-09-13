@@ -1,0 +1,3001 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Joint Detectives - Joints & Movement</title>
+
+    <style>
+      /* =========================================================
+   GLOBAL
+========================================================= */
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+        background:
+          radial-gradient(circle at top left, #e0f2fe, transparent 35%),
+          radial-gradient(circle at bottom right, #fef3c7, transparent 35%),
+          #f8fafc;
+        color: #1e293b;
+        min-height: 100vh;
+      }
+
+      button,
+      input,
+      textarea,
+      select {
+        font-family: inherit;
+      }
+
+      button {
+        cursor: pointer;
+      }
+
+      .container {
+        width: min(1200px, 94%);
+        margin: auto;
+      }
+
+      /* =========================================================
+   HEADER
+========================================================= */
+
+      header {
+        background: linear-gradient(135deg, #312e81, #4f46e5, #0891b2);
+        color: white;
+        padding: 28px 0;
+        box-shadow: 0 8px 25px rgba(15, 23, 42, 0.18);
+      }
+
+      .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .logo-area h1 {
+        font-size: clamp(28px, 5vw, 44px);
+        margin-bottom: 6px;
+      }
+
+      .logo-area p {
+        opacity: 0.92;
+        font-size: 16px;
+      }
+
+      .mode-buttons {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .mode-btn {
+        border: 2px solid rgba(255, 255, 255, 0.5);
+        background: rgba(255, 255, 255, 0.12);
+        color: white;
+        padding: 10px 16px;
+        border-radius: 25px;
+        font-weight: bold;
+      }
+
+      .mode-btn.active,
+      .mode-btn:hover {
+        background: white;
+        color: #312e81;
+      }
+
+      /* =========================================================
+   STUDENT BAR
+========================================================= */
+
+      .student-bar {
+        background: white;
+        margin: 20px auto;
+        padding: 15px 20px;
+        border-radius: 18px;
+        box-shadow: 0 5px 20px rgba(15, 23, 42, 0.08);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .student-bar input {
+        flex: 1;
+        min-width: 200px;
+        border: 2px solid #cbd5e1;
+        border-radius: 12px;
+        padding: 11px;
+        outline: none;
+      }
+
+      .student-bar input:focus {
+        border-color: #4f46e5;
+      }
+
+      .save-name-btn {
+        background: #4f46e5;
+        color: white;
+        border: none;
+        padding: 11px 18px;
+        border-radius: 12px;
+        font-weight: bold;
+      }
+
+      /* =========================================================
+   PROGRESS
+========================================================= */
+
+      .progress-card {
+        background: white;
+        padding: 18px;
+        border-radius: 18px;
+        box-shadow: 0 5px 20px rgba(15, 23, 42, 0.07);
+        margin-bottom: 22px;
+      }
+
+      .progress-top {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        font-weight: bold;
+      }
+
+      .progress-track {
+        height: 14px;
+        background: #e2e8f0;
+        border-radius: 20px;
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #4f46e5, #06b6d4);
+        transition: width 0.5s;
+      }
+
+      /* =========================================================
+   COMMON SECTIONS
+========================================================= */
+
+      .section {
+        background: rgba(255, 255, 255, 0.96);
+        border-radius: 24px;
+        padding: 28px;
+        margin-bottom: 25px;
+        box-shadow: 0 8px 30px rgba(15, 23, 42, 0.08);
+      }
+
+      .section-title {
+        font-size: 28px;
+        color: #312e81;
+        margin-bottom: 8px;
+      }
+
+      .section-subtitle {
+        color: #64748b;
+        margin-bottom: 22px;
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      /* =========================================================
+   HERO
+========================================================= */
+
+      .hero {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 25px;
+        align-items: center;
+      }
+
+      .hero-text h2 {
+        font-size: clamp(30px, 5vw, 50px);
+        color: #312e81;
+        margin-bottom: 15px;
+      }
+
+      .hero-text p {
+        line-height: 1.7;
+        color: #475569;
+      }
+
+      .hero-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 18px;
+      }
+
+      .badge {
+        padding: 8px 12px;
+        background: #eef2ff;
+        color: #3730a3;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: bold;
+      }
+
+      /* =========================================================
+   BODY MODEL
+========================================================= */
+
+      .body-lab {
+        display: grid;
+        grid-template-columns: 0.8fr 1.2fr;
+        gap: 25px;
+      }
+
+      .body-stage {
+        min-height: 570px;
+        background: radial-gradient(circle at center, #eef2ff, #e0f2fe);
+        border-radius: 22px;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .body-stage::before {
+        content: "🧬";
+        position: absolute;
+        font-size: 180px;
+        opacity: 0.05;
+      }
+
+      .person {
+        width: 250px;
+        height: 500px;
+        position: relative;
+        z-index: 2;
+      }
+
+      /* head */
+      .head {
+        width: 72px;
+        height: 80px;
+        border-radius: 48% 48% 45% 45%;
+        background: #f4c7a1;
+        position: absolute;
+        top: 8px;
+        left: 89px;
+        border: 3px solid #b45309;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+      }
+
+      /* neck */
+      .neck {
+        width: 34px;
+        height: 42px;
+        background: #f4c7a1;
+        position: absolute;
+        top: 78px;
+        left: 108px;
+        border-left: 3px solid #b45309;
+        border-right: 3px solid #b45309;
+      }
+
+      /* body */
+      .torso {
+        width: 100px;
+        height: 175px;
+        background: #60a5fa;
+        border-radius: 45px 45px 25px 25px;
+        position: absolute;
+        top: 110px;
+        left: 75px;
+      }
+
+      /* arms */
+      .arm-left,
+      .arm-right {
+        width: 32px;
+        height: 170px;
+        background: #f4c7a1;
+        border: 3px solid #b45309;
+        border-radius: 20px;
+        position: absolute;
+        top: 125px;
+        transform-origin: top center;
+        transition: transform 0.7s ease;
+      }
+
+      .arm-left {
+        left: 48px;
+        transform: rotate(8deg);
+      }
+
+      .arm-right {
+        right: 48px;
+        transform: rotate(-8deg);
+      }
+
+      /* forearms */
+      .forearm-left,
+      .forearm-right {
+        width: 30px;
+        height: 130px;
+        background: #f4c7a1;
+        border: 3px solid #b45309;
+        border-radius: 20px;
+        position: absolute;
+        top: 275px;
+        transition: transform 0.7s ease;
+      }
+
+      .forearm-left {
+        left: 25px;
+      }
+
+      .forearm-right {
+        right: 25px;
+      }
+
+      /* legs */
+      .leg-left,
+      .leg-right {
+        width: 38px;
+        height: 190px;
+        background: #6366f1;
+        border-radius: 20px;
+        position: absolute;
+        top: 270px;
+      }
+
+      .leg-left {
+        left: 78px;
+      }
+
+      .leg-right {
+        right: 78px;
+      }
+
+      /* joint dots */
+
+      .joint-dot {
+        position: absolute;
+        width: 18px;
+        height: 18px;
+        background: #facc15;
+        border: 3px solid #854d0e;
+        border-radius: 50%;
+        z-index: 10;
+        cursor: pointer;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+
+      .joint-dot:hover {
+        transform: scale(1.4);
+        box-shadow: 0 0 18px #facc15;
+      }
+
+      .dot-head {
+        top: 40px;
+        left: 116px;
+      }
+
+      .dot-neck {
+        top: 85px;
+        left: 116px;
+      }
+
+      .dot-shoulder-left {
+        top: 125px;
+        left: 57px;
+      }
+
+      .dot-shoulder-right {
+        top: 125px;
+        right: 57px;
+      }
+
+      .dot-elbow-left {
+        top: 268px;
+        left: 32px;
+      }
+
+      .dot-elbow-right {
+        top: 268px;
+        right: 32px;
+      }
+
+      .dot-wrist-left {
+        top: 395px;
+        left: 13px;
+      }
+
+      .dot-wrist-right {
+        top: 395px;
+        right: 13px;
+      }
+
+      .dot-hip-left {
+        top: 270px;
+        left: 87px;
+      }
+
+      .dot-hip-right {
+        top: 270px;
+        right: 87px;
+      }
+
+      .dot-knee-left {
+        top: 425px;
+        left: 88px;
+      }
+
+      .dot-knee-right {
+        top: 425px;
+        right: 88px;
+      }
+
+      /* =========================================================
+   JOINT INFO
+========================================================= */
+
+      .joint-info {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .joint-card {
+        padding: 18px;
+        border-radius: 18px;
+        background: #f8fafc;
+        border: 2px solid #e2e8f0;
+        transition: 0.3s;
+      }
+
+      .joint-card.active {
+        border-color: #4f46e5;
+        background: #eef2ff;
+        transform: translateX(5px);
+      }
+
+      .joint-card h3 {
+        color: #312e81;
+        margin-bottom: 5px;
+      }
+
+      .joint-card p {
+        color: #64748b;
+        line-height: 1.5;
+      }
+
+      .joint-type {
+        display: inline-block;
+        margin-top: 8px;
+        padding: 5px 10px;
+        border-radius: 15px;
+        background: #cffafe;
+        color: #155e75;
+        font-size: 12px;
+        font-weight: bold;
+      }
+
+      /* =========================================================
+   ANIMATION BOX
+========================================================= */
+
+      .animation-box {
+        background: #0f172a;
+        color: white;
+        border-radius: 20px;
+        padding: 25px;
+        text-align: center;
+        margin-top: 20px;
+        overflow: hidden;
+      }
+
+      .animation-person {
+        font-size: 100px;
+        margin: 15px;
+        display: inline-block;
+        transition: transform 1s ease;
+      }
+
+      .animation-person.move {
+        animation: bodyMove 2s ease-in-out infinite;
+      }
+
+      @keyframes bodyMove {
+        0%,
+        100% {
+          transform: rotate(-5deg) translateY(0);
+        }
+        50% {
+          transform: rotate(5deg) translateY(-15px);
+        }
+      }
+
+      .animation-label {
+        color: #67e8f9;
+        font-size: 20px;
+        font-weight: bold;
+      }
+
+      /* =========================================================
+   BUTTONS
+========================================================= */
+
+      .primary-btn,
+      .secondary-btn,
+      .success-btn,
+      .danger-btn {
+        border: none;
+        padding: 12px 18px;
+        border-radius: 13px;
+        font-weight: bold;
+        transition: 0.2s;
+      }
+
+      .primary-btn {
+        background: #4f46e5;
+        color: white;
+      }
+
+      .secondary-btn {
+        background: #e2e8f0;
+        color: #1e293b;
+      }
+
+      .success-btn {
+        background: #16a34a;
+        color: white;
+      }
+
+      .danger-btn {
+        background: #dc2626;
+        color: white;
+      }
+
+      .primary-btn:hover,
+      .secondary-btn:hover,
+      .success-btn:hover,
+      .danger-btn:hover {
+        transform: translateY(-2px);
+        filter: brightness(1.05);
+      }
+
+      .button-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 15px;
+      }
+
+      /* =========================================================
+   PREDICTION
+========================================================= */
+
+      .prediction-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+      }
+
+      .prediction-card {
+        border: 3px solid #e2e8f0;
+        border-radius: 18px;
+        padding: 20px;
+        text-align: center;
+        background: white;
+        transition: 0.25s;
+      }
+
+      .prediction-card:hover {
+        transform: translateY(-5px);
+        border-color: #818cf8;
+      }
+
+      .prediction-card.selected {
+        border-color: #4f46e5;
+        background: #eef2ff;
+      }
+
+      .prediction-card .emoji {
+        font-size: 45px;
+        margin-bottom: 8px;
+      }
+
+      .prediction-card button {
+        margin-top: 12px;
+      }
+
+      /* =========================================================
+   INVESTIGATION
+========================================================= */
+
+      .investigation {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+      }
+
+      .step {
+        padding: 20px;
+        border-radius: 18px;
+        background: #f8fafc;
+        border-left: 5px solid #4f46e5;
+      }
+
+      .step-number {
+        display: inline-flex;
+        width: 34px;
+        height: 34px;
+        background: #4f46e5;
+        color: white;
+        border-radius: 50%;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      .step h3 {
+        margin-bottom: 8px;
+      }
+
+      .step p {
+        color: #64748b;
+        line-height: 1.5;
+      }
+
+      /* =========================================================
+   DETECTIVE GAME
+========================================================= */
+
+      .game-board {
+        background: linear-gradient(135deg, #ede9fe, #cffafe);
+        padding: 25px;
+        border-radius: 22px;
+      }
+
+      .question-box {
+        background: white;
+        border-radius: 18px;
+        padding: 20px;
+        margin-bottom: 18px;
+        text-align: center;
+      }
+
+      .movement-demo {
+        font-size: 80px;
+        margin: 10px;
+        animation: demoMovement 1.5s infinite alternate ease-in-out;
+      }
+
+      @keyframes demoMovement {
+        from {
+          transform: rotate(-8deg);
+        }
+        to {
+          transform: rotate(8deg);
+        }
+      }
+
+      .answer-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 10px;
+      }
+
+      .answer-btn {
+        border: 2px solid #cbd5e1;
+        background: white;
+        padding: 14px 8px;
+        border-radius: 13px;
+        font-weight: bold;
+      }
+
+      .answer-btn:hover {
+        border-color: #4f46e5;
+        background: #eef2ff;
+      }
+
+      .answer-btn.correct {
+        background: #dcfce7;
+        border-color: #16a34a;
+      }
+
+      .answer-btn.wrong {
+        background: #fee2e2;
+        border-color: #dc2626;
+      }
+
+      /* =========================================================
+   SORTING GAME
+========================================================= */
+
+      .sorting-tray {
+        background: #f8fafc;
+        padding: 20px;
+        border-radius: 18px;
+        margin-bottom: 20px;
+      }
+
+      .sorting-items {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 15px;
+      }
+
+      .sort-item {
+        background: white;
+        border: 2px solid #cbd5e1;
+        border-radius: 13px;
+        padding: 12px 16px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+
+      .sort-item.selected {
+        background: #eef2ff;
+        border-color: #4f46e5;
+      }
+
+      .sort-zones {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+      }
+
+      .sort-zone {
+        min-height: 180px;
+        padding: 20px;
+        border-radius: 18px;
+        border: 3px dashed #94a3b8;
+        background: white;
+      }
+
+      .sort-zone h3 {
+        margin-bottom: 12px;
+      }
+
+      .sort-zone.good {
+        border-color: #22c55e;
+        background: #f0fdf4;
+      }
+
+      .sort-zone.poor {
+        border-color: #f59e0b;
+        background: #fffbeb;
+      }
+
+      .sorted-item {
+        display: inline-block;
+        background: white;
+        border-radius: 10px;
+        padding: 8px 12px;
+        margin: 5px;
+        border: 1px solid #cbd5e1;
+      }
+
+      /* =========================================================
+   QUIZ
+========================================================= */
+
+      .quiz-question {
+        padding: 20px;
+        border-radius: 18px;
+        background: #f8fafc;
+        margin-bottom: 15px;
+      }
+
+      .quiz-question h3 {
+        margin-bottom: 12px;
+      }
+
+      .quiz-options {
+        display: grid;
+        gap: 8px;
+      }
+
+      .quiz-option {
+        padding: 12px;
+        border: 2px solid #cbd5e1;
+        border-radius: 12px;
+        background: white;
+        text-align: left;
+      }
+
+      .quiz-option:hover {
+        border-color: #4f46e5;
+      }
+
+      .quiz-option.selected {
+        background: #eef2ff;
+        border-color: #4f46e5;
+      }
+
+      /* =========================================================
+   DOUBTS
+========================================================= */
+
+      .doubt-form {
+        display: grid;
+        gap: 12px;
+      }
+
+      .doubt-form input,
+      .doubt-form textarea,
+      .doubt-form select {
+        width: 100%;
+        border: 2px solid #cbd5e1;
+        border-radius: 12px;
+        padding: 12px;
+        outline: none;
+      }
+
+      .doubt-form textarea {
+        min-height: 100px;
+        resize: vertical;
+      }
+
+      .doubt-card {
+        padding: 18px;
+        background: #f8fafc;
+        border-radius: 18px;
+        margin-bottom: 12px;
+        border-left: 5px solid #4f46e5;
+      }
+
+      .doubt-card.answered {
+        border-left-color: #16a34a;
+        background: #f0fdf4;
+      }
+
+      .doubt-meta {
+        color: #64748b;
+        font-size: 13px;
+        margin: 5px 0 10px;
+      }
+
+      .answer-area {
+        margin-top: 12px;
+      }
+
+      .answer-area textarea {
+        width: 100%;
+        min-height: 80px;
+        border: 2px solid #cbd5e1;
+        border-radius: 10px;
+        padding: 10px;
+      }
+
+      /* =========================================================
+   TEACHER DASHBOARD
+========================================================= */
+
+      .teacher-dashboard {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+      }
+
+      .stat-card {
+        background: #f8fafc;
+        border-radius: 18px;
+        padding: 20px;
+        text-align: center;
+      }
+
+      .stat-card .number {
+        font-size: 34px;
+        color: #4f46e5;
+        font-weight: bold;
+      }
+
+      .teacher-prompt {
+        background: #fff7ed;
+        border-left: 5px solid #f97316;
+        padding: 18px;
+        border-radius: 15px;
+        margin-bottom: 12px;
+      }
+
+      .teacher-prompt strong {
+        color: #c2410c;
+      }
+
+      /* =========================================================
+   RESULT
+========================================================= */
+
+      .result-card {
+        text-align: center;
+        padding: 30px;
+        background: linear-gradient(135deg, #eef2ff, #ecfeff);
+        border-radius: 22px;
+      }
+
+      .trophy {
+        font-size: 75px;
+      }
+
+      .final-score {
+        font-size: 48px;
+        color: #4f46e5;
+        font-weight: bold;
+      }
+
+      /* =========================================================
+   TOAST
+========================================================= */
+
+      #toast {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        max-width: 350px;
+        background: #0f172a;
+        color: white;
+        padding: 15px 20px;
+        border-radius: 14px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        transform: translateY(130px);
+        transition: 0.3s;
+        z-index: 1000;
+      }
+
+      #toast.show {
+        transform: translateY(0);
+      }
+
+      /* =========================================================
+   RESPONSIVE
+========================================================= */
+
+      @media (max-width: 900px) {
+        .hero,
+        .body-lab {
+          grid-template-columns: 1fr;
+        }
+
+        .prediction-grid,
+        .investigation {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .answer-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+
+        .teacher-dashboard {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .header-content {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .section {
+          padding: 18px;
+        }
+
+        .prediction-grid,
+        .investigation,
+        .sort-zones,
+        .teacher-dashboard {
+          grid-template-columns: 1fr;
+        }
+
+        .answer-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .body-stage {
+          min-height: 520px;
+          transform: scale(0.9);
+        }
+
+        .final-score {
+          font-size: 38px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- =======================================================
+     HEADER
+======================================================= -->
+
+    <header>
+      <div class="container header-content">
+        <div class="logo-area">
+          <h1>🦴 Joint Detectives</h1>
+          <p>Explore how our joints help us move!</p>
+        </div>
+
+        <div class="mode-buttons">
+          <button
+            class="mode-btn active"
+            id="studentModeBtn"
+            onclick="switchMode('student')"
+          >
+            Student Mode
+          </button>
+
+          <button
+            class="mode-btn"
+            id="teacherModeBtn"
+            onclick="switchMode('teacher')"
+          >
+            Teacher Mode
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      <!-- =======================================================
+     STUDENT NAME
+======================================================= -->
+
+      <div class="student-bar">
+        <strong> Explorer Name:</strong>
+
+        <input
+          type="text"
+          id="studentName"
+          placeholder="Enter your name"
+          maxlength="40"
+        />
+
+        <button class="save-name-btn" onclick="saveStudentName()">
+          Save Name
+        </button>
+
+        <span id="nameMessage"></span>
+      </div>
+
+      <!-- =======================================================
+     PROGRESS
+======================================================= -->
+
+      <div class="progress-card">
+        <div class="progress-top">
+          <span> Mission Progress</span>
+          <span id="progressText">0%</span>
+        </div>
+
+        <div class="progress-track">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+
+      <!-- =======================================================
+     STUDENT CONTENT
+======================================================= -->
+
+      <div id="studentView">
+        <!-- =======================================================
+     HERO
+======================================================= -->
+
+        <section class="section hero">
+          <div class="hero-text">
+            <h2>Become a Joint Detective! 🔎</h2>
+
+            <p>
+              Have you ever wondered how you can bend your elbow, turn your
+              head, move your shoulder or walk? The secret is inside your body!
+            </p>
+
+            <p style="margin-top: 10px">
+              Your <strong>joints</strong> connect bones and allow different
+              kinds of movement.
+            </p>
+
+            <div class="hero-badges">
+              <span class="badge"> Bones</span>
+              <span class="badge"> Movement</span>
+              <span class="badge"> Think</span>
+              <span class="badge"> Discover</span>
+              <span class="badge"> Play</span>
+            </div>
+          </div>
+
+          <div class="animation-box">
+            <div class="animation-label">Watch the body move!</div>
+
+            <div class="animation-person move" id="animationPerson">🧍</div>
+
+            <p>Different joints allow different movements.</p>
+
+            <div class="button-row" style="justify-content: center">
+              <button class="primary-btn" onclick="replayAnimation()">
+                ▶ Replay Animation
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- =======================================================
+     LEARN BY CLICKING BODY
+======================================================= -->
+
+        <section class="section">
+          <h2 class="section-title">Explore the Human Body</h2>
+
+          <p class="section-subtitle">
+            Click a yellow joint point to investigate it. You can also click the
+            information cards.
+          </p>
+
+          <div class="body-lab">
+            <div class="body-stage">
+              <div class="person">
+                <div class="head">HEAD</div>
+                <div class="neck"></div>
+                <div class="torso"></div>
+
+                <div class="arm-left"></div>
+                <div class="arm-right"></div>
+
+                <div class="forearm-left"></div>
+                <div class="forearm-right"></div>
+
+                <div class="leg-left"></div>
+                <div class="leg-right"></div>
+
+                <!-- Interactive joint dots -->
+
+                <div
+                  class="joint-dot dot-head"
+                  onclick="showJoint('fixed')"
+                  title="Head"
+                ></div>
+
+                <div
+                  class="joint-dot dot-neck"
+                  onclick="showJoint('pivot')"
+                  title="Neck"
+                ></div>
+
+                <div
+                  class="joint-dot dot-shoulder-left"
+                  onclick="showJoint('ball')"
+                  title="Shoulder"
+                ></div>
+
+                <div
+                  class="joint-dot dot-shoulder-right"
+                  onclick="showJoint('ball')"
+                  title="Shoulder"
+                ></div>
+
+                <div
+                  class="joint-dot dot-elbow-left"
+                  onclick="showJoint('hinge')"
+                  title="Elbow"
+                ></div>
+
+                <div
+                  class="joint-dot dot-elbow-right"
+                  onclick="showJoint('hinge')"
+                  title="Elbow"
+                ></div>
+
+                <div
+                  class="joint-dot dot-wrist-left"
+                  onclick="showJoint('gliding')"
+                  title="Wrist"
+                ></div>
+
+                <div
+                  class="joint-dot dot-wrist-right"
+                  onclick="showJoint('gliding')"
+                  title="Wrist"
+                ></div>
+
+                <div
+                  class="joint-dot dot-hip-left"
+                  onclick="showJoint('ball')"
+                  title="Hip"
+                ></div>
+
+                <div
+                  class="joint-dot dot-hip-right"
+                  onclick="showJoint('ball')"
+                  title="Hip"
+                ></div>
+
+                <div
+                  class="joint-dot dot-knee-left"
+                  onclick="showJoint('hinge')"
+                  title="Knee"
+                ></div>
+
+                <div
+                  class="joint-dot dot-knee-right"
+                  onclick="showJoint('hinge')"
+                  title="Knee"
+                ></div>
+              </div>
+            </div>
+
+            <div class="joint-info" id="jointInfo">
+              <div class="joint-card active">
+                <h3>👀 Choose a joint</h3>
+                <p>
+                  Click one of the yellow points on the body to discover how
+                  that joint works.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- =======================================================
+     JOINT TYPES
+======================================================= -->
+
+        <section class="section">
+          <h2 class="section-title">Meet the Five Joint Types</h2>
+
+          <p class="section-subtitle">
+            Learn what kind of movement each joint allows.
+          </p>
+
+          <div class="investigation">
+            <div class="step">
+              <span class="step-number">1</span>
+              <h3>Ball-and-Socket</h3>
+              <p>
+                Allows movement in many directions. Example: shoulder and hip.
+              </p>
+            </div>
+
+            <div class="step">
+              <span class="step-number">2</span>
+              <h3>Hinge</h3>
+              <p>
+                Mainly allows bending and straightening. Example: elbow and
+                knee.
+              </p>
+            </div>
+
+            <div class="step">
+              <span class="step-number">3</span>
+              <h3>Pivot</h3>
+              <p>Allows one part to rotate around another. Example: neck.</p>
+            </div>
+
+            <div class="step">
+              <span class="step-number">4</span>
+              <h3>↔ Gliding</h3>
+              <p>
+                Allows bones to slide or glide over each other. Example: some
+                wrist and ankle joints.
+              </p>
+            </div>
+
+            <div class="step">
+              <span class="step-number">5</span>
+              <h3>Fixed</h3>
+              <p>
+                Does not allow noticeable movement. Example: joints between
+                skull bones.
+              </p>
+            </div>
+
+            <div class="step">
+              <span class="step-number">★</span>
+              <h3>Detective Tip</h3>
+              <p>
+                Look at the movement first. Then identify which joint type best
+                explains it.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- =======================================================
+     PREDICTION
+======================================================= -->
+
+        <section class="section">
+          <h2 class="section-title">Mission 1: Make a Prediction</h2>
+
+          <p class="section-subtitle">
+            Before investigating, predict which joint type is involved.
+          </p>
+
+          <div class="prediction-grid">
+            <div class="prediction-card">
+              <div class="emoji">💪</div>
+              <h3>Elbow</h3>
+              <p>Bend your arm.</p>
+              <button
+                class="secondary-btn"
+                onclick="makePrediction('Elbow', 'Hinge')"
+              >
+                Hinge?
+              </button>
+            </div>
+
+            <div class="prediction-card">
+              <div class="emoji">🙆</div>
+              <h3>Shoulder</h3>
+              <p>Move your arm around.</p>
+              <button
+                class="secondary-btn"
+                onclick="makePrediction('Shoulder', 'Ball-and-Socket')"
+              >
+                Ball-and-Socket?
+              </button>
+            </div>
+
+            <div class="prediction-card">
+              <div class="emoji">🙂</div>
+              <h3>Neck</h3>
+              <p>Turn your head.</p>
+              <button
+                class="secondary-btn"
+                onclick="makePrediction('Neck', 'Pivot')"
+              >
+                Pivot?
+              </button>
+            </div>
+          </div>
+
+          <div
+            id="predictionFeedback"
+            style="margin-top: 15px; font-weight: bold"
+          ></div>
+        </section>
+
+        <!-- =======================================================
+     GUIDED INVESTIGATION
+======================================================= -->
+
+        <section class="section">
+          <h2 class="section-title">Mission 2: Guided Investigation</h2>
+
+          <p class="section-subtitle">
+            Try the movement yourself and compare what happens.
+          </p>
+
+          <div class="investigation">
+            <div class="step">
+              <span class="step-number">1</span>
+              <h3>Observe</h3>
+              <p>Watch how the selected body part moves.</p>
+            </div>
+
+            <div class="step">
+              <span class="step-number">2</span>
+              <h3>Try</h3>
+              <p>
+                Carefully move your own body part. Notice the direction of
+                movement.
+              </p>
+            </div>
+
+            <div class="step">
+              <span class="step-number">3</span>
+              <h3>Explain</h3>
+              <p>Ask yourself: what type of joint could allow this movement?</p>
+            </div>
+          </div>
+
+          <div class="button-row">
+            <button class="primary-btn" onclick="showInvestigationTip()">
+              Give Me a Hint
+            </button>
+          </div>
+
+          <div id="investigationTip" style="margin-top: 15px"></div>
+        </section>
+
+        <!-- =======================================================
+     JOINT DETECTIVE GAME
+======================================================= -->
+
+        <section class="section">
+          <h2 class="section-title">Mission 3: Joint Detective Challenge</h2>
+
+          <p class="section-subtitle">
+            Watch the movement and identify the joint type.
+          </p>
+
+          <div class="game-board">
+            <div class="question-box">
+              <div class="movement-demo" id="movementDemo">💪</div>
+
+              <h2 id="gameQuestion">Which joint helps the elbow bend?</h2>
+
+              <p id="gameScoreText">Detective Score: 0</p>
+            </div>
+
+            <div class="answer-grid">
+              <button
+                class="answer-btn"
+                onclick="answerGame('Ball-and-Socket')"
+              >
+                Ball-and-Socket
+              </button>
+
+              <button class="answer-btn" onclick="answerGame('Hinge')">
+                Hinge
+              </button>
+
+              <button class="answer-btn" onclick="answerGame('Pivot')">
+                Pivot
+              </button>
+
+              <button class="answer-btn" onclick="answerGame('Gliding')">
+                ↔ Gliding
+              </button>
+
+              <button class="answer-btn" onclick="answerGame('Fixed')">
+                Fixed
+              </button>
+            </div>
+
+            <div
+              id="gameFeedback"
+              style="text-align: center; margin-top: 18px; font-weight: bold"
+            ></div>
+          </div>
+        </section>
+
+        <!-- =======================================================
+     SORTING GAME
+======================================================= -->
+
+        <section class="section">
+          <h2 class="section-title">Mission 4: Sort the Joints</h2>
+
+          <p class="section-subtitle">
+            Select a body part, then choose the correct joint type.
+          </p>
+
+          <div class="sorting-tray">
+            <strong>Materials / Body Parts:</strong>
+
+            <div class="sorting-items" id="sortingItems">
+              <button
+                class="sort-item"
+                onclick="selectSortItem(this, 'shoulder')"
+              >
+                🦴 Shoulder
+              </button>
+
+              <button class="sort-item" onclick="selectSortItem(this, 'elbow')">
+                💪 Elbow
+              </button>
+
+              <button class="sort-item" onclick="selectSortItem(this, 'neck')">
+                🙂 Neck
+              </button>
+
+              <button class="sort-item" onclick="selectSortItem(this, 'wrist')">
+                ✋ Wrist
+              </button>
+
+              <button class="sort-item" onclick="selectSortItem(this, 'skull')">
+                🧠 Skull
+              </button>
+
+              <button class="sort-item" onclick="selectSortItem(this, 'hip')">
+                🦵 Hip
+              </button>
+            </div>
+
+            <p
+              id="selectedSortText"
+              style="margin-top: 15px; color: #4f46e5; font-weight: bold"
+            >
+              Select a body part first.
+            </p>
+          </div>
+
+          <div class="sort-zones">
+            <div class="sort-zone good">
+              <h3>Ball-and-Socket</h3>
+
+              <button
+                class="primary-btn"
+                onclick="placeSortItem('Ball-and-Socket')"
+              >
+                Place Here
+              </button>
+
+              <div id="ballZone"></div>
+            </div>
+
+            <div class="sort-zone poor">
+              <h3>Hinge</h3>
+
+              <button class="primary-btn" onclick="placeSortItem('Hinge')">
+                Place Here
+              </button>
+
+              <div id="hingeZone"></div>
+            </div>
+
+            <div class="sort-zone">
+              <h3>Pivot</h3>
+
+              <button class="primary-btn" onclick="placeSortItem('Pivot')">
+                Place Here
+              </button>
+
+              <div id="pivotZone"></div>
+            </div>
+
+            <div class="sort-zone">
+              <h3>Gliding</h3>
+
+              <button class="primary-btn" onclick="placeSortItem('Gliding')">
+                Place Here
+              </button>
+
+              <div id="glidingZone"></div>
+            </div>
+
+            <div class="sort-zone">
+              <h3>Fixed</h3>
+
+              <button class="primary-btn" onclick="placeSortItem('Fixed')">
+                Place Here
+              </button>
+
+              <div id="fixedZone"></div>
+            </div>
+          </div>
+
+          <div
+            id="sortingFeedback"
+            style="margin-top: 15px; font-weight: bold"
+          ></div>
+        </section>
+
+        <!-- =======================================================
+     REAL LIFE CHALLENGE
+======================================================= -->
+
+        <section class="section">
+          <h2 class="section-title">Mission 5: Movement Around You</h2>
+
+          <p class="section-subtitle">
+            Think about the movements you make every day.
+          </p>
+
+          <div class="investigation">
+            <div class="step">
+              <span class="step-number">A</span>
+              <h3>🏃 Walking</h3>
+              <p>
+                Your legs bend and straighten while walking. Think about the
+                joints involved.
+              </p>
+            </div>
+
+            <div class="step">
+              <span class="step-number">B</span>
+              <h3>✍️ Writing</h3>
+              <p>Your hand and wrist make small movements while writing.</p>
+            </div>
+
+            <div class="step">
+              <span class="step-number">C</span>
+              <h3>🙋 Raising Your Arm</h3>
+              <p>
+                Move your arm around and observe how your shoulder allows
+                movement.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- =======================================================
+     QUIZ
+======================================================= -->
+
+        <section class="section">
+          <h2 class="section-title">Mission 6: Final Quiz</h2>
+
+          <p class="section-subtitle">Test what you discovered.</p>
+
+          <div id="quizContainer"></div>
+
+          <button class="success-btn" onclick="finishQuiz()">
+            Finish Quiz
+          </button>
+
+          <div
+            id="quizResult"
+            style="margin-top: 18px; font-weight: bold"
+          ></div>
+        </section>
+
+        <!-- =======================================================
+     DOUBTS
+======================================================= -->
+
+        <section class="section">
+          <h2 class="section-title">💬 Ask Your Teacher</h2>
+
+          <p class="section-subtitle">
+            Did something confuse you? Drop your doubt here. Your teacher can
+            answer it in Teacher Mode.
+          </p>
+
+          <div class="doubt-form">
+            <select id="doubtTopic">
+              <option value="General">General</option>
+              <option value="Ball-and-Socket">Ball-and-Socket</option>
+              <option value="Hinge">Hinge</option>
+              <option value="Pivot">Pivot</option>
+              <option value="Gliding">Gliding</option>
+              <option value="Fixed">Fixed</option>
+              <option value="Movement">Movement</option>
+            </select>
+
+            <textarea id="doubtText" placeholder="Write your doubt here...">
+            </textarea>
+
+            <button class="primary-btn" onclick="submitDoubt()">
+              Send Doubt to Teacher
+            </button>
+          </div>
+
+          <div id="studentDoubts" style="margin-top: 20px"></div>
+        </section>
+
+        <!-- =======================================================
+     FINAL RESULT
+======================================================= -->
+
+        <section class="section">
+          <div class="result-card">
+            <div class="trophy">🏆</div>
+
+            <h2>Joint Detective Mission</h2>
+
+            <p style="margin: 10px">Your total learning score is:</p>
+
+            <div class="final-score" id="finalScore">0</div>
+
+            <p id="completionMessage">
+              Complete the missions to become a Joint Detective!
+            </p>
+
+            <div class="button-row" style="justify-content: center">
+              <button class="secondary-btn" onclick="resetActivity()">
+                Reset Activity
+              </button>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- =======================================================
+     TEACHER VIEW
+======================================================= -->
+
+      <div id="teacherView" class="hidden">
+        <section class="section">
+          <h2 class="section-title">Teacher Dashboard</h2>
+
+          <p class="section-subtitle">
+            Use this area to guide students, monitor their progress, and clear
+            their doubts.
+          </p>
+
+          <div class="teacher-dashboard">
+            <div class="stat-card">
+              <div class="number" id="teacherScore">0</div>
+              <p>Student Score</p>
+            </div>
+
+            <div class="stat-card">
+              <div class="number" id="teacherProgress">0%</div>
+              <p>Progress</p>
+            </div>
+
+            <div class="stat-card">
+              <div class="number" id="teacherDoubtCount">0</div>
+              <p>Doubts</p>
+            </div>
+
+            <div class="stat-card">
+              <div class="number" id="teacherAnsweredCount">0</div>
+              <p>Answered</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- =======================================================
+     TEACHING GUIDE
+======================================================= -->
+
+        <section class="section">
+          <h2 class="section-title">Classroom Guide</h2>
+
+          <div class="teacher-prompt">
+            <strong>Discussion Prompt:</strong>
+            Ask students: “What happens when you bend your elbow? Can your elbow
+            rotate in every direction?”
+          </div>
+
+          <div class="teacher-prompt">
+            <strong>Prediction Prompt:</strong>
+            Ask students to predict the joint type before revealing the answer.
+          </div>
+
+          <div class="teacher-prompt">
+            <strong>Demonstration:</strong>
+            Ask students to slowly move their head, arm and wrist and describe
+            the movement.
+          </div>
+
+          <div class="teacher-prompt">
+            <strong>Group Activity:</strong>
+            Divide students into groups. Give each group a body movement and ask
+            them to identify the joint type.
+          </div>
+
+          <div class="teacher-prompt">
+            <strong>Think & Explain:</strong>
+            Ask: “Why would a fixed joint be useful in the skull?”
+          </div>
+        </section>
+
+        <!-- =======================================================
+     TEACHER JOINT REFERENCE
+======================================================= -->
+
+        <section class="section">
+          <h2 class="section-title">Quick Teaching Reference</h2>
+
+          <div class="investigation">
+            <div class="step">
+              <h3>Ball-and-Socket</h3>
+              <p>Shoulder and hip. Allows movement in several directions.</p>
+            </div>
+
+            <div class="step">
+              <h3>Hinge</h3>
+              <p>Elbow and knee. Mainly allows bending and straightening.</p>
+            </div>
+
+            <div class="step">
+              <h3>Pivot</h3>
+              <p>Neck. Allows rotational movement.</p>
+            </div>
+
+            <div class="step">
+              <h3>Gliding</h3>
+              <p>
+                Some wrist and ankle joints allow bones to glide over one
+                another.
+              </p>
+            </div>
+
+            <div class="step">
+              <h3>Fixed</h3>
+              <p>
+                Skull bones have fixed joints that provide stability and
+                protection.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- =======================================================
+     DOUBTS TEACHER
+======================================================= -->
+
+        <section class="section">
+          <h2 class="section-title">💬 Student Doubts</h2>
+
+          <p class="section-subtitle">
+            Review submitted questions and answer them.
+          </p>
+
+          <div id="teacherDoubts"></div>
+        </section>
+
+        <!-- =======================================================
+     TEACHER CONTROLS
+======================================================= -->
+
+        <section class="section">
+          <h2 class="section-title">Teacher Controls</h2>
+
+          <div class="button-row">
+            <button class="primary-btn" onclick="teacherHint()">
+              Teaching Hint
+            </button>
+
+            <button class="secondary-btn" onclick="refreshTeacherDashboard()">
+              Refresh Dashboard
+            </button>
+
+            <button class="danger-btn" onclick="resetActivity()">
+              Reset Student Activity
+            </button>
+          </div>
+
+          <div id="teacherHintBox" style="margin-top: 15px"></div>
+        </section>
+      </div>
+    </main>
+
+    <!-- TOAST -->
+
+    <div id="toast"></div>
+
+    <script>
+      /* =========================================================
+   APPLICATION STATE
+========================================================= */
+
+      const defaultState = {
+        studentName: "",
+        score: 0,
+
+        predictionDone: false,
+        experimentDone: false,
+        sortingScore: 0,
+
+        selectedJoint: null,
+        selectedSortItem: null,
+
+        gameIndex: 0,
+        gameScore: 0,
+
+        quizAnswers: {},
+        quizFinished: false,
+        quizScore: 0,
+
+        doubts: [],
+
+        sorted: {},
+
+        scoreFlags: {
+          prediction: false,
+          game: false,
+          sorting: false,
+          quiz: false,
+        },
+      };
+
+      let state = loadState();
+
+      /* =========================================================
+   SAVE / LOAD
+========================================================= */
+
+      function loadState() {
+        const saved = localStorage.getItem("jointDetectiveState");
+
+        if (saved) {
+          try {
+            const parsed = JSON.parse(saved);
+
+            return {
+              ...defaultState,
+              ...parsed,
+              scoreFlags: {
+                ...defaultState.scoreFlags,
+                ...(parsed.scoreFlags || {}),
+              },
+            };
+          } catch (error) {
+            return { ...defaultState };
+          }
+        }
+
+        return { ...defaultState };
+      }
+
+      function saveState() {
+        localStorage.setItem("jointDetectiveState", JSON.stringify(state));
+
+        updateProgress();
+        updateFinalScore();
+      }
+
+      /* =========================================================
+   TOAST
+========================================================= */
+
+      function showToast(message) {
+        const toast = document.getElementById("toast");
+
+        toast.textContent = message;
+
+        toast.classList.add("show");
+
+        setTimeout(() => {
+          toast.classList.remove("show");
+        }, 2800);
+      }
+
+      /* =========================================================
+   STUDENT NAME
+========================================================= */
+
+      function saveStudentName() {
+        const input = document.getElementById("studentName");
+
+        const name = input.value.trim();
+
+        if (!name) {
+          showToast("Please enter your name first.");
+
+          return;
+        }
+
+        state.studentName = name;
+
+        saveState();
+
+        document.getElementById("nameMessage").textContent = " ✅ Saved!";
+
+        showToast("Welcome, " + name + "!");
+
+        setTimeout(() => {
+          document.getElementById("nameMessage").textContent = "";
+        }, 2500);
+      }
+
+      /* =========================================================
+   MODE SWITCH
+========================================================= */
+
+      function switchMode(mode) {
+        const studentView = document.getElementById("studentView");
+        const teacherView = document.getElementById("teacherView");
+
+        const studentBtn = document.getElementById("studentModeBtn");
+        const teacherBtn = document.getElementById("teacherModeBtn");
+
+        if (mode === "student") {
+          studentView.classList.remove("hidden");
+          teacherView.classList.add("hidden");
+
+          studentBtn.classList.add("active");
+          teacherBtn.classList.remove("active");
+        } else {
+          studentView.classList.add("hidden");
+          teacherView.classList.remove("hidden");
+
+          studentBtn.classList.remove("active");
+          teacherBtn.classList.add("active");
+
+          refreshTeacherDashboard();
+        }
+      }
+
+      /* =========================================================
+   JOINT DATABASE
+========================================================= */
+
+      const jointData = {
+        fixed: {
+          name: "Fixed Joint",
+          emoji: "🔒",
+          bodyPart: "Skull",
+          movement: "Very little or no movement",
+          explanation:
+            "The bones of the skull are joined firmly. This helps protect the brain.",
+          example: "Joints between many skull bones.",
+        },
+
+        pivot: {
+          name: "Pivot Joint",
+          emoji: "🔄",
+          bodyPart: "Neck",
+          movement: "Rotation",
+          explanation:
+            "A pivot joint allows one part to rotate around another.",
+          example: "The neck helps us turn our head from side to side.",
+        },
+
+        ball: {
+          name: "Ball-and-Socket Joint",
+          emoji: "⚽",
+          bodyPart: "Shoulder / Hip",
+          movement: "Movement in many directions",
+          explanation:
+            "The rounded end of one bone fits into a cup-like part of another bone.",
+          example: "Shoulder and hip joints.",
+        },
+
+        hinge: {
+          name: "Hinge Joint",
+          emoji: "🚪",
+          bodyPart: "Elbow / Knee",
+          movement: "Bending and straightening",
+          explanation:
+            "A hinge joint mainly allows movement in one direction, similar to a door hinge.",
+          example: "Elbow and knee.",
+        },
+
+        gliding: {
+          name: "Gliding Joint",
+          emoji: "↔️",
+          bodyPart: "Wrist / Ankle",
+          movement: "Sliding or gliding",
+          explanation:
+            "The surfaces of bones can slide or glide over one another.",
+          example: "Some joints of the wrist and ankle.",
+        },
+      };
+
+      /* =========================================================
+   SHOW JOINT
+========================================================= */
+
+      function showJoint(type) {
+        const data = jointData[type];
+
+        state.selectedJoint = type;
+
+        const info = document.getElementById("jointInfo");
+
+        info.innerHTML = `
+        <div class="joint-card active">
+
+            <h3>
+                ${data.emoji}
+                ${data.name}
+            </h3>
+
+            <p style="margin-top:8px;">
+                <strong>Body Part:</strong>
+                ${data.bodyPart}
+            </p>
+
+            <p style="margin-top:8px;">
+                <strong>Movement:</strong>
+                ${data.movement}
+            </p>
+
+            <span class="joint-type">
+                ${data.name}
+            </span>
+
+            <p style="margin-top:12px;">
+                ${data.explanation}
+            </p>
+
+            <p style="margin-top:10px;">
+                <strong>Example:</strong>
+                ${data.example}
+            </p>
+
+            <div class="animation-box" style="margin-top:15px;padding:15px;">
+
+                <div style="font-size:60px;" id="jointAnimation">
+                    ${data.emoji}
+                </div>
+
+                <div class="animation-label">
+                    ${data.movement}
+                </div>
+
+            </div>
+
+        </div>
+    `;
+
+        animateJoint(type);
+
+        saveState();
+      }
+
+      /* =========================================================
+   JOINT ANIMATION
+========================================================= */
+
+      function animateJoint(type) {
+        const element = document.getElementById("jointAnimation");
+
+        if (!element) return;
+
+        element.style.display = "inline-block";
+
+        if (type === "hinge") {
+          element.animate(
+            [
+              { transform: "rotate(-35deg)" },
+              { transform: "rotate(35deg)" },
+              { transform: "rotate(-35deg)" },
+            ],
+            {
+              duration: 1400,
+              iterations: 3,
+            },
+          );
+        } else if (type === "pivot") {
+          element.animate(
+            [
+              { transform: "rotate(-40deg)" },
+              { transform: "rotate(40deg)" },
+              { transform: "rotate(-40deg)" },
+            ],
+            {
+              duration: 1200,
+              iterations: 3,
+            },
+          );
+        } else if (type === "ball") {
+          element.animate(
+            [
+              { transform: "rotate(-25deg)" },
+              { transform: "rotate(25deg)" },
+              { transform: "rotate(-25deg)" },
+            ],
+            {
+              duration: 1500,
+              iterations: 3,
+            },
+          );
+        } else if (type === "gliding") {
+          element.animate(
+            [
+              { transform: "translateX(-25px)" },
+              { transform: "translateX(25px)" },
+              { transform: "translateX(-25px)" },
+            ],
+            {
+              duration: 1000,
+              iterations: 3,
+            },
+          );
+        } else {
+          element.animate(
+            [
+              { transform: "scale(1)" },
+              { transform: "scale(1.05)" },
+              { transform: "scale(1)" },
+            ],
+            {
+              duration: 1000,
+              iterations: 2,
+            },
+          );
+        }
+      }
+
+      /* =========================================================
+   REPLAY ANIMATION
+========================================================= */
+
+      function replayAnimation() {
+        const person = document.getElementById("animationPerson");
+
+        person.classList.remove("move");
+
+        void person.offsetWidth;
+
+        person.classList.add("move");
+
+        showToast("Animation replayed! Watch how the body moves.");
+      }
+
+      /* =========================================================
+   PREDICTION
+========================================================= */
+
+      function makePrediction(bodyPart, answer) {
+        state.predictionDone = true;
+
+        if (!state.scoreFlags.prediction) {
+          state.score += 5;
+
+          state.scoreFlags.prediction = true;
+        }
+
+        const feedback = document.getElementById("predictionFeedback");
+
+        feedback.innerHTML = `
+        <span style="color:#16a34a;">
+            ✅ Great prediction! You chose
+            <strong>${answer}</strong>
+            for the ${bodyPart}.
+            Now investigate to check your idea.
+        </span>
+    `;
+
+        saveState();
+
+        showToast("+5 points for making a prediction!");
+      }
+
+      /* =========================================================
+   INVESTIGATION HINT
+========================================================= */
+
+      function showInvestigationTip() {
+        const tip = document.getElementById("investigationTip");
+
+        tip.innerHTML = `
+        <div class="teacher-prompt">
+            💡 <strong>Detective Hint:</strong>
+            Do not start with the name of the joint.
+            Start by describing the movement.
+            Is it bending, rotating, sliding, moving in
+            many directions, or almost not moving?
+        </div>
+    `;
+      }
+
+      /* =========================================================
+   DETECTIVE GAME
+========================================================= */
+
+      const gameQuestions = [
+        {
+          icon: "💪",
+          question: "Which joint helps the elbow bend?",
+          answer: "Hinge",
+        },
+
+        {
+          icon: "🙆",
+          question:
+            "Which joint allows the shoulder to move in many directions?",
+          answer: "Ball-and-Socket",
+        },
+
+        {
+          icon: "🙂",
+          question: "Which joint helps you turn your head?",
+          answer: "Pivot",
+        },
+
+        {
+          icon: "✋",
+          question:
+            "Which type of joint is associated with sliding movement in parts of the wrist?",
+          answer: "Gliding",
+        },
+
+        {
+          icon: "🧠",
+          question: "Which type of joint is found between many skull bones?",
+          answer: "Fixed",
+        },
+      ];
+
+      function answerGame(answer) {
+        const current = gameQuestions[state.gameIndex];
+
+        const feedback = document.getElementById("gameFeedback");
+
+        if (answer === current.answer) {
+          feedback.innerHTML = "🎉 Correct! You found the joint!";
+
+          if (!state.scoreFlags.game) {
+            state.gameScore += 5;
+            state.score += 5;
+
+            state.scoreFlags.game = true;
+          }
+
+          state.gameIndex++;
+
+          if (state.gameIndex >= gameQuestions.length) {
+            state.gameIndex = 0;
+
+            feedback.innerHTML +=
+              "<br>🏆 Challenge completed! The questions will start again.";
+          }
+
+          loadGameQuestion();
+
+          saveState();
+
+          showToast("Correct answer!");
+        } else {
+          feedback.innerHTML =
+            "❌ Not quite. Think about the kind of movement.";
+
+          showToast("Try again. Look at the movement clue.");
+        }
+
+        document.getElementById("gameScoreText").textContent =
+          "Detective Score: " + state.gameScore;
+      }
+
+      function loadGameQuestion() {
+        const q = gameQuestions[state.gameIndex];
+
+        document.getElementById("movementDemo").textContent = q.icon;
+
+        document.getElementById("gameQuestion").textContent = q.question;
+      }
+
+      /* =========================================================
+   SORTING GAME
+========================================================= */
+
+      const sortingAnswers = {
+        shoulder: "Ball-and-Socket",
+        elbow: "Hinge",
+        neck: "Pivot",
+        wrist: "Gliding",
+        skull: "Fixed",
+        hip: "Ball-and-Socket",
+      };
+
+      function selectSortItem(button, item) {
+        document.querySelectorAll(".sort-item").forEach((btn) => {
+          btn.classList.remove("selected");
+        });
+
+        button.classList.add("selected");
+
+        state.selectedSortItem = item;
+
+        const names = {
+          shoulder: "Shoulder",
+          elbow: "Elbow",
+          neck: "Neck",
+          wrist: "Wrist",
+          skull: "Skull",
+          hip: "Hip",
+        };
+
+        document.getElementById("selectedSortText").textContent =
+          "Selected: " + names[item];
+
+        saveState();
+      }
+
+      function placeSortItem(type) {
+        if (!state.selectedSortItem) {
+          showToast("Select a body part first.");
+
+          return;
+        }
+
+        const item = state.selectedSortItem;
+
+        const correct = sortingAnswers[item];
+
+        const feedback = document.getElementById("sortingFeedback");
+
+        if (correct === type) {
+          if (!state.sorted[item]) {
+            state.sorted[item] = type;
+
+            state.sortingScore++;
+
+            state.score += 3;
+
+            renderSortedItem(item, type);
+
+            feedback.innerHTML =
+              "🎉 Correct! " +
+              getSortName(item) +
+              " is associated with a " +
+              type +
+              " joint.";
+          } else {
+            feedback.innerHTML = "ℹ️ You have already sorted this body part.";
+          }
+
+          state.selectedSortItem = null;
+
+          document.querySelectorAll(".sort-item").forEach((btn) => {
+            btn.classList.remove("selected");
+          });
+
+          document.getElementById("selectedSortText").textContent =
+            "Select another body part.";
+
+          saveState();
+        } else {
+          feedback.innerHTML =
+            "❌ Try again. Think about the movement allowed.";
+
+          showToast("Not the best match. Try again!");
+        }
+      }
+
+      function getSortName(item) {
+        const names = {
+          shoulder: "Shoulder",
+          elbow: "Elbow",
+          neck: "Neck",
+          wrist: "Wrist",
+          skull: "Skull",
+          hip: "Hip",
+        };
+
+        return names[item];
+      }
+
+      function renderSortedItem(item, type) {
+        const zones = {
+          "Ball-and-Socket": "ballZone",
+          Hinge: "hingeZone",
+          Pivot: "pivotZone",
+          Gliding: "glidingZone",
+          Fixed: "fixedZone",
+        };
+
+        const element = document.getElementById(zones[type]);
+
+        const div = document.createElement("span");
+
+        div.className = "sorted-item";
+
+        div.textContent = getSortName(item);
+
+        element.appendChild(div);
+      }
+
+      /* =========================================================
+   QUIZ
+========================================================= */
+
+      const quizQuestions = [
+        {
+          question:
+            "Which joint allows the shoulder to move in many directions?",
+
+          options: ["Hinge", "Ball-and-Socket", "Fixed", "Pivot"],
+
+          answer: "Ball-and-Socket",
+        },
+
+        {
+          question: "Which joint mainly allows bending and straightening?",
+
+          options: ["Hinge", "Fixed", "Pivot", "Gliding"],
+
+          answer: "Hinge",
+        },
+
+        {
+          question: "Which joint helps you turn your head?",
+
+          options: ["Fixed", "Pivot", "Hinge", "Ball-and-Socket"],
+
+          answer: "Pivot",
+        },
+
+        {
+          question: "Which joint type is associated with sliding movement?",
+
+          options: ["Gliding", "Fixed", "Hinge", "Pivot"],
+
+          answer: "Gliding",
+        },
+
+        {
+          question: "Which joint is found between many skull bones?",
+
+          options: ["Hinge", "Ball-and-Socket", "Fixed", "Gliding"],
+
+          answer: "Fixed",
+        },
+
+        {
+          question: "What is the main purpose of joints?",
+
+          options: [
+            "To connect bones and allow movement",
+            "To make blood",
+            "To digest food",
+            "To produce sound",
+          ],
+
+          answer: "To connect bones and allow movement",
+        },
+      ];
+
+      function createQuiz() {
+        const container = document.getElementById("quizContainer");
+
+        container.innerHTML = "";
+
+        quizQuestions.forEach((q, index) => {
+          const div = document.createElement("div");
+
+          div.className = "quiz-question";
+
+          let optionsHTML = "";
+
+          q.options.forEach((option) => {
+            const selected =
+              state.quizAnswers[index] === option ? "selected" : "";
+
+            optionsHTML += `
+                <button
+                    class="quiz-option ${selected}"
+                    onclick="selectQuizAnswer(${index}, '${escapeQuotes(option)}')">
+                    ${option}
+                </button>
+            `;
+          });
+
+          div.innerHTML = `
+            <h3>
+                ${index + 1}. ${q.question}
+            </h3>
+
+            <div class="quiz-options">
+                ${optionsHTML}
+            </div>
+        `;
+
+          container.appendChild(div);
+        });
+      }
+
+      function escapeQuotes(text) {
+        return text.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+      }
+
+      function selectQuizAnswer(index, answer) {
+        if (state.quizFinished) {
+          showToast("The quiz has already been submitted.");
+
+          return;
+        }
+
+        state.quizAnswers[index] = answer;
+
+        createQuiz();
+
+        saveState();
+      }
+
+      function finishQuiz() {
+        if (state.quizFinished) {
+          showToast("Quiz already completed.");
+
+          return;
+        }
+
+        if (Object.keys(state.quizAnswers).length < quizQuestions.length) {
+          showToast("Please answer every question before finishing.");
+
+          return;
+        }
+
+        let score = 0;
+
+        quizQuestions.forEach((q, index) => {
+          if (state.quizAnswers[index] === q.answer) {
+            score++;
+          }
+        });
+
+        state.quizScore = score;
+        state.quizFinished = true;
+
+        const percentage = Math.round((score / quizQuestions.length) * 100);
+
+        if (!state.scoreFlags.quiz) {
+          state.score += score * 2;
+
+          state.scoreFlags.quiz = true;
+        }
+
+        const result = document.getElementById("quizResult");
+
+        if (percentage >= 80) {
+          result.innerHTML = `
+            🎉 Excellent!
+            You scored ${score}/${quizQuestions.length}
+            (${percentage}%).
+            You are a Joint Expert!
+        `;
+        } else if (percentage >= 50) {
+          result.innerHTML = `
+            👍 Good work!
+            You scored ${score}/${quizQuestions.length}
+            (${percentage}%).
+            Review the joint types once more.
+        `;
+        } else {
+          result.innerHTML = `
+            💡 Keep learning!
+            You scored ${score}/${quizQuestions.length}
+            (${percentage}%).
+            Try exploring the body model again.
+        `;
+        }
+
+        saveState();
+
+        showToast("Quiz completed!");
+      }
+
+      /* =========================================================
+   DOUBTS
+========================================================= */
+
+      function submitDoubt() {
+        const text = document.getElementById("doubtText").value.trim();
+
+        const topic = document.getElementById("doubtTopic").value;
+
+        if (!text) {
+          showToast("Please write your doubt first.");
+
+          return;
+        }
+
+        const doubt = {
+          id: Date.now(),
+
+          student: state.studentName || "Anonymous Student",
+
+          topic: topic,
+
+          question: text,
+
+          answer: "",
+
+          answered: false,
+
+          time: new Date().toLocaleString(),
+        };
+
+        state.doubts.push(doubt);
+
+        document.getElementById("doubtText").value = "";
+
+        saveState();
+
+        renderStudentDoubts();
+
+        showToast("Your doubt has been sent to the teacher.");
+      }
+
+      function renderStudentDoubts() {
+        const container = document.getElementById("studentDoubts");
+
+        if (!state.doubts.length) {
+          container.innerHTML =
+            "<p style='color:#64748b;'>No doubts submitted yet.</p>";
+
+          return;
+        }
+
+        container.innerHTML =
+          "<h3 style='margin-bottom:12px;'>📬 Your Questions</h3>";
+
+        state.doubts.forEach((doubt) => {
+          const div = document.createElement("div");
+
+          div.className = "doubt-card " + (doubt.answered ? "answered" : "");
+
+          div.innerHTML = `
+
+            <strong>
+                ${doubt.topic}
+            </strong>
+
+            <div class="doubt-meta">
+                ${doubt.time}
+            </div>
+
+            <p>
+                <strong>You asked:</strong>
+                ${escapeHTML(doubt.question)}
+            </p>
+
+            ${
+              doubt.answered
+                ? `
+                    <div style="margin-top:10px;">
+                        <strong>👩‍🏫 Teacher's Answer:</strong>
+                        <p style="margin-top:5px;">
+                            ${escapeHTML(doubt.answer)}
+                        </p>
+                    </div>
+                `
+                : `
+                    <p style="margin-top:10px;color:#d97706;">
+                        ⏳ Waiting for teacher's answer...
+                    </p>
+                `
+            }
+
+        `;
+
+          container.appendChild(div);
+        });
+      }
+
+      function escapeHTML(text) {
+        const div = document.createElement("div");
+
+        div.textContent = text;
+
+        return div.innerHTML;
+      }
+
+      /* =========================================================
+   TEACHER DASHBOARD
+========================================================= */
+
+      function refreshTeacherDashboard() {
+        document.getElementById("teacherScore").textContent = state.score;
+
+        const progress = calculateProgress();
+
+        document.getElementById("teacherProgress").textContent = progress + "%";
+
+        document.getElementById("teacherDoubtCount").textContent =
+          state.doubts.length;
+
+        document.getElementById("teacherAnsweredCount").textContent =
+          state.doubts.filter((d) => d.answered).length;
+
+        renderTeacherDoubts();
+      }
+
+      /* =========================================================
+   TEACHER DOUBTS
+========================================================= */
+
+      function renderTeacherDoubts() {
+        const container = document.getElementById("teacherDoubts");
+
+        if (!state.doubts.length) {
+          container.innerHTML = `
+            <div class="teacher-prompt">
+                📭 No student doubts have been submitted yet.
+            </div>
+        `;
+
+          return;
+        }
+
+        container.innerHTML = "";
+
+        state.doubts.forEach((doubt) => {
+          const div = document.createElement("div");
+
+          div.className = "doubt-card " + (doubt.answered ? "answered" : "");
+
+          div.innerHTML = `
+
+            <strong>
+                👩‍🎓 ${escapeHTML(doubt.student)}
+            </strong>
+
+            <div class="doubt-meta">
+                Topic: ${escapeHTML(doubt.topic)}
+                <br>
+                ${escapeHTML(doubt.time)}
+            </div>
+
+            <p>
+                <strong>Question:</strong>
+                ${escapeHTML(doubt.question)}
+            </p>
+
+            ${
+              doubt.answered
+                ? `
+                    <div class="answer-area">
+                        <strong>Teacher's Answer:</strong>
+                        <p style="margin-top:6px;">
+                            ${escapeHTML(doubt.answer)}
+                        </p>
+                    </div>
+                `
+                : `
+                    <div class="answer-area">
+
+                        <textarea
+                            id="answer-${doubt.id}"
+                            placeholder="Write your explanation for the student..."></textarea>
+
+                        <button
+                            class="success-btn"
+                            style="margin-top:8px;"
+                            onclick="answerDoubt(${doubt.id})">
+                            ✅ Clear Doubt
+                        </button>
+
+                    </div>
+                `
+            }
+
+        `;
+
+          container.appendChild(div);
+        });
+      }
+
+      function answerDoubt(id) {
+        const textarea = document.getElementById("answer-" + id);
+
+        if (!textarea) return;
+
+        const answer = textarea.value.trim();
+
+        if (!answer) {
+          showToast("Please write an answer.");
+
+          return;
+        }
+
+        const doubt = state.doubts.find((d) => d.id === id);
+
+        if (!doubt) return;
+
+        doubt.answer = answer;
+        doubt.answered = true;
+
+        saveState();
+
+        renderTeacherDoubts();
+
+        showToast("Doubt cleared successfully!");
+      }
+
+      /* =========================================================
+   TEACHER HINT
+========================================================= */
+
+      function teacherHint() {
+        const box = document.getElementById("teacherHintBox");
+
+        box.innerHTML = `
+        <div class="teacher-prompt">
+            💡 <strong>Teaching Hint:</strong>
+            Ask students to describe the movement without
+            saying the joint name. For example:
+            “Does it bend like a door, rotate, slide,
+            move in many directions, or remain fixed?”
+            This encourages observation and reasoning.
+        </div>
+    `;
+      }
+
+      /* =========================================================
+   PROGRESS
+========================================================= */
+
+      function calculateProgress() {
+        let completed = 0;
+
+        const total = 6;
+
+        if (state.predictionDone) completed++;
+
+        if (state.selectedJoint) completed++;
+
+        if (Object.keys(state.sorted).length >= 6) completed++;
+
+        if (state.gameScore > 0) completed++;
+
+        if (state.quizFinished) completed++;
+
+        if (state.doubts.length > 0) completed++;
+
+        return Math.round((completed / total) * 100);
+      }
+
+      function updateProgress() {
+        const progress = calculateProgress();
+
+        document.getElementById("progressFill").style.width = progress + "%";
+
+        document.getElementById("progressText").textContent = progress + "%";
+
+        if (document.getElementById("teacherProgress")) {
+          document.getElementById("teacherProgress").textContent =
+            progress + "%";
+        }
+      }
+
+      /* =========================================================
+   FINAL SCORE
+========================================================= */
+
+      function updateFinalScore() {
+        document.getElementById("finalScore").textContent = state.score;
+
+        const message = document.getElementById("completionMessage");
+
+        if (calculateProgress() >= 100) {
+          message.textContent =
+            "🎉 Amazing! You completed the Joint Detective Mission!";
+        } else if (state.score >= 25) {
+          message.textContent = "🌟 Great progress! Keep exploring the joints.";
+        } else {
+          message.textContent =
+            "Complete the missions to become a Joint Detective!";
+        }
+      }
+
+      /* =========================================================
+   RESET
+========================================================= */
+
+      function resetActivity() {
+        const confirmed = confirm(
+          "Are you sure you want to reset the entire activity?",
+        );
+
+        if (!confirmed) return;
+
+        localStorage.removeItem("jointDetectiveState");
+
+        state = {
+          ...defaultState,
+          scoreFlags: {
+            ...defaultState.scoreFlags,
+          },
+        };
+
+        location.reload();
+      }
+
+      /* =========================================================
+   RESTORE SORTING
+========================================================= */
+
+      function restoreSorting() {
+        Object.keys(state.sorted).forEach((item) => {
+          renderSortedItem(item, state.sorted[item]);
+        });
+      }
+
+      /* =========================================================
+   INITIALIZE
+========================================================= */
+
+      function initialize() {
+        document.getElementById("studentName").value = state.studentName || "";
+
+        createQuiz();
+
+        loadGameQuestion();
+
+        restoreSorting();
+
+        renderStudentDoubts();
+
+        updateProgress();
+
+        updateFinalScore();
+      }
+
+      initialize();
+    </script>
+  </body>
+</html>

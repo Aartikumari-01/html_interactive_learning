@@ -1,0 +1,4416 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Heat Detectives - Conductors & Insulators</title>
+
+    <style>
+      /* =========================================================
+   GLOBAL
+========================================================= */
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+        background:
+          radial-gradient(
+            circle at 10% 10%,
+            rgba(255, 180, 70, 0.2),
+            transparent 25%
+          ),
+          radial-gradient(
+            circle at 90% 20%,
+            rgba(100, 180, 255, 0.18),
+            transparent 25%
+          ),
+          linear-gradient(135deg, #fff7ed, #eff6ff 45%, #f5f3ff);
+        color: #1e293b;
+        min-height: 100vh;
+      }
+
+      body::before,
+      body::after {
+        content: "";
+        position: fixed;
+        width: 220px;
+        height: 220px;
+        border-radius: 50%;
+        z-index: -1;
+        filter: blur(2px);
+        animation: floatBubble 8s ease-in-out infinite;
+      }
+
+      body::before {
+        background: rgba(251, 146, 60, 0.12);
+        top: 15%;
+        left: -70px;
+      }
+
+      body::after {
+        background: rgba(59, 130, 246, 0.1);
+        right: -70px;
+        bottom: 10%;
+        animation-delay: 2s;
+      }
+
+      @keyframes floatBubble {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-30px);
+        }
+      }
+
+      /* =========================================================
+   HEADER
+========================================================= */
+
+      header {
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, #ea580c, #f97316, #fb923c);
+        color: white;
+        padding: 30px 20px 38px;
+        text-align: center;
+        border-bottom-left-radius: 35px;
+        border-bottom-right-radius: 35px;
+        box-shadow: 0 10px 35px rgba(234, 88, 12, 0.25);
+      }
+
+      header::before {
+        position: absolute;
+        top: 8px;
+        left: 0;
+        width: 100%;
+        opacity: 0.18;
+        font-size: 30px;
+        letter-spacing: 25px;
+        animation: headerMove 18s linear infinite;
+      }
+
+      @keyframes headerMove {
+        from {
+          transform: translateX(-50px);
+        }
+        to {
+          transform: translateX(50px);
+        }
+      }
+
+      .header-content {
+        position: relative;
+        z-index: 2;
+      }
+
+      .header-icon {
+        font-size: 55px;
+        display: inline-block;
+        animation: thermometerBounce 2s infinite;
+      }
+
+      @keyframes thermometerBounce {
+        0%,
+        100% {
+          transform: rotate(-4deg) translateY(0);
+        }
+
+        50% {
+          transform: rotate(4deg) translateY(-8px);
+        }
+      }
+
+      header h1 {
+        font-size: clamp(30px, 5vw, 52px);
+        margin: 8px 0;
+        text-shadow: 3px 4px 0 rgba(0, 0, 0, 0.12);
+      }
+
+      header p {
+        font-size: 18px;
+        font-weight: 600;
+      }
+
+      .class-chip {
+        display: inline-block;
+        margin-top: 14px;
+        padding: 8px 18px;
+        background: rgba(255, 255, 255, 0.22);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        border-radius: 30px;
+        backdrop-filter: blur(8px);
+      }
+
+      /* =========================================================
+   MODE BAR
+========================================================= */
+
+      .mode-bar {
+        width: min(1200px, 94%);
+        margin: 18px auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        flex-wrap: wrap;
+      }
+
+      .mode-title {
+        font-size: 17px;
+        font-weight: bold;
+      }
+
+      .mode-buttons {
+        display: flex;
+        gap: 8px;
+      }
+
+      .mode-btn {
+        border: none;
+        padding: 11px 20px;
+        border-radius: 25px;
+        background: white;
+        color: #475569;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.1);
+        transition: 0.25s;
+      }
+
+      .mode-btn:hover {
+        transform: translateY(-2px);
+      }
+
+      .mode-btn.active {
+        background: #7c3aed;
+        color: white;
+      }
+
+      /* =========================================================
+   MAIN
+========================================================= */
+
+      .container {
+        width: min(1200px, 94%);
+        margin: auto;
+        padding-bottom: 50px;
+      }
+
+      /* =========================================================
+   STUDENT NAME
+========================================================= */
+
+      .student-name-card {
+        background: linear-gradient(135deg, #ffffff, #f5f3ff);
+        border: 2px solid #ddd6fe;
+        border-radius: 20px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 8px 25px rgba(15, 23, 42, 0.08);
+      }
+
+      .student-name-card label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 8px;
+      }
+
+      .student-name-input {
+        width: 100%;
+        max-width: 500px;
+        padding: 13px 15px;
+        border: 2px solid #ddd6fe;
+        border-radius: 13px;
+        font-family: inherit;
+        font-size: 16px;
+        outline: none;
+      }
+
+      .student-name-input:focus {
+        border-color: #7c3aed;
+      }
+
+      /* =========================================================
+   STUDENT TOP PANEL
+========================================================= */
+
+      .student-top {
+        display: grid;
+        grid-template-columns: 1.6fr 0.7fr;
+        gap: 18px;
+        margin-bottom: 20px;
+      }
+
+      @media (max-width: 800px) {
+        .student-top {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .mission {
+        background: linear-gradient(135deg, #fff7ed, #ffffff);
+        border-left: 8px solid #f97316;
+        border-radius: 20px;
+        padding: 22px;
+        box-shadow: 0 8px 25px rgba(15, 23, 42, 0.08);
+      }
+
+      .mission h2 {
+        color: #c2410c;
+        margin-bottom: 8px;
+      }
+
+      .mission p {
+        line-height: 1.6;
+      }
+
+      .progress-card {
+        background: white;
+        border-radius: 20px;
+        padding: 20px;
+        box-shadow: 0 8px 25px rgba(15, 23, 42, 0.08);
+      }
+
+      .progress-label {
+        display: flex;
+        justify-content: space-between;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      .progress {
+        height: 16px;
+        border-radius: 20px;
+        background: #e2e8f0;
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        height: 100%;
+        width: 0%;
+        border-radius: 20px;
+        background: linear-gradient(90deg, #f97316, #ef4444, #f59e0b);
+        transition: width 0.6s ease;
+        position: relative;
+      }
+
+      .progress-fill::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -50px;
+        width: 50px;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.45);
+        animation: shine 2s infinite;
+      }
+
+      @keyframes shine {
+        from {
+          left: -60px;
+        }
+        to {
+          left: 110%;
+        }
+      }
+
+      /* =========================================================
+   SCORE
+========================================================= */
+
+      .score-panel {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap;
+        margin: 20px 0;
+      }
+
+      .score-box {
+        background: white;
+        min-width: 150px;
+        padding: 18px;
+        text-align: center;
+        border-radius: 20px;
+        box-shadow: 0 7px 22px rgba(15, 23, 42, 0.08);
+      }
+
+      .score-number {
+        font-size: 32px;
+        font-weight: 900;
+        color: #ea580c;
+      }
+
+      .badge {
+        font-size: 35px;
+      }
+
+      /* =========================================================
+   CARDS
+========================================================= */
+
+      .card {
+        background: rgba(255, 255, 255, 0.92);
+        border-radius: 25px;
+        padding: 25px;
+        margin: 22px 0;
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.09);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        transition: 0.3s;
+      }
+
+      .card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+      }
+
+      .card h2 {
+        margin-bottom: 12px;
+        color: #7c3aed;
+      }
+
+      .card h3 {
+        margin-bottom: 8px;
+      }
+
+      .section-intro {
+        color: #64748b;
+        margin-bottom: 18px;
+      }
+
+      /* =========================================================
+   SAFETY
+========================================================= */
+
+      .safety-card {
+        background: linear-gradient(135deg, #fff7ed, #fef2f2);
+        border: 2px solid #fdba74;
+        border-left: 8px solid #f97316;
+      }
+
+      .safety-card h2 {
+        color: #c2410c;
+      }
+
+      .safety-list {
+        padding-left: 22px;
+        line-height: 1.8;
+      }
+
+      /* =========================================================
+   PREDICTION
+========================================================= */
+
+      .prediction-box {
+        background: linear-gradient(135deg, #eef2ff, #faf5ff);
+        border: 2px dashed #8b5cf6;
+      }
+
+      .prediction-options {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+      }
+
+      @media (max-width: 700px) {
+        .prediction-options {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .predict-btn {
+        padding: 18px;
+        border: 2px solid #ddd6fe;
+        background: white;
+        border-radius: 18px;
+        font-size: 17px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.25s;
+      }
+
+      .predict-btn:hover {
+        transform: scale(1.03);
+        border-color: #7c3aed;
+      }
+
+      .predict-btn.selected {
+        background: #7c3aed;
+        color: white;
+      }
+
+      .prediction-result {
+        margin-top: 15px;
+        padding: 15px;
+        border-radius: 15px;
+        display: none;
+      }
+
+      /* =========================================================
+   ANIMATED EXPLANATION
+========================================================= */
+
+      .animation-box {
+        background: linear-gradient(135deg, #0f172a, #1e293b);
+        color: white;
+        border-radius: 25px;
+        padding: 25px;
+        overflow: hidden;
+      }
+
+      .animation-title {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #fbbf24;
+      }
+
+      .heat-demo {
+        position: relative;
+        height: 330px;
+        background:
+          radial-gradient(
+            circle at 20% 80%,
+            rgba(249, 115, 22, 0.25),
+            transparent 25%
+          ),
+          linear-gradient(#172033, #0f172a);
+        border-radius: 20px;
+        overflow: hidden;
+        border: 2px solid #334155;
+      }
+
+      .water {
+        position: absolute;
+        bottom: 0;
+        left: 8%;
+        width: 84%;
+        height: 42%;
+        background: linear-gradient(#fb923c, #ef4444);
+        border-radius: 0 0 30px 30px;
+        opacity: 0.85;
+      }
+
+      .water::before {
+        content: "HOT WATER";
+        position: absolute;
+        top: 12px;
+        width: 100%;
+        text-align: center;
+        font-weight: bold;
+        letter-spacing: 2px;
+      }
+
+      .beaker {
+        position: absolute;
+        left: 8%;
+        bottom: 5%;
+        width: 84%;
+        height: 80%;
+        border: 4px solid rgba(255, 255, 255, 0.45);
+        border-top: none;
+        border-radius: 0 0 30px 30px;
+      }
+
+      .demo-object {
+        position: absolute;
+        bottom: 35%;
+        height: 14px;
+        width: 65%;
+        left: 18%;
+        border-radius: 20px;
+        transform: rotate(-4deg);
+      }
+
+      .demo-metal {
+        background: linear-gradient(#e2e8f0, #64748b, #f8fafc);
+        box-shadow: 0 0 12px rgba(255, 255, 255, 0.35);
+      }
+
+      .demo-plastic {
+        bottom: 23%;
+        background: linear-gradient(#60a5fa, #2563eb);
+        box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+      }
+
+      .demo-wood {
+        bottom: 11%;
+        background: linear-gradient(#d97706, #92400e);
+        box-shadow: 0 0 8px rgba(180, 83, 9, 0.3);
+      }
+
+      .heat-particle {
+        position: absolute;
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: #fde68a;
+        box-shadow: 0 0 12px #fb923c;
+        animation: heatTravel 2.5s linear infinite;
+      }
+
+      .metal-p1 {
+        left: 25%;
+        bottom: 39%;
+      }
+      .metal-p2 {
+        left: 40%;
+        bottom: 39%;
+        animation-delay: 0.5s;
+      }
+      .metal-p3 {
+        left: 55%;
+        bottom: 39%;
+        animation-delay: 1s;
+      }
+      .metal-p4 {
+        left: 70%;
+        bottom: 39%;
+        animation-delay: 1.5s;
+      }
+
+      .plastic-p1 {
+        left: 25%;
+        bottom: 27%;
+        animation-duration: 5s;
+      }
+
+      .plastic-p2 {
+        left: 40%;
+        bottom: 27%;
+        animation-duration: 5s;
+        animation-delay: 1s;
+      }
+
+      .wood-p1 {
+        left: 25%;
+        bottom: 15%;
+        animation-duration: 8s;
+      }
+
+      .wood-p2 {
+        left: 40%;
+        bottom: 15%;
+        animation-duration: 8s;
+        animation-delay: 2s;
+      }
+
+      @keyframes heatTravel {
+        0% {
+          transform: translateX(0) scale(0.7);
+          opacity: 0.1;
+        }
+
+        25% {
+          opacity: 1;
+        }
+
+        100% {
+          transform: translateX(270px) scale(1);
+          opacity: 0;
+        }
+      }
+
+      .demo-label {
+        position: absolute;
+        right: 15px;
+        font-weight: bold;
+        font-size: 14px;
+      }
+
+      .label-metal {
+        bottom: 37%;
+        color: #cbd5e1;
+      }
+
+      .label-plastic {
+        bottom: 25%;
+        color: #60a5fa;
+      }
+
+      .label-wood {
+        bottom: 13%;
+        color: #f59e0b;
+      }
+
+      .animation-message {
+        text-align: center;
+        margin-top: 18px;
+        font-size: 17px;
+        line-height: 1.6;
+      }
+
+      .replay-animation {
+        display: block;
+        margin: 18px auto 0;
+      }
+
+      /* =========================================================
+   REAL EXPERIMENT
+========================================================= */
+
+      .lab {
+        background: linear-gradient(135deg, #f8fafc, #eef2ff);
+      }
+
+      .lab-controls {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+      }
+
+      button {
+        font-family: inherit;
+      }
+
+      .primary-btn,
+      .secondary-btn,
+      .teacher-btn,
+      .danger-btn {
+        border: none;
+        padding: 12px 20px;
+        border-radius: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.25s;
+      }
+
+      .primary-btn {
+        background: linear-gradient(135deg, #ea580c, #f97316);
+        color: white;
+        box-shadow: 0 6px 15px rgba(234, 88, 12, 0.25);
+      }
+
+      .secondary-btn {
+        background: #e0e7ff;
+        color: #3730a3;
+      }
+
+      .teacher-btn {
+        background: #7c3aed;
+        color: white;
+      }
+
+      .danger-btn {
+        background: #fee2e2;
+        color: #b91c1c;
+      }
+
+      button:hover {
+        transform: translateY(-3px);
+      }
+
+      button:active {
+        transform: scale(0.97);
+      }
+
+      button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      /* Experiment stage */
+
+      .experiment-stage {
+        position: relative;
+        height: 450px;
+        border-radius: 25px;
+        overflow: hidden;
+        background: linear-gradient(
+          180deg,
+          #e0f2fe 0%,
+          #f8fafc 42%,
+          #cbd5e1 43%,
+          #cbd5e1 100%
+        );
+        border: 3px solid #cbd5e1;
+      }
+
+      /* table */
+
+      .table-surface {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 18%;
+        background: linear-gradient(#94a3b8, #64748b);
+      }
+
+      /* beaker */
+
+      .real-beaker {
+        position: absolute;
+        bottom: 15%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 420px;
+        height: 250px;
+        border: 5px solid rgba(255, 255, 255, 0.75);
+        border-top: none;
+        border-radius: 0 0 35px 35px;
+        background: rgba(255, 255, 255, 0.13);
+        box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.3);
+      }
+
+      .real-water {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 75%;
+        background: linear-gradient(180deg, #fb923c, #ef4444);
+        border-radius: 0 0 30px 30px;
+        transition: 0.5s;
+      }
+
+      .water-wave {
+        position: absolute;
+        top: -8px;
+        left: 0;
+        width: 100%;
+        height: 15px;
+        border-radius: 50%;
+        background: #fdba74;
+        animation: wave 1.5s ease-in-out infinite;
+      }
+
+      @keyframes wave {
+        0%,
+        100% {
+          transform: scaleX(1);
+        }
+        50% {
+          transform: scaleX(0.96);
+        }
+      }
+
+      /* Material rods */
+
+      .rod {
+        position: absolute;
+        width: 32px;
+        height: 310px;
+        bottom: 18%;
+        border-radius: 15px 15px 8px 8px;
+        transform: rotate(5deg);
+        transition: 0.5s;
+        z-index: 5;
+      }
+
+      .rod::after {
+        content: "";
+        position: absolute;
+        top: -48px;
+        left: -10px;
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+      }
+
+      .metal {
+        left: 40%;
+        background: linear-gradient(90deg, #475569, #e2e8f0, #64748b);
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+      }
+
+      .plastic {
+        left: 50%;
+        background: linear-gradient(90deg, #1d4ed8, #60a5fa, #2563eb);
+      }
+
+      .wood {
+        left: 60%;
+        background: linear-gradient(90deg, #78350f, #d97706, #92400e);
+      }
+
+      /* =========================================================
+   EXPERIMENT HEAT PARTICLES
+========================================================= */
+
+      .lab-heat {
+        position: absolute;
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: #fde68a;
+        box-shadow: 0 0 15px #f97316;
+        opacity: 0;
+        z-index: 7;
+        pointer-events: none;
+      }
+
+      .lab-running .lab-heat {
+        opacity: 1;
+      }
+
+      .lab-metal-p1 {
+        left: 40%;
+        bottom: 29%;
+        animation: labMetalHeat 1.2s linear infinite;
+      }
+
+      .lab-metal-p2 {
+        left: 40%;
+        bottom: 29%;
+        animation: labMetalHeat 1.2s linear infinite 0.4s;
+      }
+
+      .lab-metal-p3 {
+        left: 40%;
+        bottom: 29%;
+        animation: labMetalHeat 1.2s linear infinite 0.8s;
+      }
+
+      .lab-plastic-p1 {
+        left: 50%;
+        bottom: 29%;
+        animation: labPlasticHeat 3s linear infinite;
+      }
+
+      .lab-plastic-p2 {
+        left: 50%;
+        bottom: 29%;
+        animation: labPlasticHeat 3s linear infinite 1.2s;
+      }
+
+      .lab-wood-p1 {
+        left: 60%;
+        bottom: 29%;
+        animation: labWoodHeat 5s linear infinite;
+      }
+
+      .lab-wood-p2 {
+        left: 60%;
+        bottom: 29%;
+        animation: labWoodHeat 5s linear infinite 2s;
+      }
+
+      @keyframes labMetalHeat {
+        0% {
+          transform: translateY(190px);
+          opacity: 0;
+        }
+
+        20% {
+          opacity: 1;
+        }
+
+        100% {
+          transform: translateY(-170px);
+          opacity: 0;
+        }
+      }
+
+      @keyframes labPlasticHeat {
+        0% {
+          transform: translateY(190px);
+          opacity: 0;
+        }
+
+        20% {
+          opacity: 1;
+        }
+
+        100% {
+          transform: translateY(-90px);
+          opacity: 0;
+        }
+      }
+
+      @keyframes labWoodHeat {
+        0% {
+          transform: translateY(190px);
+          opacity: 0;
+        }
+
+        20% {
+          opacity: 1;
+        }
+
+        100% {
+          transform: translateY(-55px);
+          opacity: 0;
+        }
+      }
+
+      /* =========================================================
+   EXPOSED END INDICATORS
+========================================================= */
+
+      .exposed-label {
+        position: absolute;
+        z-index: 8;
+        background: rgba(15, 23, 42, 0.85);
+        color: white;
+        padding: 7px 10px;
+        border-radius: 10px;
+        font-size: 12px;
+        font-weight: bold;
+        pointer-events: none;
+      }
+
+      .exposed-metal {
+        left: 34%;
+        top: 9%;
+      }
+
+      .exposed-plastic {
+        left: 47%;
+        top: 9%;
+      }
+
+      .exposed-wood {
+        left: 59%;
+        top: 9%;
+      }
+
+      /* heat status */
+
+      .temperature-display {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        background: rgba(15, 23, 42, 0.85);
+        color: white;
+        padding: 13px 18px;
+        border-radius: 15px;
+        font-weight: bold;
+        z-index: 10;
+      }
+
+      .stage-note {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: white;
+        padding: 13px 18px;
+        border-radius: 15px;
+        font-weight: bold;
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12);
+        z-index: 10;
+      }
+
+      /* steam */
+
+      .steam {
+        position: absolute;
+        width: 10px;
+        height: 40px;
+        border-radius: 50%;
+        border-left: 3px solid rgba(255, 255, 255, 0.75);
+        top: 10%;
+        animation: steamRise 3s infinite;
+        z-index: 3;
+      }
+
+      .steam1 {
+        left: 42%;
+      }
+      .steam2 {
+        left: 50%;
+        animation-delay: 0.8s;
+      }
+      .steam3 {
+        left: 58%;
+        animation-delay: 1.4s;
+      }
+
+      @keyframes steamRise {
+        0% {
+          transform: translateY(20px);
+          opacity: 0;
+        }
+        50% {
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-70px);
+          opacity: 0;
+        }
+      }
+
+      /* =========================================================
+   TOUCH PANEL
+========================================================= */
+
+      .touch-panel {
+        margin-top: 22px;
+        background: linear-gradient(135deg, #fff7ed, #fff);
+        border-radius: 20px;
+        padding: 20px;
+        border: 2px solid #fed7aa;
+      }
+
+      .touch-panel h3 {
+        color: #c2410c;
+      }
+
+      .touch-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+        margin-top: 15px;
+      }
+
+      @media (max-width: 800px) {
+        .touch-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .touch-card {
+        background: white;
+        border-radius: 17px;
+        padding: 15px;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(15, 23, 42, 0.07);
+        border: 2px solid #e2e8f0;
+      }
+
+      .touch-button {
+        width: 100%;
+        margin-top: 10px;
+        border: none;
+        padding: 11px;
+        border-radius: 12px;
+        background: #ede9fe;
+        color: #5b21b6;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      .touch-result {
+        margin-top: 10px;
+        min-height: 25px;
+        font-weight: bold;
+      }
+
+      /* =========================================================
+   OBSERVATION CARDS
+========================================================= */
+
+      .observation-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+        margin-top: 22px;
+      }
+
+      @media (max-width: 800px) {
+        .observation-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .real-beaker {
+          width: 85%;
+        }
+
+        .metal {
+          left: 38%;
+        }
+        .plastic {
+          left: 50%;
+        }
+        .wood {
+          left: 62%;
+        }
+
+        .exposed-metal {
+          left: 31%;
+        }
+        .exposed-plastic {
+          left: 46%;
+        }
+        .exposed-wood {
+          left: 59%;
+        }
+      }
+
+      .material-card {
+        background: white;
+        border-radius: 20px;
+        padding: 20px;
+        text-align: center;
+        border-top: 7px solid;
+        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+      }
+
+      .material-card.metal-card {
+        border-color: #64748b;
+      }
+
+      .material-card.plastic-card {
+        border-color: #3b82f6;
+      }
+
+      .material-card.wood-card {
+        border-color: #d97706;
+      }
+
+      .material-icon {
+        font-size: 45px;
+      }
+
+      .temp-meter {
+        height: 15px;
+        border-radius: 20px;
+        background: #e2e8f0;
+        overflow: hidden;
+        margin: 12px 0;
+      }
+
+      .temp-fill {
+        height: 100%;
+        width: 10%;
+        transition: 1s;
+      }
+
+      .metal-fill {
+        background: linear-gradient(90deg, #facc15, #ef4444);
+      }
+
+      .plastic-fill {
+        background: linear-gradient(90deg, #93c5fd, #60a5fa);
+      }
+
+      .wood-fill {
+        background: linear-gradient(90deg, #fde68a, #d97706);
+      }
+
+      .status {
+        font-weight: bold;
+        padding: 7px 12px;
+        border-radius: 20px;
+        display: inline-block;
+      }
+
+      .cold {
+        background: #dbeafe;
+        color: #1d4ed8;
+      }
+
+      .warm {
+        background: #fef3c7;
+        color: #b45309;
+      }
+
+      .hot {
+        background: #fee2e2;
+        color: #b91c1c;
+      }
+
+      /* =========================================================
+   OBSERVATION TABLE
+========================================================= */
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 18px;
+        overflow: hidden;
+        border-radius: 15px;
+      }
+
+      th,
+      td {
+        padding: 14px;
+        text-align: center;
+        border-bottom: 1px solid #e2e8f0;
+      }
+
+      th {
+        background: #7c3aed;
+        color: white;
+      }
+
+      tr:nth-child(even) {
+        background: #f8fafc;
+      }
+
+      /* =========================================================
+   SORTING GAME
+========================================================= */
+
+      .sorting-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+
+      @media (max-width: 700px) {
+        .sorting-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .sort-zone {
+        min-height: 250px;
+        border: 3px dashed;
+        border-radius: 20px;
+        padding: 20px;
+        text-align: center;
+      }
+
+      .conductor-zone {
+        border-color: #ef4444;
+        background: #fff1f2;
+      }
+
+      .insulator-zone {
+        border-color: #3b82f6;
+        background: #eff6ff;
+      }
+
+      .sort-items {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        justify-content: center;
+        margin-top: 15px;
+      }
+
+      .sort-item {
+        background: white;
+        border: 2px solid #e2e8f0;
+        padding: 12px 17px;
+        border-radius: 15px;
+        box-shadow: 0 5px 12px rgba(15, 23, 42, 0.1);
+        cursor: pointer;
+        font-weight: bold;
+        transition: 0.2s;
+      }
+
+      .sort-item:hover {
+        transform: scale(1.06);
+      }
+
+      .sort-item.selected-sort {
+        border-color: #7c3aed;
+        background: #ede9fe;
+      }
+
+      .sort-item.correct {
+        background: #dcfce7;
+        color: #166534;
+        border-color: #22c55e;
+      }
+
+      .sort-item.wrong {
+        background: #fee2e2;
+        color: #991b1b;
+        animation: shake 0.3s;
+      }
+
+      .sort-source {
+        margin-top: 20px;
+        padding: 18px;
+        background: #f8fafc;
+        border-radius: 18px;
+      }
+
+      .sort-instruction {
+        text-align: center;
+        font-weight: bold;
+        color: #475569;
+      }
+
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-5px);
+        }
+        75% {
+          transform: translateX(5px);
+        }
+      }
+
+      /* =========================================================
+   REAL LIFE
+========================================================= */
+
+      .example-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+      }
+
+      @media (max-width: 800px) {
+        .example-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (max-width: 500px) {
+        .example-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .example {
+        padding: 20px;
+        border-radius: 20px;
+        background: linear-gradient(135deg, #fff, #f8fafc);
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(15, 23, 42, 0.07);
+        transition: 0.25s;
+      }
+
+      .example:hover {
+        transform: translateY(-5px) rotate(1deg);
+      }
+
+      .example-icon {
+        font-size: 42px;
+        margin-bottom: 8px;
+      }
+
+      /* =========================================================
+   DOUBT BOX
+========================================================= */
+
+      .doubt-box {
+        background: linear-gradient(135deg, #eef2ff, #faf5ff);
+        border: 2px solid #c4b5fd;
+      }
+
+      textarea {
+        width: 100%;
+        min-height: 110px;
+        border: 2px solid #ddd6fe;
+        border-radius: 15px;
+        padding: 15px;
+        font-family: inherit;
+        font-size: 15px;
+        resize: vertical;
+        outline: none;
+      }
+
+      textarea:focus {
+        border-color: #7c3aed;
+        box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1);
+      }
+
+      .doubt-list {
+        margin-top: 20px;
+      }
+
+      .doubt-item {
+        background: white;
+        padding: 16px;
+        border-radius: 15px;
+        margin-top: 12px;
+        border-left: 5px solid #7c3aed;
+      }
+
+      .doubt-question {
+        font-weight: bold;
+      }
+
+      .doubt-student {
+        color: #7c3aed;
+        font-size: 13px;
+        margin-bottom: 7px;
+      }
+
+      .teacher-answer {
+        margin-top: 10px;
+        background: #f0fdf4;
+        padding: 12px;
+        border-radius: 12px;
+        color: #166534;
+      }
+
+      /* =========================================================
+   QUIZ
+========================================================= */
+
+      .quiz-question {
+        background: #f8fafc;
+        padding: 20px;
+        border-radius: 18px;
+        margin-bottom: 18px;
+      }
+
+      .quiz-options {
+        display: grid;
+        gap: 9px;
+        margin-top: 12px;
+      }
+
+      .quiz-option {
+        padding: 12px;
+        background: white;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        cursor: pointer;
+        text-align: left;
+        font-weight: 600;
+      }
+
+      .quiz-option:hover {
+        border-color: #7c3aed;
+        background: #faf5ff;
+      }
+
+      .quiz-option.correct-answer {
+        background: #dcfce7;
+        border-color: #22c55e;
+      }
+
+      .quiz-option.incorrect-answer {
+        background: #fee2e2;
+        border-color: #ef4444;
+      }
+
+      .quiz-feedback {
+        margin-top: 10px;
+        font-weight: bold;
+      }
+
+      .quiz-result {
+        display: none;
+        margin-top: 20px;
+        padding: 20px;
+        text-align: center;
+        border-radius: 18px;
+        background: #fff7ed;
+      }
+
+      .quiz-progress {
+        margin-bottom: 20px;
+        padding: 12px;
+        background: #ede9fe;
+        border-radius: 12px;
+        color: #5b21b6;
+        font-weight: bold;
+        text-align: center;
+      }
+
+      /* =========================================================
+   TEACHER DASHBOARD
+========================================================= */
+
+      .teacher-panel {
+        display: none;
+      }
+
+      .teacher-header {
+        background: linear-gradient(135deg, #4c1d95, #7c3aed, #a78bfa);
+        color: white;
+        border-radius: 25px;
+        padding: 25px;
+      }
+
+      .teacher-header h2 {
+        color: white;
+      }
+
+      .teacher-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 18px;
+      }
+
+      @media (max-width: 700px) {
+        .teacher-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .teacher-card {
+        background: white;
+        padding: 20px;
+        border-radius: 20px;
+        box-shadow: 0 7px 20px rgba(15, 23, 42, 0.08);
+        border-left: 6px solid #7c3aed;
+      }
+
+      .teacher-card ul {
+        padding-left: 20px;
+        line-height: 1.8;
+      }
+
+      .teacher-feedback {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 15px;
+      }
+
+      .teacher-feedback button {
+        border: none;
+        padding: 11px 15px;
+        border-radius: 12px;
+        background: #ede9fe;
+        color: #5b21b6;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      .mistake-monitor {
+        margin-top: 15px;
+        padding: 15px;
+        background: #fff7ed;
+        border-radius: 15px;
+        color: #9a3412;
+        font-weight: bold;
+      }
+
+      .teacher-student-name {
+        font-size: 20px;
+        font-weight: bold;
+        color: #7c3aed;
+        margin-top: 8px;
+      }
+
+      .teacher-stat-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-top: 15px;
+      }
+
+      .teacher-stat {
+        padding: 15px;
+        border-radius: 15px;
+        background: #f8fafc;
+        text-align: center;
+      }
+
+      .teacher-stat strong {
+        display: block;
+        font-size: 23px;
+        color: #ea580c;
+      }
+
+      @media (max-width: 600px) {
+        .teacher-stat-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* =========================================================
+   FINAL MESSAGE
+========================================================= */
+
+      .final-message {
+        display: none;
+        text-align: center;
+        background: linear-gradient(135deg, #dcfce7, #ecfeff);
+        border: 2px solid #22c55e;
+        padding: 25px;
+        border-radius: 25px;
+        animation: popIn 0.5s ease;
+      }
+
+      @keyframes popIn {
+        from {
+          transform: scale(0.8);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      .reset-area {
+        text-align: center;
+        margin-top: 30px;
+      }
+
+      footer {
+        text-align: center;
+        padding: 25px;
+        color: #64748b;
+      }
+
+      /* =========================================================
+   TOAST
+========================================================= */
+
+      .toast {
+        position: fixed;
+        bottom: 25px;
+        right: 25px;
+        max-width: 330px;
+        background: #0f172a;
+        color: white;
+        padding: 16px 20px;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+        transform: translateY(120px);
+        opacity: 0;
+        transition: 0.4s;
+        z-index: 999;
+      }
+
+      .toast.show {
+        transform: translateY(0);
+        opacity: 1;
+      }
+
+      /* =========================================================
+   HEAT GLOW
+========================================================= */
+
+      .hot-glow {
+        animation: hotGlow 1s infinite alternate;
+      }
+
+      @keyframes hotGlow {
+        from {
+          filter: brightness(1);
+        }
+        to {
+          filter: brightness(1.3);
+        }
+      }
+
+      /* =========================================================
+   ANIMATION REPLAY
+========================================================= */
+
+      .replay-now .heat-particle {
+        animation: none;
+      }
+
+      .replay-now .metal-p1 {
+        animation: heatTravel 2.5s linear infinite;
+      }
+
+      .replay-now .metal-p2 {
+        animation: heatTravel 2.5s linear infinite 0.5s;
+      }
+
+      .replay-now .metal-p3 {
+        animation: heatTravel 2.5s linear infinite 1s;
+      }
+
+      .replay-now .metal-p4 {
+        animation: heatTravel 2.5s linear infinite 1.5s;
+      }
+
+      /* =========================================================
+   MOBILE EXPERIMENT
+========================================================= */
+
+      @media (max-width: 600px) {
+        .experiment-stage {
+          height: 430px;
+        }
+
+        .real-beaker {
+          height: 230px;
+        }
+
+        .rod {
+          height: 285px;
+        }
+
+        .temperature-display,
+        .stage-note {
+          font-size: 11px;
+          padding: 9px;
+        }
+
+        .exposed-label {
+          font-size: 9px;
+          padding: 5px;
+        }
+
+        th,
+        td {
+          padding: 8px 5px;
+          font-size: 12px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- ======================================================
+     HEADER
+====================================================== -->
+
+    <header>
+      <div class="header-content">
+        <div class="header-icon"></div>
+
+        <h1>Heat Detectives 🔥</h1>
+
+        <p>Discover Which Materials Let Heat Travel!</p>
+
+        <div class="class-chip">🔬 Class VI • Science • Materials</div>
+      </div>
+    </header>
+
+    <!-- ======================================================
+     MODE BAR
+====================================================== -->
+
+    <div class="mode-bar">
+      <div class="mode-title">Choose your learning mode</div>
+
+      <div class="mode-buttons">
+        <button
+          class="mode-btn active"
+          id="studentModeBtn"
+          onclick="showStudentMode()"
+        >
+          Student
+        </button>
+
+        <button
+          class="mode-btn"
+          id="teacherModeBtn"
+          onclick="showTeacherMode()"
+        >
+          Teacher
+        </button>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- ======================================================
+     STUDENT MODE
+====================================================== -->
+
+      <section id="studentPanel">
+        <!-- STUDENT NAME -->
+
+        <div class="student-name-card">
+          <label for="studentName"> Young Scientist, what is your name? </label>
+
+          <input
+            type="text"
+            id="studentName"
+            class="student-name-input"
+            placeholder="Enter your name"
+            maxlength="40"
+            oninput="saveStudentName()"
+          />
+
+          <p style="margin-top: 8px; color: #64748b">
+            Your name will be attached to doubts you send to the teacher.
+          </p>
+        </div>
+
+        <!-- MISSION + PROGRESS -->
+
+        <div class="student-top">
+          <div class="mission">
+            <h2>Today's Mission</h2>
+
+            <p>
+              You are now a <strong>Heat Detective!</strong>
+              Your mission is to investigate three materials:
+              <strong>metal, plastic and wood</strong>.
+            </p>
+
+            <p style="margin-top: 8px">
+              Find out which material allows heat to travel easily and which
+              materials slow heat down.
+            </p>
+          </div>
+
+          <div class="progress-card">
+            <div class="progress-label">
+              <span>Lab Progress</span>
+              <span id="progressText">0%</span>
+            </div>
+
+            <div class="progress">
+              <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <p style="margin-top: 10px; text-align: center">
+              Keep investigating!
+            </p>
+          </div>
+        </div>
+
+        <!-- SCORE -->
+
+        <div class="score-panel">
+          <div class="score-box">
+            <div class="badge">⭐</div>
+
+            <div class="score-number" id="score">0</div>
+
+            <div>Science Points</div>
+          </div>
+
+          <div class="score-box">
+            <div class="badge">🔥</div>
+
+            <div class="score-number" id="badgeText">Beginner</div>
+
+            <div>Detective Rank</div>
+          </div>
+        </div>
+
+        <!-- ==================================================
+         SAFETY
+    ================================================== -->
+
+        <div class="card safety-card">
+          <h2>Safety First!</h2>
+
+          <ul class="safety-list">
+            <li>This webpage is a <strong>virtual simulation</strong>.</li>
+
+            <li>
+              For a real classroom experiment, work only with your teacher's
+              supervision.
+            </li>
+
+            <li>
+              Use <strong>hot water, not boiling water</strong>, as instructed
+              by your teacher.
+            </li>
+
+            <li>
+              Never touch a real hot object or hot water without your teacher's
+              permission.
+            </li>
+
+            <li>
+              In this activity, the <strong>Simulate Touch</strong>
+              buttons safely represent what you would observe.
+            </li>
+          </ul>
+        </div>
+
+        <!-- ==================================================
+         LEARN FIRST
+    ================================================== -->
+
+        <div class="card">
+          <h2>First, Let's Understand</h2>
+
+          <p class="section-intro">
+            Imagine heat as tiny travellers. Some materials give these
+            travellers an easy path, while others make the journey much slower.
+          </p>
+
+          <div class="animation-box" id="animationBox">
+            <h3 class="animation-title">Watch the Heat Travel!</h3>
+
+            <div class="heat-demo">
+              <div class="beaker"></div>
+
+              <div class="water"></div>
+
+              <div class="demo-object demo-metal"></div>
+
+              <div class="demo-object demo-plastic"></div>
+
+              <div class="demo-object demo-wood"></div>
+
+              <div class="heat-particle metal-p1"></div>
+              <div class="heat-particle metal-p2"></div>
+              <div class="heat-particle metal-p3"></div>
+              <div class="heat-particle metal-p4"></div>
+
+              <div class="heat-particle plastic-p1"></div>
+              <div class="heat-particle plastic-p2"></div>
+
+              <div class="heat-particle wood-p1"></div>
+              <div class="heat-particle wood-p2"></div>
+
+              <div class="demo-label label-metal">METAL → FAST</div>
+
+              <div class="demo-label label-plastic">PLASTIC → SLOW</div>
+
+              <div class="demo-label label-wood">WOOD → VERY SLOW</div>
+            </div>
+
+            <div class="animation-message">
+              <strong>Notice the moving yellow particles!</strong>
+
+              <br />
+
+              In metal, heat travels quickly. In plastic and wood, heat travels
+              much more slowly.
+            </div>
+
+            <button
+              class="secondary-btn replay-animation"
+              onclick="replayHeatAnimation()"
+            >
+              Replay Heat Animation
+            </button>
+          </div>
+        </div>
+
+        <!-- ==================================================
+         PREDICTION
+    ================================================== -->
+
+        <div class="card prediction-box">
+          <h2>Make Your Prediction</h2>
+
+          <p>
+            Before starting the experiment, which material do you think will
+            become hot at the exposed end first?
+          </p>
+
+          <div class="prediction-options">
+            <button class="predict-btn" onclick="makePrediction('metal', this)">
+              Metal
+            </button>
+
+            <button
+              class="predict-btn"
+              onclick="makePrediction('plastic', this)"
+            >
+              Plastic
+            </button>
+
+            <button class="predict-btn" onclick="makePrediction('wood', this)">
+              Wood
+            </button>
+          </div>
+
+          <div id="predictionResult" class="prediction-result"></div>
+        </div>
+
+        <!-- ==================================================
+         EXPERIMENT
+    ================================================== -->
+
+        <div class="card lab">
+          <h2>Virtual Heat Lab</h2>
+
+          <p class="section-intro">
+            Three objects are placed in hot water. One end stays outside the
+            water.
+
+            <strong> Watch how heat moves through each material. </strong>
+          </p>
+
+          <div class="lab-controls">
+            <button
+              class="primary-btn"
+              id="startButton"
+              onclick="startExperiment()"
+            >
+              Start Experiment
+            </button>
+
+            <button
+              class="secondary-btn"
+              id="fast2Button"
+              onclick="observeAt2Minutes()"
+              disabled
+            >
+              Fast Forward to 2 Minutes
+            </button>
+
+            <button
+              class="secondary-btn"
+              id="fast4Button"
+              onclick="observeAt4Minutes()"
+              disabled
+            >
+              Fast Forward to 4 Minutes
+            </button>
+
+            <button class="secondary-btn" onclick="restartExperiment()">
+              Restart Lab
+            </button>
+          </div>
+
+          <div class="experiment-stage" id="experimentStage">
+            <div class="temperature-display" id="labTime">
+              Experiment not started
+            </div>
+
+            <div class="stage-note" id="stageNote">Ready</div>
+
+            <div class="steam steam1"></div>
+            <div class="steam steam2"></div>
+            <div class="steam steam3"></div>
+
+            <div class="real-beaker">
+              <div class="real-water">
+                <div class="water-wave"></div>
+              </div>
+            </div>
+
+            <!-- HEAT PARTICLES -->
+
+            <div class="lab-heat lab-metal-p1"></div>
+            <div class="lab-heat lab-metal-p2"></div>
+            <div class="lab-heat lab-metal-p3"></div>
+
+            <div class="lab-heat lab-plastic-p1"></div>
+            <div class="lab-heat lab-plastic-p2"></div>
+
+            <div class="lab-heat lab-wood-p1"></div>
+            <div class="lab-heat lab-wood-p2"></div>
+
+            <div class="exposed-label exposed-metal">👆 Exposed End</div>
+
+            <div class="exposed-label exposed-plastic">👆 Exposed End</div>
+
+            <div class="exposed-label exposed-wood">👆 Exposed End</div>
+
+            <div class="rod metal" id="metalRod"></div>
+
+            <div class="rod plastic" id="plasticRod"></div>
+
+            <div class="rod wood" id="woodRod"></div>
+
+            <div class="table-surface"></div>
+          </div>
+
+          <!-- SIMULATED TOUCH -->
+
+          <div class="touch-panel">
+            <h3>Simulate Touch: Check the Exposed Ends</h3>
+
+            <p style="margin-top: 8px; color: #64748b; line-height: 1.6">
+              After reaching an observation time, click the button for each
+              material. This safely simulates touching the exposed end.
+            </p>
+
+            <div class="touch-grid">
+              <div class="touch-card">
+                <div style="font-size: 40px">🥄</div>
+
+                <h3>Metal</h3>
+
+                <button
+                  class="touch-button"
+                  id="touchMetalButton"
+                  onclick="touchMaterial('metal')"
+                  disabled
+                >
+                  👆 Touch Metal End
+                </button>
+
+                <div class="touch-result" id="touchMetalResult"></div>
+              </div>
+
+              <div class="touch-card">
+                <div style="font-size: 40px">🧴</div>
+
+                <h3>Plastic</h3>
+
+                <button
+                  class="touch-button"
+                  id="touchPlasticButton"
+                  onclick="touchMaterial('plastic')"
+                  disabled
+                >
+                  👆 Touch Plastic End
+                </button>
+
+                <div class="touch-result" id="touchPlasticResult"></div>
+              </div>
+
+              <div class="touch-card">
+                <div style="font-size: 40px">🪵</div>
+
+                <h3>Wood</h3>
+
+                <button
+                  class="touch-button"
+                  id="touchWoodButton"
+                  onclick="touchMaterial('wood')"
+                  disabled
+                >
+                  👆 Touch Wood End
+                </button>
+
+                <div class="touch-result" id="touchWoodResult"></div>
+              </div>
+            </div>
+
+            <p
+              id="touchRoundMessage"
+              style="text-align: center; margin-top: 15px; font-weight: bold"
+            ></p>
+          </div>
+
+          <!-- MATERIAL STATUS -->
+
+          <div class="observation-grid">
+            <div class="material-card metal-card">
+              <div class="material-icon">🥄</div>
+
+              <h3>Metal</h3>
+
+              <p>Good conductor</p>
+
+              <div class="temp-meter">
+                <div class="temp-fill metal-fill" id="metalTemp"></div>
+              </div>
+
+              <div class="status cold" id="metalStatus">Cold</div>
+            </div>
+
+            <div class="material-card plastic-card">
+              <div class="material-icon">🧴</div>
+
+              <h3>Plastic</h3>
+
+              <p>Poor conductor</p>
+
+              <div class="temp-meter">
+                <div class="temp-fill plastic-fill" id="plasticTemp"></div>
+              </div>
+
+              <div class="status cold" id="plasticStatus">Cold</div>
+            </div>
+
+            <div class="material-card wood-card">
+              <div class="material-icon">🪵</div>
+
+              <h3>Wood</h3>
+
+              <p>Poor conductor</p>
+
+              <div class="temp-meter">
+                <div class="temp-fill wood-fill" id="woodTemp"></div>
+              </div>
+
+              <div class="status cold" id="woodStatus">Cold</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================================================
+         OBSERVATION TABLE
+    ================================================== -->
+
+        <div class="card">
+          <h2>Observation Station</h2>
+
+          <p class="section-intro">Record what happens at the exposed ends.</p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Material</th>
+                <th>After 2 Minutes</th>
+                <th>After 4 Minutes</th>
+                <th>What did we learn?</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td>Metal</td>
+                <td id="tableMetal2">—</td>
+                <td id="tableMetal4">—</td>
+                <td>Heat travels easily</td>
+              </tr>
+
+              <tr>
+                <td>Plastic</td>
+                <td id="tablePlastic2">—</td>
+                <td id="tablePlastic4">—</td>
+                <td>Heat travels slowly</td>
+              </tr>
+
+              <tr>
+                <td>Wood</td>
+                <td id="tableWood2">—</td>
+                <td id="tableWood4">—</td>
+                <td>Heat travels very slowly</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ==================================================
+         SORTING GAME
+    ================================================== -->
+
+        <div class="card">
+          <h2>Heat Sorting Challenge</h2>
+
+          <p class="section-intro">
+            Select a material and then click the correct category. Let's see how
+            many you can classify correctly!
+          </p>
+
+          <div class="sort-source">
+            <div class="sort-instruction">First select a material below</div>
+
+            <div id="sortItems" class="sort-items"></div>
+          </div>
+
+          <div class="sorting-grid" style="margin-top: 20px">
+            <div class="sort-zone conductor-zone">
+              <h3>GOOD CONDUCTOR</h3>
+
+              <p>Heat travels easily</p>
+
+              <div id="conductorItems" class="sort-items"></div>
+            </div>
+
+            <div class="sort-zone insulator-zone">
+              <h3>POOR CONDUCTOR</h3>
+
+              <p>Heat travels slowly</p>
+
+              <div id="insulatorItems" class="sort-items"></div>
+            </div>
+          </div>
+
+          <div
+            id="sortMessage"
+            style="text-align: center; margin-top: 15px; font-weight: bold"
+          ></div>
+        </div>
+
+        <!-- ==================================================
+         REAL LIFE CONNECTION
+    ================================================== -->
+
+        <div class="card">
+          <h2>Where Do We See This in Real Life?</h2>
+
+          <p class="section-intro">Science is all around you!</p>
+
+          <div class="example-grid">
+            <div class="example">
+              <div class="example-icon">🍳</div>
+
+              <h3>Cooking Pan</h3>
+
+              <p>Metal helps transfer heat to food.</p>
+            </div>
+
+            <div class="example">
+              <div class="example-icon">🧤</div>
+
+              <h3>Oven Glove</h3>
+
+              <p>Insulating material protects your hand.</p>
+            </div>
+
+            <div class="example">
+              <div class="example-icon">🥄</div>
+
+              <h3>Wooden Spoon</h3>
+
+              <p>Wood slows down heat transfer.</p>
+            </div>
+
+            <div class="example">
+              <div class="example-icon">🍲</div>
+
+              <h3>Pan Handle</h3>
+
+              <p>Plastic or wood helps keep the handle cooler.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================================================
+         DOUBT BOX
+    ================================================== -->
+
+        <div class="card doubt-box">
+          <h2>Ask Your Teacher</h2>
+
+          <p class="section-intro">
+            Confused about something? Don't be afraid to ask! Type your doubt
+            below. Your teacher can answer it from the Teacher Dashboard.
+          </p>
+
+          <textarea
+            id="doubtInput"
+            placeholder="Example: Why does metal become hot faster than wood?"
+          >
+          </textarea>
+
+          <button
+            class="teacher-btn"
+            style="margin-top: 12px"
+            onclick="submitDoubt()"
+          >
+            Drop My Doubt
+          </button>
+
+          <div id="doubtMessage" style="margin-top: 10px"></div>
+
+          <div id="studentDoubtList" class="doubt-list"></div>
+        </div>
+
+        <!-- ==================================================
+         QUIZ
+    ================================================== -->
+
+        <div class="card">
+          <h2>Heat Detective Quiz</h2>
+
+          <p class="section-intro">Let's check what you discovered!</p>
+
+          <div class="quiz-progress" id="quizProgress">Answered: 0 / 10</div>
+
+          <!-- QUESTION 1 -->
+
+          <div class="quiz-question">
+            <h3>1. Which material is a good conductor of heat?</h3>
+
+            <div class="quiz-options">
+              <button class="quiz-option" onclick="answerQuiz(1, this, false)">
+                Wood
+              </button>
+
+              <button class="quiz-option" onclick="answerQuiz(1, this, true)">
+                Metal
+              </button>
+
+              <button class="quiz-option" onclick="answerQuiz(1, this, false)">
+                Plastic
+              </button>
+            </div>
+
+            <div id="feedback1" class="quiz-feedback"></div>
+          </div>
+
+          <!-- QUESTION 2 -->
+
+          <div class="quiz-question">
+            <h3>2. Which material is a poor conductor of heat?</h3>
+
+            <div class="quiz-options">
+              <button class="quiz-option" onclick="answerQuiz(2, this, true)">
+                Wood
+              </button>
+
+              <button class="quiz-option" onclick="answerQuiz(2, this, false)">
+                Metal
+              </button>
+
+              <button class="quiz-option" onclick="answerQuiz(2, this, false)">
+                Copper
+              </button>
+            </div>
+
+            <div id="feedback2" class="quiz-feedback"></div>
+          </div>
+
+          <!-- QUESTION 3 -->
+
+          <div class="quiz-question">
+            <h3>3. Why are some pan handles made from plastic or wood?</h3>
+
+            <div class="quiz-options">
+              <button class="quiz-option" onclick="answerQuiz(3, this, false)">
+                They make the pan heavier.
+              </button>
+
+              <button class="quiz-option" onclick="answerQuiz(3, this, true)">
+                They slow down heat transfer to our hands.
+              </button>
+
+              <button class="quiz-option" onclick="answerQuiz(3, this, false)">
+                They make food cook faster.
+              </button>
+            </div>
+
+            <div id="feedback3" class="quiz-feedback"></div>
+          </div>
+
+          <!-- QUESTION 4 -->
+
+          <div class="quiz-question">
+            <h3>
+              4. What happens to the exposed end of a metal object placed in hot
+              water?
+            </h3>
+
+            <div class="quiz-options">
+              <button class="quiz-option" onclick="answerQuiz(4, this, true)">
+                It becomes hot more quickly.
+              </button>
+
+              <button class="quiz-option" onclick="answerQuiz(4, this, false)">
+                It always remains cold.
+              </button>
+
+              <button class="quiz-option" onclick="answerQuiz(4, this, false)">
+                Nothing happens.
+              </button>
+            </div>
+
+            <div id="feedback4" class="quiz-feedback"></div>
+          </div>
+
+          <!-- QUESTION 5 -->
+
+          <div class="quiz-question">
+            <h3>5. Which statement is correct?</h3>
+
+            <div class="quiz-options">
+              <button class="quiz-option" onclick="answerQuiz(5, this, true)">
+                Heat travels more easily through good conductors.
+              </button>
+
+              <button class="quiz-option" onclick="answerQuiz(5, this, false)">
+                Heat cannot travel through metals.
+              </button>
+
+              <button class="quiz-option" onclick="answerQuiz(5, this, false)">
+                All materials conduct heat equally.
+              </button>
+            </div>
+
+            <div id="feedback5" class="quiz-feedback"></div>
+          </div>
+
+          <!-- QUESTION 6 -->
+
+          <div class="quiz-question">
+            <h3>6. Which object would most likely be a good conductor?</h3>
+
+            <div class="quiz-options">
+              <button class="quiz-option" onclick="answerQuiz(6, this, true)">
+                Aluminium spoon
+              </button>
+
+              <button class="quiz-option" onclick="answerQuiz(6, this, false)">
+                Wooden ruler
+              </button>
+
+              <button class="quiz-option" onclick="answerQuiz(6, this, false)">
+                Plastic bottle
+              </button>
+            </div>
+
+            <div id="feedback6" class="quiz-feedback"></div>
+          </div>
+
+          <!-- QUESTION 7 -->
+
+          <div class="quiz-question">
+            <h3>7. A poor conductor of heat usually:</h3>
+
+            <div class="quiz-options">
+              <button class="quiz-option" onclick="answerQuiz(7, this, false)">
+                Allows heat to travel very quickly.
+              </button>
+
+              <button class="quiz-option" onclick="answerQuiz(7, this, true)">
+                Slows down heat transfer.
+              </button>
+
+              <button class="quiz-option" onclick="answerQuiz(7, this, false)">
+                Produces heat by itself.
+              </button>
+            </div>
+
+            <div id="feedback7" class="quiz-feedback"></div>
+          </div>
+
+          <!-- QUESTION 8 -->
+
+          <div class="quiz-question">
+            <h3>
+              8. Which material is useful for protecting our hands from heat?
+            </h3>
+
+            <div class="quiz-options">
+              <button class="quiz-option" onclick="answerQuiz(8, this, false)">
+                Copper
+              </button>
+
+              <button class="quiz-option" onclick="answerQuiz(8, this, true)">
+                Insulating material
+              </button>
+
+              <button class="quiz-option" onclick="answerQuiz(8, this, false)">
+                Aluminium
+              </button>
+            </div>
+
+            <div id="feedback8" class="quiz-feedback"></div>
+          </div>
+
+          <!-- QUESTION 9 -->
+
+          <div class="quiz-question">
+            <h3>9. If heat travels easily through a material, we call it a:</h3>
+
+            <div class="quiz-options">
+              <button class="quiz-option" onclick="answerQuiz(9, this, true)">
+                Good conductor
+              </button>
+
+              <button class="quiz-option" onclick="answerQuiz(9, this, false)">
+                Poor conductor
+              </button>
+
+              <button class="quiz-option" onclick="answerQuiz(9, this, false)">
+                Heat blocker
+              </button>
+            </div>
+
+            <div id="feedback9" class="quiz-feedback"></div>
+          </div>
+
+          <!-- QUESTION 10 -->
+
+          <div class="quiz-question">
+            <h3>10. Which pair contains two poor conductors of heat?</h3>
+
+            <div class="quiz-options">
+              <button class="quiz-option" onclick="answerQuiz(10, this, false)">
+                Copper and aluminium
+              </button>
+
+              <button class="quiz-option" onclick="answerQuiz(10, this, true)">
+                Wood and plastic
+              </button>
+
+              <button class="quiz-option" onclick="answerQuiz(10, this, false)">
+                Iron and copper
+              </button>
+            </div>
+
+            <div id="feedback10" class="quiz-feedback"></div>
+          </div>
+
+          <button
+            class="primary-btn"
+            id="finishQuizButton"
+            onclick="finishQuiz()"
+          >
+            Check My Quiz
+          </button>
+
+          <div id="quizResult" class="quiz-result"></div>
+        </div>
+
+        <!-- ==================================================
+         FINAL
+    ================================================== -->
+
+        <div id="finalMessage" class="final-message">
+          <div style="font-size: 60px">🏆</div>
+
+          <h2>Amazing, Heat Detective!</h2>
+
+          <p style="margin-top: 10px; line-height: 1.6">
+            You discovered that metals are generally good conductors of heat,
+            while materials such as wood and plastic are poor conductors.
+
+            <br /><br />
+
+            You predicted, observed, touched the simulated exposed ends, sorted
+            materials and completed the quiz.
+
+            <br /><br />
+
+            You are ready for the next science mystery!
+          </p>
+        </div>
+      </section>
+
+      <!-- ======================================================
+     TEACHER PANEL
+====================================================== -->
+
+      <section id="teacherPanel" class="teacher-panel">
+        <div class="teacher-header">
+          <h2>Teacher Control Room</h2>
+
+          <p>
+            Monitor learning, answer doubts and guide your young scientists.
+          </p>
+
+          <div class="teacher-student-name" id="teacherStudentName">
+            Student: Not entered
+          </div>
+        </div>
+
+        <div class="teacher-grid" style="margin-top: 20px">
+          <div class="teacher-card">
+            <h3>Learning Objectives</h3>
+
+            <ul>
+              <li>Identify good conductors of heat.</li>
+
+              <li>Identify poor conductors of heat.</li>
+
+              <li>Observe heat transfer through different materials.</li>
+
+              <li>Connect the concept with everyday objects.</li>
+            </ul>
+          </div>
+
+          <div class="teacher-card">
+            <h3>Student Progress</h3>
+
+            <p>
+              Current score:
+              <strong id="teacherScore">0</strong>
+            </p>
+
+            <p style="margin-top: 10px">
+              Progress:
+              <strong id="teacherProgress">0%</strong>
+            </p>
+
+            <div class="teacher-stat-grid">
+              <div class="teacher-stat">
+                <strong id="teacherPrediction">No</strong>
+                Prediction
+              </div>
+
+              <div class="teacher-stat">
+                <strong id="teacherObservation">0/2</strong>
+                Observations
+              </div>
+
+              <div class="teacher-stat">
+                <strong id="teacherSorting">0/8</strong>
+                Sorting
+              </div>
+            </div>
+
+            <div class="mistake-monitor">
+              Teacher Tip: Ask students:
+
+              <br /><br />
+
+              "Why does the metal end become hot before the wooden end?"
+            </div>
+          </div>
+
+          <div class="teacher-card">
+            <h3>Quick Teaching Hints</h3>
+
+            <div class="teacher-feedback">
+              <button onclick="teacherHint(1)">Explain Conductor</button>
+
+              <button onclick="teacherHint(2)">Explain Insulator</button>
+
+              <button onclick="teacherHint(3)">Give Real Example</button>
+
+              <button onclick="teacherHint(4)">Ask Thinking Question</button>
+            </div>
+
+            <div
+              id="teacherHintBox"
+              style="
+                margin-top: 15px;
+                padding: 15px;
+                background: #f5f3ff;
+                border-radius: 15px;
+              "
+            ></div>
+          </div>
+
+          <div class="teacher-card">
+            <h3>Suggested Classroom Discussion</h3>
+
+            <p style="line-height: 1.7">
+              Ask students to compare the three materials.
+
+              <br /><br />
+
+              <strong>Question:</strong>
+
+              Why might a cooking utensil have a metal body but a plastic or
+              wooden handle?
+
+              <br /><br />
+
+              Encourage students to explain using the words
+              <strong>conductor</strong> and <strong>insulator</strong>.
+            </p>
+          </div>
+
+          <!-- TEACHER DOUBTS -->
+
+          <div class="teacher-card" style="grid-column: 1/-1">
+            <h3>Student Doubts</h3>
+
+            <p class="section-intro">
+              Questions submitted by students appear here.
+            </p>
+
+            <div id="teacherDoubtList">
+              <p style="color: #64748b">No doubts submitted yet.</p>
+            </div>
+          </div>
+
+          <!-- ANSWER BOX -->
+
+          <div class="teacher-card" style="grid-column: 1/-1">
+            <h3>Teacher Answer Panel</h3>
+
+            <p id="selectedDoubtText">
+              Select a student's question above and write your explanation.
+            </p>
+
+            <textarea
+              id="teacherAnswer"
+              placeholder="Write a simple explanation for the student..."
+            >
+            </textarea>
+
+            <button
+              class="teacher-btn"
+              style="margin-top: 12px"
+              onclick="answerSelectedDoubt()"
+            >
+              Send Answer to Student
+            </button>
+
+            <div id="teacherAnswerMessage" style="margin-top: 10px"></div>
+          </div>
+
+          <div class="teacher-card" style="grid-column: 1/-1">
+            <h3>Answer Key</h3>
+
+            <ul>
+              <li>Metal → Good conductor</li>
+
+              <li>Plastic → Poor conductor</li>
+
+              <li>Wood → Poor conductor</li>
+
+              <li>Heat travels more easily through conductors.</li>
+
+              <li>Poor conductors slow down heat transfer.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- RESET -->
+
+      <div class="reset-area">
+        <button class="danger-btn" onclick="resetActivity()">
+          Reset Entire Activity
+        </button>
+      </div>
+    </div>
+
+    <footer>
+      Heat Detectives Lab • Class VI Science
+
+      <br />
+
+      Learn • Observe • Predict • Question • Discover
+    </footer>
+
+    <!-- TOAST -->
+
+    <div id="toast" class="toast"></div>
+
+    <script>
+      /* =========================================================
+   VARIABLES
+========================================================= */
+
+      let score = 0;
+
+      let predictionDone = false;
+
+      let experimentStarted = false;
+
+      let observed2 = false;
+
+      let observed4 = false;
+
+      let currentObservationRound = 0;
+
+      let touchResults = {
+        2: {
+          metal: false,
+          plastic: false,
+          wood: false,
+        },
+        4: {
+          metal: false,
+          plastic: false,
+          wood: false,
+        },
+      };
+
+      let quizAnswers = {};
+
+      let quizFinished = false;
+
+      let currentDoubtIndex = null;
+
+      let doubts = [];
+
+      let selectedSortItem = null;
+
+      let sortingCorrect = {};
+
+      let sortingItems = [
+        {
+          name: "Copper Wire",
+          type: "conductor",
+          icon: "🔌",
+        },
+        {
+          name: "Aluminium Spoon",
+          type: "conductor",
+          icon: "🥄",
+        },
+        {
+          name: "Iron Pan",
+          type: "conductor",
+          icon: "🍳",
+        },
+        {
+          name: "Metal Key",
+          type: "conductor",
+          icon: "🔑",
+        },
+        {
+          name: "Wooden Spoon",
+          type: "insulator",
+          icon: "🥄",
+        },
+        {
+          name: "Plastic Ruler",
+          type: "insulator",
+          icon: "📏",
+        },
+        {
+          name: "Rubber Handle",
+          type: "insulator",
+          icon: "🧤",
+        },
+        {
+          name: "Wooden Stick",
+          type: "insulator",
+          icon: "🪵",
+        },
+      ];
+
+      /* =========================================================
+   STORAGE
+========================================================= */
+
+      const STORAGE_KEY = "heatDetectivesClass6Activity";
+
+      function saveActivity() {
+        let data = {
+          score: score,
+
+          predictionDone: predictionDone,
+
+          experimentStarted: experimentStarted,
+
+          observed2: observed2,
+
+          observed4: observed4,
+
+          currentObservationRound: currentObservationRound,
+
+          touchResults: touchResults,
+
+          quizAnswers: quizAnswers,
+
+          quizFinished: quizFinished,
+
+          doubts: doubts,
+
+          sortingCorrect: sortingCorrect,
+
+          studentName: document.getElementById("studentName").value,
+        };
+
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      }
+
+      function loadActivity() {
+        let saved = localStorage.getItem(STORAGE_KEY);
+
+        if (!saved) {
+          return;
+        }
+
+        try {
+          let data = JSON.parse(saved);
+
+          score = data.score || 0;
+
+          predictionDone = data.predictionDone || false;
+
+          experimentStarted = data.experimentStarted || false;
+
+          observed2 = data.observed2 || false;
+
+          observed4 = data.observed4 || false;
+
+          currentObservationRound = data.currentObservationRound || 0;
+
+          if (data.touchResults) {
+            touchResults = data.touchResults;
+          }
+
+          quizAnswers = data.quizAnswers || {};
+
+          quizFinished = data.quizFinished || false;
+
+          doubts = data.doubts || [];
+
+          sortingCorrect = data.sortingCorrect || {};
+
+          document.getElementById("studentName").value = data.studentName || "";
+        } catch (error) {
+          console.log("Saved activity could not be loaded.");
+        }
+      }
+
+      /* =========================================================
+   STUDENT NAME
+========================================================= */
+
+      function saveStudentName() {
+        saveActivity();
+
+        updateTeacherDashboard();
+      }
+
+      /* =========================================================
+   MODE SWITCH
+========================================================= */
+
+      function showStudentMode() {
+        document.getElementById("studentPanel").style.display = "block";
+
+        document.getElementById("teacherPanel").style.display = "none";
+
+        document.getElementById("studentModeBtn").classList.add("active");
+
+        document.getElementById("teacherModeBtn").classList.remove("active");
+      }
+
+      function showTeacherMode() {
+        document.getElementById("studentPanel").style.display = "none";
+
+        document.getElementById("teacherPanel").style.display = "block";
+
+        document.getElementById("teacherModeBtn").classList.add("active");
+
+        document.getElementById("studentModeBtn").classList.remove("active");
+
+        updateTeacherDashboard();
+      }
+
+      /* =========================================================
+   SCORE
+========================================================= */
+
+      function addScore(points) {
+        score += points;
+
+        document.getElementById("score").textContent = score;
+
+        updateProgress();
+
+        updateBadge();
+
+        saveActivity();
+
+        updateTeacherDashboard();
+      }
+
+      function updateBadge() {
+        let badge = "Beginner";
+
+        if (score >= 10) {
+          badge = "Heat Scout";
+        }
+
+        if (score >= 20) {
+          badge = "Heat Detective";
+        }
+
+        if (score >= 40) {
+          badge = "Science Expert";
+        }
+
+        document.getElementById("badgeText").textContent = badge;
+      }
+
+      /* =========================================================
+   PROGRESS
+========================================================= */
+
+      function updateProgress() {
+        let completed = 0;
+
+        /*
+       8 total learning milestones:
+       1 prediction
+       2 experiment started
+       3 two-minute observation
+       4 four-minute observation
+       5 sorting
+       6 quiz
+       7 doubt submitted
+       8 final review
+    */
+
+        let totalMilestones = 8;
+
+        if (predictionDone) completed++;
+
+        if (experimentStarted) completed++;
+
+        if (observed2) completed++;
+
+        if (observed4) completed++;
+
+        if (Object.keys(sortingCorrect).length >= sortingItems.length)
+          completed++;
+
+        if (quizFinished) completed++;
+
+        if (doubts.length > 0) completed++;
+
+        if (
+          predictionDone &&
+          observed2 &&
+          observed4 &&
+          Object.keys(sortingCorrect).length >= sortingItems.length &&
+          quizFinished
+        ) {
+          completed++;
+        }
+
+        let progress = Math.round((completed / totalMilestones) * 100);
+
+        if (progress > 100) {
+          progress = 100;
+        }
+
+        document.getElementById("progressFill").style.width = progress + "%";
+
+        document.getElementById("progressText").textContent = progress + "%";
+
+        updateTeacherDashboard();
+
+        checkFinalCompletion();
+      }
+
+      /* =========================================================
+   PREDICTION
+========================================================= */
+
+      function makePrediction(answer, button) {
+        if (predictionDone) {
+          showToast("You have already made your prediction! 🔮");
+
+          return;
+        }
+
+        document
+          .querySelectorAll(".predict-btn")
+          .forEach((btn) => btn.classList.remove("selected"));
+
+        button.classList.add("selected");
+
+        let result = document.getElementById("predictionResult");
+
+        result.style.display = "block";
+
+        predictionDone = true;
+
+        if (answer === "metal") {
+          result.innerHTML =
+            "🎉 Excellent prediction! Metal is a good conductor of heat.";
+
+          result.style.background = "#dcfce7";
+
+          result.style.color = "#166534";
+
+          addScore(5);
+        } else {
+          result.innerHTML =
+            "💡 Interesting prediction! Let's perform the experiment and see what happens.";
+
+          result.style.background = "#fef3c7";
+
+          result.style.color = "#92400e";
+
+          addScore(2);
+        }
+
+        saveActivity();
+      }
+
+      /* =========================================================
+   EXPERIMENT START
+========================================================= */
+
+      function startExperiment() {
+        if (experimentStarted) {
+          showToast("The experiment is already running! 🔥");
+
+          return;
+        }
+
+        experimentStarted = true;
+
+        currentObservationRound = 0;
+
+        document.getElementById("labTime").textContent =
+          "🔥 Experiment running...";
+
+        document.getElementById("stageNote").textContent =
+          "🌡️ Heat is travelling!";
+
+        document.getElementById("experimentStage").classList.add("lab-running");
+
+        document.getElementById("metalRod").classList.add("hot-glow");
+
+        document.getElementById("startButton").disabled = true;
+
+        document.getElementById("fast2Button").disabled = false;
+
+        showToast(
+          "🔥 Heat is travelling through the materials. Watch the moving particles!",
+        );
+
+        addScore(5);
+      }
+
+      /* =========================================================
+   2 MINUTE OBSERVATION
+========================================================= */
+
+      function observeAt2Minutes() {
+        if (!experimentStarted) {
+          showToast("First click 'Start Experiment' 🧪");
+
+          return;
+        }
+
+        if (observed2) {
+          showToast("You already completed the 2-minute observation.");
+
+          return;
+        }
+
+        observed2 = true;
+
+        currentObservationRound = 2;
+
+        document.getElementById("labTime").textContent =
+          "⏱️ Observation: 2 minutes";
+
+        document.getElementById("stageNote").textContent =
+          "👀 Now simulate touching the exposed ends";
+
+        setTemperatures(2);
+
+        document.getElementById("tableMetal2").textContent = "🔥 Hot";
+
+        document.getElementById("tablePlastic2").textContent = "🧊 Not hot";
+
+        document.getElementById("tableWood2").textContent = "🧊 Not hot";
+
+        enableTouchButtons();
+
+        document.getElementById("fast2Button").disabled = true;
+
+        document.getElementById("fast4Button").disabled = false;
+
+        showToast("🔎 At 2 minutes, simulate touching all three exposed ends.");
+
+        addScore(5);
+
+        saveActivity();
+      }
+
+      /* =========================================================
+   4 MINUTE OBSERVATION
+========================================================= */
+
+      function observeAt4Minutes() {
+        if (!experimentStarted) {
+          showToast("Start the experiment first 🧪");
+
+          return;
+        }
+
+        if (!observed2) {
+          showToast("Complete the 2-minute observation first ⏱️");
+
+          return;
+        }
+
+        if (observed4) {
+          showToast("You already completed the 4-minute observation.");
+
+          return;
+        }
+
+        observed4 = true;
+
+        currentObservationRound = 4;
+
+        document.getElementById("labTime").textContent =
+          "⏱️ Observation: 4 minutes";
+
+        document.getElementById("stageNote").textContent =
+          "🌡️ Compare all three materials!";
+
+        setTemperatures(4);
+
+        document.getElementById("tableMetal4").textContent = "🔥 Very hot";
+
+        document.getElementById("tablePlastic4").textContent =
+          "🌤️ Slightly warm";
+
+        document.getElementById("tableWood4").textContent =
+          "🧊 Relatively cool";
+
+        enableTouchButtons();
+
+        document.getElementById("fast4Button").disabled = true;
+
+        showToast(
+          "🎉 Great observation! Now simulate touching the exposed ends again.",
+        );
+
+        addScore(7);
+
+        saveActivity();
+      }
+
+      /* =========================================================
+   TOUCH BUTTONS
+========================================================= */
+
+      function enableTouchButtons() {
+        document.getElementById("touchMetalButton").disabled = false;
+
+        document.getElementById("touchPlasticButton").disabled = false;
+
+        document.getElementById("touchWoodButton").disabled = false;
+      }
+
+      function touchMaterial(material) {
+        if (!experimentStarted) {
+          showToast("Start the experiment first 🧪");
+
+          return;
+        }
+
+        if (currentObservationRound !== 2 && currentObservationRound !== 4) {
+          showToast("Choose a 2-minute or 4-minute observation first ⏱️");
+
+          return;
+        }
+
+        let round = currentObservationRound;
+
+        if (touchResults[round][material]) {
+          showToast("You already checked this material.");
+
+          return;
+        }
+
+        touchResults[round][material] = true;
+
+        let resultId =
+          "touch" +
+          material.charAt(0).toUpperCase() +
+          material.slice(1) +
+          "Result";
+
+        let result = document.getElementById(resultId);
+
+        if (round === 2) {
+          if (material === "metal") {
+            result.innerHTML = "🔥 Hot!";
+
+            result.style.color = "#b91c1c";
+          } else if (material === "plastic") {
+            result.innerHTML = "🧊 Not hot";
+
+            result.style.color = "#1d4ed8";
+          } else {
+            result.innerHTML = "🧊 Not hot";
+
+            result.style.color = "#1d4ed8";
+          }
+        }
+
+        if (round === 4) {
+          if (material === "metal") {
+            result.innerHTML = "🔥 Very hot!";
+
+            result.style.color = "#b91c1c";
+          } else if (material === "plastic") {
+            result.innerHTML = "🌤️ Slightly warm";
+
+            result.style.color = "#b45309";
+          } else {
+            result.innerHTML = "🧊 Relatively cool";
+
+            result.style.color = "#1d4ed8";
+          }
+        }
+
+        checkTouchRoundComplete();
+
+        saveActivity();
+      }
+
+      /* =========================================================
+   TOUCH ROUND COMPLETE
+========================================================= */
+
+      function checkTouchRoundComplete() {
+        let round = currentObservationRound;
+
+        let result = touchResults[round];
+
+        let complete = result.metal && result.plastic && result.wood;
+
+        if (!complete) {
+          let checked = Object.values(result).filter(
+            (value) => value === true,
+          ).length;
+
+          document.getElementById("touchRoundMessage").textContent =
+            "🔍 You checked " + checked + "/3 materials.";
+
+          return;
+        }
+
+        document.getElementById("touchRoundMessage").textContent =
+          "🎉 Excellent! You checked all three exposed ends at " +
+          round +
+          " minutes.";
+
+        if (round === 2) {
+          document.getElementById("tableMetal2").textContent = "🔥 Hot ✓";
+
+          document.getElementById("tablePlastic2").textContent = "🧊 Not hot ✓";
+
+          document.getElementById("tableWood2").textContent = "🧊 Not hot ✓";
+
+          showToast("⭐ 2-minute observation completed!");
+        }
+
+        if (round === 4) {
+          document.getElementById("tableMetal4").textContent = "🔥 Very hot ✓";
+
+          document.getElementById("tablePlastic4").textContent =
+            "🌤️ Slightly warm ✓";
+
+          document.getElementById("tableWood4").textContent =
+            "🧊 Relatively cool ✓";
+
+          showToast("⭐ 4-minute observation completed!");
+        }
+
+        updateProgress();
+      }
+
+      /* =========================================================
+   TEMPERATURES
+========================================================= */
+
+      function setTemperatures(time) {
+        if (time === 2) {
+          document.getElementById("metalTemp").style.width = "90%";
+
+          document.getElementById("plasticTemp").style.width = "25%";
+
+          document.getElementById("woodTemp").style.width = "12%";
+
+          setStatus("metalStatus", "Hot", "hot");
+
+          setStatus("plasticStatus", "Not Hot", "cold");
+
+          setStatus("woodStatus", "Not Hot", "cold");
+        }
+
+        if (time === 4) {
+          document.getElementById("metalTemp").style.width = "100%";
+
+          document.getElementById("plasticTemp").style.width = "50%";
+
+          document.getElementById("woodTemp").style.width = "20%";
+
+          setStatus("metalStatus", "Very Hot", "hot");
+
+          setStatus("plasticStatus", "Slightly Warm", "warm");
+
+          setStatus("woodStatus", "Relatively Cool", "cold");
+        }
+      }
+
+      /* =========================================================
+   STATUS
+========================================================= */
+
+      function setStatus(id, text, className) {
+        let element = document.getElementById(id);
+
+        element.textContent = text;
+
+        element.className = "status " + className;
+      }
+
+      /* =========================================================
+   RESTART EXPERIMENT
+========================================================= */
+
+      function restartExperiment() {
+        experimentStarted = false;
+
+        observed2 = false;
+
+        observed4 = false;
+
+        currentObservationRound = 0;
+
+        touchResults = {
+          2: {
+            metal: false,
+            plastic: false,
+            wood: false,
+          },
+
+          4: {
+            metal: false,
+            plastic: false,
+            wood: false,
+          },
+        };
+
+        document
+          .getElementById("experimentStage")
+          .classList.remove("lab-running");
+
+        document.getElementById("metalRod").classList.remove("hot-glow");
+
+        document.getElementById("startButton").disabled = false;
+
+        document.getElementById("fast2Button").disabled = true;
+
+        document.getElementById("fast4Button").disabled = true;
+
+        document.getElementById("labTime").textContent =
+          "⏱️ Experiment not started";
+
+        document.getElementById("stageNote").textContent = "🧪 Ready";
+
+        document.getElementById("metalTemp").style.width = "10%";
+
+        document.getElementById("plasticTemp").style.width = "10%";
+
+        document.getElementById("woodTemp").style.width = "10%";
+
+        setStatus("metalStatus", "Cold", "cold");
+
+        setStatus("plasticStatus", "Cold", "cold");
+
+        setStatus("woodStatus", "Cold", "cold");
+
+        document.getElementById("tableMetal2").textContent = "—";
+
+        document.getElementById("tableMetal4").textContent = "—";
+
+        document.getElementById("tablePlastic2").textContent = "—";
+
+        document.getElementById("tablePlastic4").textContent = "—";
+
+        document.getElementById("tableWood2").textContent = "—";
+
+        document.getElementById("tableWood4").textContent = "—";
+
+        document.getElementById("touchMetalResult").textContent = "";
+
+        document.getElementById("touchPlasticResult").textContent = "";
+
+        document.getElementById("touchWoodResult").textContent = "";
+
+        document.getElementById("touchRoundMessage").textContent = "";
+
+        document.getElementById("touchMetalButton").disabled = true;
+
+        document.getElementById("touchPlasticButton").disabled = true;
+
+        document.getElementById("touchWoodButton").disabled = true;
+
+        saveActivity();
+
+        updateProgress();
+
+        showToast("🔄 Virtual lab restarted!");
+      }
+
+      /* =========================================================
+   SORTING GAME
+========================================================= */
+
+      function createSortingGame() {
+        let source = document.getElementById("sortItems");
+
+        let conductor = document.getElementById("conductorItems");
+
+        let insulator = document.getElementById("insulatorItems");
+
+        source.innerHTML = "";
+
+        conductor.innerHTML = "";
+
+        insulator.innerHTML = "";
+
+        sortingItems.forEach((item, index) => {
+          if (sortingCorrect[index]) {
+            placeCorrectSortingItem(item, index);
+
+            return;
+          }
+
+          let button = document.createElement("button");
+
+          button.className = "sort-item";
+
+          button.textContent = item.icon + " " + item.name;
+
+          button.onclick = function () {
+            selectSortItem(item, index, button);
+          };
+
+          source.appendChild(button);
+        });
+
+        updateSortingMessage();
+      }
+
+      /* =========================================================
+   SELECT SORT ITEM
+========================================================= */
+
+      function selectSortItem(item, index, button) {
+        document
+          .querySelectorAll("#sortItems .sort-item")
+          .forEach((btn) => btn.classList.remove("selected-sort"));
+
+        button.classList.add("selected-sort");
+
+        selectedSortItem = {
+          item: item,
+          index: index,
+          button: button,
+        };
+
+        document.getElementById("sortMessage").textContent =
+          "👆 Now click the correct category for " + item.name + ".";
+
+        /*
+       Clicking the category itself performs the sort.
+    */
+
+        document.querySelector(".conductor-zone").onclick = function () {
+          sortSelectedItem("conductor");
+        };
+
+        document.querySelector(".insulator-zone").onclick = function () {
+          sortSelectedItem("insulator");
+        };
+      }
+
+      /* =========================================================
+   SORT SELECTED ITEM
+========================================================= */
+
+      function sortSelectedItem(zone) {
+        if (!selectedSortItem) {
+          showToast("First select a material to sort. 👆");
+
+          return;
+        }
+
+        let item = selectedSortItem.item;
+
+        let index = selectedSortItem.index;
+
+        if (item.type === zone) {
+          sortingCorrect[index] = true;
+
+          selectedSortItem.button.classList.add("correct");
+
+          selectedSortItem.button.classList.remove("selected-sort");
+
+          placeCorrectSortingItem(item, index);
+
+          selectedSortItem = null;
+
+          addScore(3);
+
+          document.getElementById("sortMessage").textContent =
+            "🎉 Correct! " +
+            item.name +
+            " is a " +
+            (item.type === "conductor" ? "good conductor." : "poor conductor.");
+
+          saveActivity();
+
+          updateSortingMessage();
+        } else {
+          selectedSortItem.button.classList.add("wrong");
+
+          document.getElementById("sortMessage").textContent =
+            "💡 Not quite! Think about how easily heat travels through " +
+            item.name +
+            ".";
+
+          setTimeout(() => {
+            selectedSortItem.button.classList.remove("wrong");
+          }, 500);
+        }
+      }
+
+      /* =========================================================
+   PLACE CORRECT SORTING ITEM
+========================================================= */
+
+      function placeCorrectSortingItem(item, index) {
+        let target =
+          item.type === "conductor"
+            ? document.getElementById("conductorItems")
+            : document.getElementById("insulatorItems");
+
+        let button = document.createElement("button");
+
+        button.className = "sort-item correct";
+
+        button.textContent = item.icon + " " + item.name;
+
+        button.disabled = true;
+
+        target.appendChild(button);
+      }
+
+      /* =========================================================
+   SORTING MESSAGE
+========================================================= */
+
+      function updateSortingMessage() {
+        let completed = Object.keys(sortingCorrect).length;
+
+        if (completed === sortingItems.length) {
+          document.getElementById("sortMessage").textContent =
+            "🏆 Fantastic! You correctly sorted all " +
+            sortingItems.length +
+            " materials!";
+
+          updateProgress();
+
+          return;
+        }
+
+        document.getElementById("sortMessage").textContent =
+          "Materials correctly sorted: " +
+          completed +
+          " / " +
+          sortingItems.length;
+      }
+
+      /* =========================================================
+   DOUBTS
+========================================================= */
+
+      function submitDoubt() {
+        let input = document.getElementById("doubtInput");
+
+        let question = input.value.trim();
+
+        if (question === "") {
+          showToast("Please type your doubt first 💬");
+
+          return;
+        }
+
+        let studentName = document.getElementById("studentName").value.trim();
+
+        if (studentName === "") {
+          studentName = "Anonymous Student";
+
+          showToast("💡 Your doubt will be shown as Anonymous Student.");
+        }
+
+        doubts.push({
+          question: question,
+
+          answer: "",
+
+          answered: false,
+
+          studentName: studentName,
+
+          date: new Date().toLocaleString(),
+        });
+
+        input.value = "";
+
+        addScore(2);
+
+        renderDoubts();
+
+        saveActivity();
+
+        showToast("💬 Your doubt has been sent to the teacher!");
+      }
+
+      /* =========================================================
+   RENDER DOUBTS
+========================================================= */
+
+      function renderDoubts() {
+        let studentList = document.getElementById("studentDoubtList");
+
+        let teacherList = document.getElementById("teacherDoubtList");
+
+        if (doubts.length === 0) {
+          studentList.innerHTML = "";
+
+          teacherList.innerHTML =
+            "<p style='color:#64748b;'>No doubts submitted yet.</p>";
+
+          return;
+        }
+
+        studentList.innerHTML = "";
+
+        teacherList.innerHTML = "";
+
+        doubts.forEach((doubt, index) => {
+          let studentBox = document.createElement("div");
+
+          studentBox.className = "doubt-item";
+
+          studentBox.innerHTML = `
+            <div class="doubt-student">
+                👤 ${escapeHTML(doubt.studentName)}
+            </div>
+
+            <div class="doubt-question">
+                🙋 ${escapeHTML(doubt.question)}
+            </div>
+
+            ${
+              doubt.answered
+                ? `<div class="teacher-answer">
+                    👩‍🏫 Teacher:
+                    ${escapeHTML(doubt.answer)}
+                </div>`
+                : `<div style="margin-top:8px;color:#64748b;">
+                    ⏳ Waiting for teacher's answer...
+                </div>`
+            }
+            `;
+
+          studentList.appendChild(studentBox);
+
+          let teacherBox = document.createElement("div");
+
+          teacherBox.className = "doubt-item";
+
+          teacherBox.innerHTML = `
+            <div class="doubt-student">
+                👤 Student: ${escapeHTML(doubt.studentName)}
+            </div>
+
+            <div class="doubt-question">
+                🙋 ${escapeHTML(doubt.question)}
+            </div>
+
+            <div style="
+                margin-top:7px;
+                color:#94a3b8;
+                font-size:12px;">
+                ${escapeHTML(doubt.date || "")}
+            </div>
+
+            <button
+                class="teacher-btn"
+                style="margin-top:10px;"
+                onclick="selectDoubt(${index})">
+
+                ✍️ Answer This Doubt
+
+            </button>
+
+            ${
+              doubt.answered
+                ? `<div class="teacher-answer">
+                    <strong>Answer sent:</strong><br>
+                    ${escapeHTML(doubt.answer)}
+                </div>`
+                : ""
+            }
+            `;
+
+          teacherList.appendChild(teacherBox);
+        });
+      }
+
+      /* =========================================================
+   SELECT DOUBT
+========================================================= */
+
+      function selectDoubt(index) {
+        currentDoubtIndex = index;
+
+        document.getElementById("teacherAnswer").focus();
+
+        document.getElementById("selectedDoubtText").textContent =
+          "✍️ Answering " +
+          doubts[index].studentName +
+          ": " +
+          doubts[index].question;
+
+        document.getElementById("teacherAnswerMessage").textContent =
+          "Write a simple explanation and send it to the student.";
+      }
+
+      /* =========================================================
+   ANSWER DOUBT
+========================================================= */
+
+      function answerSelectedDoubt() {
+        if (currentDoubtIndex === null) {
+          showToast("Please select a student doubt first.");
+
+          return;
+        }
+
+        let answer = document.getElementById("teacherAnswer").value.trim();
+
+        if (answer === "") {
+          showToast("Please write an answer first.");
+
+          return;
+        }
+
+        doubts[currentDoubtIndex].answer = answer;
+
+        doubts[currentDoubtIndex].answered = true;
+
+        document.getElementById("teacherAnswer").value = "";
+
+        document.getElementById("teacherAnswerMessage").textContent =
+          "✅ Answer sent successfully!";
+
+        document.getElementById("selectedDoubtText").textContent =
+          "Select another student's question if needed.";
+
+        renderDoubts();
+
+        saveActivity();
+
+        currentDoubtIndex = null;
+      }
+
+      /* =========================================================
+   TEACHER HINTS
+========================================================= */
+
+      function teacherHint(type) {
+        let box = document.getElementById("teacherHintBox");
+
+        if (type === 1) {
+          box.innerHTML = `
+            🔥 <strong>Conductor:</strong><br><br>
+            A good conductor is a material through which
+            heat can travel easily.
+            <br><br>
+            Example: metal.
+            `;
+        }
+
+        if (type === 2) {
+          box.innerHTML = `
+            🧊 <strong>Insulator:</strong><br><br>
+            A poor conductor or insulator slows down the
+            movement of heat.
+            <br><br>
+            Examples: wood and plastic.
+            `;
+        }
+
+        if (type === 3) {
+          box.innerHTML = `
+            🏠 <strong>Real-life example:</strong><br><br>
+            A cooking pan may have a metal body but a
+            plastic or wooden handle so that heat does not
+            travel easily to our hand.
+            `;
+        }
+
+        if (type === 4) {
+          box.innerHTML = `
+            🧠 <strong>Thinking question:</strong><br><br>
+            Ask students:
+            <br><br>
+            "If the metal, plastic and wooden objects are
+            placed in the same hot water, why don't their
+            exposed ends become equally hot?"
+            `;
+        }
+      }
+
+      /* =========================================================
+   QUIZ
+========================================================= */
+
+      function answerQuiz(question, button, correct) {
+        if (quizFinished) {
+          showToast("The quiz has already been completed.");
+
+          return;
+        }
+
+        if (Object.prototype.hasOwnProperty.call(quizAnswers, question)) {
+          showToast("You already answered this question.");
+
+          return;
+        }
+
+        quizAnswers[question] = correct ? "correct" : "wrong";
+
+        if (correct) {
+          button.classList.add("correct-answer");
+
+          document.getElementById("feedback" + question).textContent =
+            "🎉 Correct! Great thinking!";
+
+          addScore(5);
+        } else {
+          button.classList.add("incorrect-answer");
+
+          document.getElementById("feedback" + question).textContent =
+            "💡 Not quite. Think about how easily heat travels.";
+        }
+
+        document.getElementById("quizProgress").textContent =
+          "Answered: " + Object.keys(quizAnswers).length + " / 10";
+
+        saveActivity();
+      }
+
+      /* =========================================================
+   FINISH QUIZ
+========================================================= */
+
+      function finishQuiz() {
+        if (quizFinished) {
+          showToast("You have already checked your quiz.");
+
+          return;
+        }
+
+        if (Object.keys(quizAnswers).length < 10) {
+          showToast("Answer all 10 questions first 🧠");
+
+          return;
+        }
+
+        let correct = Object.values(quizAnswers).filter(
+          (x) => x === "correct",
+        ).length;
+
+        let result = document.getElementById("quizResult");
+
+        result.style.display = "block";
+
+        if (correct === 10) {
+          result.innerHTML = `
+            🏆 PERFECT SCORE!<br><br>
+            You got 10/10 correct!
+            <br><br>
+            You are a <strong>Science Expert!</strong> 🔬
+            `;
+
+          addScore(10);
+        } else if (correct >= 7) {
+          result.innerHTML = `
+            🌟 Great job!
+            <br><br>
+            You got ${correct}/10 correct.
+            <br><br>
+            You have understood most of the heat mystery!
+            `;
+        } else if (correct >= 5) {
+          result.innerHTML = `
+            👍 Good attempt!
+            <br><br>
+            You got ${correct}/10 correct.
+            <br><br>
+            Review the experiment once more.
+            `;
+        } else {
+          result.innerHTML = `
+            💪 Keep learning!
+            <br><br>
+            You got ${correct}/10 correct.
+            <br><br>
+            Re-watch the heat animation and try to understand
+            the experiment again.
+            `;
+        }
+
+        quizFinished = true;
+
+        document.getElementById("finishQuizButton").disabled = true;
+
+        saveActivity();
+
+        updateProgress();
+      }
+
+      /* =========================================================
+   REPLAY HEAT ANIMATION
+========================================================= */
+
+      function replayHeatAnimation() {
+        let animationBox = document.getElementById("animationBox");
+
+        animationBox.classList.remove("replay-now");
+
+        void animationBox.offsetWidth;
+
+        animationBox.classList.add("replay-now");
+
+        setTimeout(() => {
+          animationBox.classList.remove("replay-now");
+        }, 100);
+
+        showToast("🎬 Heat animation replayed!");
+      }
+
+      /* =========================================================
+   FINAL COMPLETION
+========================================================= */
+
+      function checkFinalCompletion() {
+        let sortingComplete =
+          Object.keys(sortingCorrect).length >= sortingItems.length;
+
+        if (
+          predictionDone &&
+          observed2 &&
+          observed4 &&
+          sortingComplete &&
+          quizFinished
+        ) {
+          document.getElementById("finalMessage").style.display = "block";
+        } else {
+          document.getElementById("finalMessage").style.display = "none";
+        }
+      }
+
+      /* =========================================================
+   TEACHER DASHBOARD
+========================================================= */
+
+      function updateTeacherDashboard() {
+        let teacherScore = document.getElementById("teacherScore");
+
+        let teacherProgress = document.getElementById("teacherProgress");
+
+        if (teacherScore) {
+          teacherScore.textContent = score;
+        }
+
+        if (teacherProgress) {
+          teacherProgress.textContent =
+            document.getElementById("progressText").textContent;
+        }
+
+        let studentName = document.getElementById("studentName").value.trim();
+
+        document.getElementById("teacherStudentName").textContent =
+          "Student: " + (studentName ? studentName : "Not entered");
+
+        document.getElementById("teacherPrediction").textContent =
+          predictionDone ? "Done" : "No";
+
+        let observationCount = 0;
+
+        if (observed2) observationCount++;
+
+        if (observed4) observationCount++;
+
+        document.getElementById("teacherObservation").textContent =
+          observationCount + "/2";
+
+        document.getElementById("teacherSorting").textContent =
+          Object.keys(sortingCorrect).length + "/" + sortingItems.length;
+
+        renderDoubts();
+      }
+
+      /* =========================================================
+   RESET
+========================================================= */
+
+      function resetActivity() {
+        let confirmReset = confirm(
+          "Are you sure you want to reset the entire activity?",
+        );
+
+        if (!confirmReset) return;
+
+        score = 0;
+
+        predictionDone = false;
+
+        experimentStarted = false;
+
+        observed2 = false;
+
+        observed4 = false;
+
+        currentObservationRound = 0;
+
+        touchResults = {
+          2: {
+            metal: false,
+            plastic: false,
+            wood: false,
+          },
+
+          4: {
+            metal: false,
+            plastic: false,
+            wood: false,
+          },
+        };
+
+        quizAnswers = {};
+
+        quizFinished = false;
+
+        doubts = [];
+
+        currentDoubtIndex = null;
+
+        selectedSortItem = null;
+
+        sortingCorrect = {};
+
+        localStorage.removeItem(STORAGE_KEY);
+
+        document.getElementById("studentName").value = "";
+
+        document.getElementById("score").textContent = "0";
+
+        document.getElementById("badgeText").textContent = "Beginner";
+
+        document.getElementById("progressFill").style.width = "0%";
+
+        document.getElementById("progressText").textContent = "0%";
+
+        document.getElementById("predictionResult").style.display = "none";
+
+        document
+          .querySelectorAll(".predict-btn")
+          .forEach((btn) => btn.classList.remove("selected"));
+
+        restartExperiment();
+
+        document.querySelectorAll(".quiz-option").forEach((btn) => {
+          btn.classList.remove("correct-answer", "incorrect-answer");
+
+          btn.disabled = false;
+        });
+
+        for (let i = 1; i <= 10; i++) {
+          document.getElementById("feedback" + i).textContent = "";
+        }
+
+        document.getElementById("quizProgress").textContent =
+          "Answered: 0 / 10";
+
+        document.getElementById("quizResult").style.display = "none";
+
+        document.getElementById("finishQuizButton").disabled = false;
+
+        document.getElementById("doubtInput").value = "";
+
+        document.getElementById("teacherAnswer").value = "";
+
+        document.getElementById("studentDoubtList").innerHTML = "";
+
+        document.getElementById("teacherDoubtList").innerHTML = `
+        <p style="color:#64748b;">
+            No doubts submitted yet.
+        </p>
+        `;
+
+        document.getElementById("teacherHintBox").innerHTML = "";
+
+        document.getElementById("selectedDoubtText").textContent =
+          "Select a student's question above and write your explanation.";
+
+        document.getElementById("teacherAnswerMessage").textContent = "";
+
+        document.getElementById("finalMessage").style.display = "none";
+
+        createSortingGame();
+
+        updateBadge();
+
+        updateTeacherDashboard();
+
+        showStudentMode();
+
+        showToast("🔄 Activity reset! Start your science investigation again.");
+      }
+
+      /* =========================================================
+   TOAST
+========================================================= */
+
+      function showToast(message) {
+        let toast = document.getElementById("toast");
+
+        toast.textContent = message;
+
+        toast.classList.add("show");
+
+        setTimeout(() => {
+          toast.classList.remove("show");
+        }, 3000);
+      }
+
+      /* =========================================================
+   SECURITY HELPER
+========================================================= */
+
+      function escapeHTML(text) {
+        let div = document.createElement("div");
+
+        div.textContent = text;
+
+        return div.innerHTML;
+      }
+
+      /* =========================================================
+   INITIALIZE
+========================================================= */
+
+      loadActivity();
+
+      createSortingGame();
+
+      renderDoubts();
+
+      updateBadge();
+
+      updateProgress();
+
+      /* Restore experiment UI if data existed */
+
+      if (experimentStarted) {
+        document.getElementById("startButton").disabled = true;
+
+        document.getElementById("experimentStage").classList.add("lab-running");
+
+        document.getElementById("metalRod").classList.add("hot-glow");
+      }
+
+      if (observed2) {
+        setTemperatures(2);
+
+        document.getElementById("tableMetal2").textContent = "🔥 Hot ✓";
+
+        document.getElementById("tablePlastic2").textContent = "🧊 Not hot ✓";
+
+        document.getElementById("tableWood2").textContent = "🧊 Not hot ✓";
+      }
+
+      if (observed4) {
+        setTemperatures(4);
+
+        document.getElementById("tableMetal4").textContent = "🔥 Very hot ✓";
+
+        document.getElementById("tablePlastic4").textContent =
+          "🌤️ Slightly warm ✓";
+
+        document.getElementById("tableWood4").textContent =
+          "🧊 Relatively cool ✓";
+      }
+
+      if (observed2 || observed4) {
+        enableTouchButtons();
+      }
+
+      if (observed2) {
+        document.getElementById("fast2Button").disabled = true;
+      }
+
+      if (observed4) {
+        document.getElementById("fast4Button").disabled = true;
+      }
+
+      if (!experimentStarted) {
+        document.getElementById("fast2Button").disabled = true;
+
+        document.getElementById("fast4Button").disabled = true;
+      }
+
+      if (quizFinished) {
+        document.getElementById("finishQuizButton").disabled = true;
+      }
+
+      Object.keys(quizAnswers).forEach((question) => {
+        /*
+       Restore quiz answer appearance.
+       The exact selected button is not stored,
+       so the feedback is restored through the answer state.
+    */
+
+        let feedback = document.getElementById("feedback" + question);
+
+        if (quizAnswers[question] === "correct") {
+          feedback.textContent = "🎉 Correct! Great thinking!";
+        } else {
+          feedback.textContent = "💡 This answer was incorrect.";
+        }
+      });
+
+      document.getElementById("quizProgress").textContent =
+        "Answered: " + Object.keys(quizAnswers).length + " / 10";
+    </script>
+  </body>
+</html>

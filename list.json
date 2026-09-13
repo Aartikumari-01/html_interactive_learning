@@ -210,7 +210,13 @@
       "subject": "Science",
       "topic": "Materials",
       "activity_name": "Distinguish Good Conductors and Poor Conductors of Heat",
-      "activity_details": "Place metal, plastic, and wooden objects in hot water. Touch the exposed ends after 2 and 4 minutes. Metal ends become hot (conductors), while plastic/wood ends remain cold (insulators)."
+      "activity_details": "Place metal, plastic, and wooden objects in hot water. Touch the exposed ends after 2 and 4 minutes. Metal ends become hot (conductors), while plastic/wood ends remain cold (insulators).",
+      "activity_path": [
+        {
+          "label": "Interactive Heat Conductors",
+          "path": "activities/good-poor-conductors/index.html"
+        }
+      ]
     },
     {
       "class": "VI",
@@ -231,7 +237,13 @@
       "subject": "Science",
       "topic": "World of the Living",
       "activity_name": "Learn about Joints and Movement",
-      "activity_details": "Move different body parts (head, neck, arm, elbow, etc.) and identify the type of joint (ball-and-socket, hinge, pivot, gliding, fixed) based on the movement."
+      "activity_details": "Move different body parts (head, neck, arm, elbow, etc.) and identify the type of joint (ball-and-socket, hinge, pivot, gliding, fixed) based on the movement.",
+      "activity_path": [
+        {
+          "label": "Interactive Joints and Movement",
+          "path": "activities/joints-and-movement/index.html"
+        }
+      ]
     },
     {
       "class": "VI",
@@ -378,7 +390,13 @@
       "subject": "Science",
       "topic": "Natural Phenomena",
       "activity_name": "Study Shadow Formation",
-      "activity_details": "Use a torch, opaque/translucent/transparent objects, and a screen. Observe the formation and nature of shadows."
+      "activity_details": "Use a torch, opaque/translucent/transparent objects, and a screen. Observe the formation and nature of shadows.",
+      "activity_path": [
+        {
+          "label": "Interactive Shadow Formation",
+          "path": "activities/shadow-formation/index.html"
+        }
+      ]
     },
     {
       "class": "VI",

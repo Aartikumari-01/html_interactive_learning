@@ -1,0 +1,1878 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Shadow Formation Lab - Class VI Science</title>
+
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: #eef4ff;
+        color: #172033;
+        min-height: 100vh;
+      }
+
+      /* =====================================================
+   HEADER
+===================================================== */
+
+      header {
+        background: linear-gradient(135deg, #172554, #2563eb);
+        color: white;
+        padding: 20px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+      }
+
+      .header-title h1 {
+        font-size: 28px;
+      }
+
+      .header-title p {
+        margin-top: 5px;
+        opacity: 0.9;
+      }
+
+      .mode-buttons {
+        display: flex;
+        gap: 10px;
+      }
+
+      .mode-buttons button {
+        border: none;
+        padding: 11px 18px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+
+      .student-btn {
+        background: #facc15;
+        color: #172033;
+      }
+
+      .teacher-btn {
+        background: white;
+        color: #1d4ed8;
+      }
+
+      /* =====================================================
+   LAYOUT
+===================================================== */
+
+      .container {
+        max-width: 1400px;
+        margin: auto;
+        padding: 20px;
+      }
+
+      .dashboard {
+        display: grid;
+        grid-template-columns: 260px 1fr 280px;
+        gap: 18px;
+      }
+
+      /* =====================================================
+   CARDS
+===================================================== */
+
+      .card {
+        background: white;
+        border-radius: 18px;
+        padding: 18px;
+        box-shadow: 0 5px 18px rgba(15, 23, 42, 0.08);
+        margin-bottom: 18px;
+      }
+
+      .card h2 {
+        font-size: 19px;
+        margin-bottom: 14px;
+      }
+
+      .card h3 {
+        margin-bottom: 10px;
+      }
+
+      /* =====================================================
+   OBJECT SELECTION
+===================================================== */
+
+      .object-list {
+        display: grid;
+        gap: 10px;
+      }
+
+      .object-btn {
+        border: 2px solid #dbeafe;
+        background: #f8fbff;
+        border-radius: 12px;
+        padding: 12px;
+        cursor: pointer;
+        text-align: left;
+        transition: 0.2s;
+      }
+
+      .object-btn:hover {
+        transform: translateY(-2px);
+        border-color: #60a5fa;
+      }
+
+      .object-btn.active {
+        border-color: #2563eb;
+        background: #eff6ff;
+      }
+
+      .object-icon {
+        font-size: 26px;
+        margin-right: 8px;
+      }
+
+      /* =====================================================
+   CONTROLS
+===================================================== */
+
+      .control {
+        margin: 16px 0;
+      }
+
+      .control label {
+        display: flex;
+        justify-content: space-between;
+        font-weight: bold;
+        margin-bottom: 7px;
+      }
+
+      input[type="range"] {
+        width: 100%;
+        accent-color: #2563eb;
+      }
+
+      /* =====================================================
+   LAB
+===================================================== */
+
+      .lab {
+        position: relative;
+        height: 520px;
+        border-radius: 18px;
+        overflow: hidden;
+        background: radial-gradient(
+          circle at 50% 20%,
+          #ffffff 0,
+          #e8eef8 55%,
+          #cbd5e1 100%
+        );
+        border: 3px solid #dbeafe;
+      }
+
+      .lab-title {
+        position: absolute;
+        top: 15px;
+        left: 18px;
+        z-index: 30;
+        background: white;
+        padding: 8px 14px;
+        border-radius: 20px;
+        font-weight: bold;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      /* =====================================================
+   TABLE
+===================================================== */
+
+      .table {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 80px;
+        background: #92400e;
+        z-index: 20;
+      }
+
+      .table-top {
+        position: absolute;
+        bottom: 80px;
+        width: 100%;
+        height: 18px;
+        background: #78350f;
+        z-index: 19;
+      }
+
+      /* =====================================================
+   TORCH
+===================================================== */
+
+      .torch {
+        position: absolute;
+        left: 60px;
+        bottom: 110px;
+        width: 85px;
+        height: 45px;
+        background: #334155;
+        border-radius: 25px;
+        transform: rotate(-8deg);
+        z-index: 15;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+      }
+
+      .torch::before {
+        content: "";
+        position: absolute;
+        right: -22px;
+        top: 9px;
+        width: 30px;
+        height: 27px;
+        background: #64748b;
+        border-radius: 5px;
+      }
+
+      .torch::after {
+        content: "";
+        position: absolute;
+        right: -15px;
+        top: 11px;
+        width: 15px;
+        height: 23px;
+        border-radius: 50%;
+        background: #fde047;
+        box-shadow:
+          0 0 10px #fde047,
+          0 0 25px rgba(250, 204, 21, 0.9),
+          0 0 45px rgba(250, 204, 21, 0.5);
+      }
+
+      /* =====================================================
+   LIGHT BEAM
+===================================================== */
+
+      .beam {
+        position: absolute;
+        left: 125px;
+        bottom: 130px;
+        width: 650px;
+        height: 270px;
+        background: rgba(250, 204, 21, 0.13);
+        clip-path: polygon(0 48%, 100% 5%, 100% 95%);
+        z-index: 3;
+        opacity: 0.8;
+        transition: 0.4s;
+      }
+
+      .beam.active {
+        animation: pulseBeam 1.4s infinite alternate;
+      }
+
+      @keyframes pulseBeam {
+        from {
+          opacity: 0.35;
+        }
+
+        to {
+          opacity: 0.9;
+        }
+      }
+
+      /* =====================================================
+   INDIVIDUAL LIGHT RAYS
+===================================================== */
+
+      .rays {
+        position: absolute;
+        left: 125px;
+        bottom: 140px;
+        width: 650px;
+        height: 230px;
+        z-index: 4;
+        pointer-events: none;
+      }
+
+      .ray {
+        position: absolute;
+        height: 3px;
+        width: 550px;
+        background: #fde047;
+        box-shadow: 0 0 8px #facc15;
+        transform-origin: left center;
+        opacity: 0;
+      }
+
+      .ray1 {
+        top: 55px;
+        transform: rotate(-13deg);
+      }
+
+      .ray2 {
+        top: 110px;
+        transform: rotate(-4deg);
+      }
+
+      .ray3 {
+        top: 165px;
+        transform: rotate(5deg);
+      }
+
+      .rays.active .ray {
+        opacity: 0.9;
+        animation: moveRay 1.2s linear infinite;
+      }
+
+      @keyframes moveRay {
+        from {
+          transform: translateX(0) rotate(var(--angle));
+        }
+
+        to {
+          transform: translateX(80px) rotate(var(--angle));
+        }
+      }
+
+      /* =====================================================
+   OBJECT
+===================================================== */
+
+      .object {
+        position: absolute;
+        bottom: 98px;
+        left: 48%;
+        width: 90px;
+        height: 150px;
+        border-radius: 8px;
+        z-index: 12;
+        transition: 0.4s;
+      }
+
+      /* =====================================================
+   OPAQUE OBJECT
+===================================================== */
+
+      .object.opaque {
+        background: linear-gradient(135deg, #1e293b, #475569);
+
+        border: 4px solid #0f172a;
+
+        box-shadow:
+          inset -12px 0 0 rgba(0, 0, 0, 0.2),
+          0 4px 10px rgba(0, 0, 0, 0.25);
+      }
+
+      /* =====================================================
+   TRANSLUCENT OBJECT
+===================================================== */
+
+      .object.translucent {
+        background: linear-gradient(
+          135deg,
+          rgba(147, 197, 253, 0.75),
+          rgba(186, 230, 253, 0.45)
+        );
+
+        border: 4px solid #38bdf8;
+
+        box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+      }
+
+      /* =====================================================
+   TRANSPARENT OBJECT
+===================================================== */
+
+      .object.transparent {
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.12),
+          rgba(186, 230, 253, 0.08)
+        );
+
+        border: 4px dashed #64748b;
+
+        box-shadow: 0 0 18px rgba(255, 255, 255, 0.5);
+      }
+
+      /* =====================================================
+   OBJECT LABEL
+===================================================== */
+
+      .object-label {
+        position: absolute;
+        top: -35px;
+        width: 150px;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+        background: #172554;
+        color: white;
+        padding: 6px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: bold;
+      }
+
+      /* =====================================================
+   SCREEN
+===================================================== */
+
+      .screen {
+        position: absolute;
+        right: 35px;
+        bottom: 95px;
+        width: 125px;
+        height: 240px;
+        background: #ffffff;
+        border: 10px solid #94a3b8;
+        border-radius: 5px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        z-index: 10;
+        overflow: hidden;
+      }
+
+      .screen-text {
+        position: absolute;
+        width: 100%;
+        text-align: center;
+        top: 10px;
+        color: #64748b;
+        font-size: 13px;
+        z-index: 5;
+      }
+
+      /* =====================================================
+   SCREEN LIGHT
+===================================================== */
+
+      .screen-light {
+        position: absolute;
+        left: 10px;
+        right: 10px;
+        top: 40px;
+        bottom: 10px;
+        border-radius: 5px;
+        background: radial-gradient(
+          ellipse,
+          rgba(250, 204, 21, 0.65),
+          rgba(254, 249, 195, 0.35),
+          rgba(255, 255, 255, 0.1)
+        );
+        transition: 0.5s;
+      }
+
+      /* =====================================================
+   PROJECTED SHADOW ON SCREEN
+===================================================== */
+
+      .screen-shadow {
+        position: absolute;
+        width: 80px;
+        height: 120px;
+        left: 50%;
+        top: 55%;
+        transform: translate(-50%, -50%);
+        border-radius: 12px;
+        background: rgba(0, 0, 0, 0.75);
+        filter: blur(2px);
+        opacity: 0;
+        transition: 0.5s;
+        z-index: 4;
+      }
+
+      /* OPAQUE SHADOW */
+
+      .screen.opaque-screen .screen-shadow {
+        opacity: 0.82;
+        background: rgba(0, 0, 0, 0.82);
+      }
+
+      /* TRANSLUCENT SHADOW */
+
+      .screen.translucent-screen .screen-shadow {
+        opacity: 0.38;
+        background: rgba(70, 70, 70, 0.4);
+        filter: blur(8px);
+      }
+
+      /* TRANSPARENT SHADOW */
+
+      .screen.transparent-screen .screen-shadow {
+        opacity: 0.05;
+        background: rgba(100, 100, 100, 0.08);
+        filter: blur(15px);
+      }
+
+      /* =====================================================
+   SHADOW GROUND
+===================================================== */
+
+      .shadow {
+        position: absolute;
+        bottom: 83px;
+        left: 62%;
+        width: 160px;
+        height: 32px;
+        background: rgba(0, 0, 0, 0.5);
+        filter: blur(7px);
+        border-radius: 50%;
+        transform: translateX(-50%);
+        transition: 0.4s;
+        z-index: 7;
+      }
+
+      /* =====================================================
+   LIGHT SPOT
+===================================================== */
+
+      .light-spot {
+        position: absolute;
+        right: 58px;
+        bottom: 130px;
+        width: 80px;
+        height: 150px;
+        background: rgba(250, 204, 21, 0.35);
+        border-radius: 50%;
+        filter: blur(8px);
+        z-index: 2;
+        transition: 0.5s;
+      }
+
+      /* =====================================================
+   SCREEN STATUS
+===================================================== */
+
+      .screen-status {
+        position: absolute;
+        bottom: 7px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 110%;
+        text-align: center;
+        font-size: 11px;
+        font-weight: bold;
+        color: #334155;
+        z-index: 6;
+      }
+
+      /* =====================================================
+   OBSERVATION
+===================================================== */
+
+      .observation {
+        margin-top: 15px;
+        padding: 15px;
+        background: #eff6ff;
+        border-radius: 12px;
+        border-left: 5px solid #2563eb;
+      }
+
+      .observation strong {
+        color: #1d4ed8;
+      }
+
+      /* =====================================================
+   SCORE
+===================================================== */
+
+      .score-box {
+        background: #172554;
+        color: white;
+        border-radius: 15px;
+        padding: 15px;
+        text-align: center;
+      }
+
+      .score {
+        font-size: 38px;
+        font-weight: bold;
+        color: #facc15;
+      }
+
+      .progress-bar {
+        width: 100%;
+        height: 12px;
+        background: #e2e8f0;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-top: 8px;
+      }
+
+      .progress {
+        height: 100%;
+        width: 0%;
+        background: #22c55e;
+        transition: 0.4s;
+      }
+
+      /* =====================================================
+   BADGES
+===================================================== */
+
+      .badges {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .badge {
+        padding: 7px 10px;
+        border-radius: 20px;
+        background: #e2e8f0;
+        font-size: 13px;
+      }
+
+      .badge.earned {
+        background: #fef3c7;
+        color: #92400e;
+      }
+
+      /* =====================================================
+   BUTTONS
+===================================================== */
+
+      .primary-btn,
+      .secondary-btn,
+      .danger-btn {
+        width: 100%;
+        border: none;
+        padding: 12px;
+        border-radius: 10px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 8px;
+      }
+
+      .primary-btn {
+        background: #2563eb;
+        color: white;
+      }
+
+      .secondary-btn {
+        background: #e0f2fe;
+        color: #075985;
+      }
+
+      .danger-btn {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+
+      button:hover {
+        filter: brightness(0.96);
+      }
+
+      /* =====================================================
+   QUIZ
+===================================================== */
+
+      .quiz-option {
+        display: block;
+        width: 100%;
+        padding: 11px;
+        margin: 7px 0;
+        border: 2px solid #e2e8f0;
+        background: white;
+        border-radius: 10px;
+        text-align: left;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+
+      .quiz-option:hover {
+        border-color: #60a5fa;
+        transform: translateX(3px);
+      }
+
+      .quiz-option.correct-answer {
+        border-color: #22c55e;
+        background: #dcfce7;
+      }
+
+      .quiz-option.wrong-answer {
+        border-color: #ef4444;
+        background: #fee2e2;
+      }
+
+      .quiz-result {
+        margin-top: 10px;
+        padding: 10px;
+        border-radius: 10px;
+        display: none;
+      }
+
+      .correct {
+        background: #dcfce7;
+        color: #166534;
+      }
+
+      .wrong {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+
+      .quiz-progress {
+        font-size: 13px;
+        color: #64748b;
+        margin-bottom: 8px;
+      }
+
+      .next-question {
+        display: none;
+      }
+
+      /* =====================================================
+   TEACHER MODE
+===================================================== */
+
+      .teacher-panel {
+        display: none;
+      }
+
+      .teacher-panel.active {
+        display: block;
+      }
+
+      .challenge {
+        background: #fefce8;
+        border-left: 5px solid #eab308;
+        padding: 12px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+      }
+
+      /* =====================================================
+   EXPERIMENT STATUS
+===================================================== */
+
+      .experiment-status {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-weight: bold;
+        background: #e0f2fe;
+        color: #075985;
+        margin-top: 8px;
+      }
+
+      /* =====================================================
+   RESPONSIVE
+===================================================== */
+
+      @media (max-width: 1100px) {
+        .dashboard {
+          grid-template-columns: 1fr;
+        }
+
+        .lab {
+          height: 500px;
+        }
+      }
+
+      @media (max-width: 600px) {
+        header {
+          padding: 16px;
+        }
+
+        .header-title h1 {
+          font-size: 22px;
+        }
+
+        .container {
+          padding: 10px;
+        }
+
+        .lab {
+          height: 430px;
+        }
+
+        .screen {
+          right: 15px;
+          width: 90px;
+        }
+
+        .object {
+          left: 43%;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <div class="header-title">
+        <h1>🔦 Shadow Formation Lab</h1>
+
+        <p>Class VI • Science • Natural Phenomena</p>
+      </div>
+
+      <div class="mode-buttons">
+        <button class="student-btn" onclick="showStudentMode()">
+          Student Mode
+        </button>
+
+        <button class="teacher-btn" onclick="showTeacherMode()">
+          Teacher Mode
+        </button>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="dashboard">
+        <!-- =====================================================
+     LEFT PANEL
+===================================================== -->
+
+        <div>
+          <div class="card">
+            <h2>Choose an Object</h2>
+
+            <div class="object-list">
+              <button
+                class="object-btn active"
+                onclick="selectObject('opaque', this)"
+              >
+                <span class="object-icon">🧱</span>
+
+                <strong>Opaque</strong>
+
+                <br />
+
+                <small>Blocks light completely</small>
+              </button>
+
+              <button
+                class="object-btn"
+                onclick="selectObject('translucent', this)"
+              >
+                <span class="object-icon">🧊</span>
+
+                <strong>Translucent</strong>
+
+                <br />
+
+                <small>Allows some light through</small>
+              </button>
+
+              <button
+                class="object-btn"
+                onclick="selectObject('transparent', this)"
+              >
+                <span class="object-icon">🪟</span>
+
+                <strong>Transparent</strong>
+
+                <br />
+
+                <small>Allows most light through</small>
+              </button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>🎛️ Experiment Controls</h2>
+
+            <div class="control">
+              <label>
+                Torch Distance
+
+                <span id="distanceValue">50 cm</span>
+              </label>
+
+              <input
+                type="range"
+                min="20"
+                max="90"
+                value="50"
+                id="distance"
+                oninput="changeDistance(this.value)"
+              />
+            </div>
+
+            <div class="control">
+              <label>
+                Object Size
+
+                <span id="sizeValue">Medium</span>
+              </label>
+
+              <input
+                type="range"
+                min="1"
+                max="3"
+                value="2"
+                id="objectSize"
+                oninput="changeSize(this.value)"
+              />
+            </div>
+
+            <button class="primary-btn" onclick="runExperiment()">
+              ▶ Run Experiment
+            </button>
+
+            <button class="secondary-btn" onclick="giveHint()">
+              Give Me a Hint
+            </button>
+
+            <button class="secondary-btn" onclick="toggleLightPath()">
+              Show / Hide Light Path
+            </button>
+
+            <button class="danger-btn" onclick="resetLab()">Reset Lab</button>
+          </div>
+        </div>
+
+        <!-- =====================================================
+     MAIN LAB
+===================================================== -->
+
+        <div>
+          <div class="card">
+            <div class="lab">
+              <div class="lab-title">🔬 Interactive Shadow Lab</div>
+
+              <!-- LIGHT BEAM -->
+
+              <div class="beam active" id="beam"></div>
+
+              <!-- RAYS -->
+
+              <div class="rays active" id="rays">
+                <div class="ray ray1"></div>
+
+                <div class="ray ray2"></div>
+
+                <div class="ray ray3"></div>
+              </div>
+
+              <!-- TORCH -->
+
+              <div class="torch" id="torch"></div>
+
+              <!-- OBJECT -->
+
+              <div class="object opaque" id="object">
+                <div class="object-label" id="objectLabel">OPAQUE</div>
+              </div>
+
+              <!-- GROUND SHADOW -->
+
+              <div class="shadow" id="shadow"></div>
+
+              <!-- SCREEN -->
+
+              <div class="screen opaque-screen" id="screen">
+                <div class="screen-text">SCREEN</div>
+
+                <div class="screen-light" id="screenLight"></div>
+
+                <div class="screen-shadow" id="screenShadow"></div>
+
+                <div class="screen-status" id="screenStatus">DARK SHADOW</div>
+              </div>
+
+              <div class="light-spot" id="lightSpot"></div>
+
+              <div class="table-top"></div>
+
+              <div class="table"></div>
+            </div>
+
+            <div class="observation" id="observation">
+              <strong>Observation:</strong>
+
+              Select an object and run the experiment. Watch the screen
+              carefully to see how much light passes through the object.
+            </div>
+          </div>
+
+          <!-- =====================================================
+     QUIZ
+===================================================== -->
+
+          <div class="card">
+            <h2>Shadow Scientist Quiz</h2>
+
+            <div class="quiz-progress" id="quizProgress">Question 1 of 10</div>
+
+            <p id="question">Which object will produce the darkest shadow?</p>
+
+            <div id="quizOptions">
+              <button class="quiz-option" onclick="answerQuiz(this, 0)">
+                🪟 Transparent glass
+              </button>
+
+              <button class="quiz-option" onclick="answerQuiz(this, 1)">
+                🧱 Opaque object
+              </button>
+
+              <button class="quiz-option" onclick="answerQuiz(this, 0)">
+                🧊 Translucent material
+              </button>
+
+              <button class="quiz-option" onclick="answerQuiz(this, 0)">
+                💧 Clear water
+              </button>
+            </div>
+
+            <div id="quizResult" class="quiz-result"></div>
+
+            <button
+              class="primary-btn next-question"
+              id="nextQuestion"
+              onclick="nextQuizQuestion()"
+            >
+              Next Question
+            </button>
+          </div>
+
+          <!-- =====================================================
+     TEACHER PANEL
+===================================================== -->
+
+          <div class="card teacher-panel" id="teacherPanel">
+            <h2>Teacher Control Room</h2>
+
+            <div class="challenge">
+              <strong> Current Classroom Challenge </strong>
+
+              <p id="teacherChallenge">
+                Ask students to predict what will happen when an opaque object
+                is placed between the torch and screen.
+              </p>
+            </div>
+
+            <button class="primary-btn" onclick="teacherChallenge()">
+              Give New Challenge
+            </button>
+
+            <button class="secondary-btn" onclick="teacherHint()">
+              Give Teacher Hint
+            </button>
+
+            <button class="secondary-btn" onclick="revealAnswer()">
+              Reveal Scientific Explanation
+            </button>
+
+            <button class="danger-btn" onclick="resetClass()">
+              Reset Classroom
+            </button>
+
+            <div class="observation" id="teacherFeedback">
+              Teacher feedback will appear here.
+            </div>
+          </div>
+        </div>
+
+        <!-- =====================================================
+     RIGHT PANEL
+===================================================== -->
+
+        <div>
+          <div class="card">
+            <div class="score-box">
+              <h3>🏆 Student Score</h3>
+
+              <div class="score" id="score">0</div>
+
+              <p>points</p>
+
+              <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>Badges</h2>
+
+            <div class="badges">
+              <div class="badge" id="badgeObserver">Observer</div>
+
+              <div class="badge" id="badgeScientist">Scientist</div>
+
+              <div class="badge" id="badgeExpert">Shadow Expert</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>What Did We Learn?</h2>
+
+            <ul style="padding-left: 20px; line-height: 1.8">
+              <li>Light travels in a straight line.</li>
+
+              <li>An opaque object blocks light.</li>
+
+              <li>A shadow forms when light is blocked.</li>
+
+              <li>Transparent objects allow most light through.</li>
+
+              <li>Translucent objects allow some light through.</li>
+
+              <li>The shadow can change when distances change.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h2>Scientist Tip</h2>
+
+            <p id="tip">
+              Try changing only one thing at a time. Then observe the screen
+              carefully.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      /* =====================================================
+   VARIABLES
+===================================================== */
+
+      let currentObject = "opaque";
+
+      let score = 0;
+
+      let experiments = 0;
+
+      let quizIndex = 0;
+
+      let quizAnswered = false;
+
+      let lightPathVisible = true;
+
+      /* =====================================================
+   QUIZ DATA
+===================================================== */
+
+      const quizQuestions = [
+        {
+          question:
+            "Which object produces the darkest shadow when placed between a torch and screen?",
+
+          options: [
+            "Transparent glass",
+            "Opaque object",
+            "Translucent plastic",
+            "Clear water",
+          ],
+
+          correct: 1,
+
+          explanation:
+            "An opaque object blocks light, so it produces the darkest shadow.",
+        },
+
+        {
+          question: "What happens when light falls on a transparent object?",
+
+          options: [
+            "Most light passes through",
+            "All light is blocked",
+            "A very dark shadow forms",
+            "The light disappears",
+          ],
+
+          correct: 0,
+
+          explanation:
+            "A transparent object allows most light to pass through it.",
+        },
+
+        {
+          question: "Why does a translucent object produce a lighter shadow?",
+
+          options: [
+            "It absorbs all light",
+            "It allows some light to pass through",
+            "It produces its own light",
+            "It blocks the screen",
+          ],
+
+          correct: 1,
+
+          explanation:
+            "A translucent object allows some light to pass through, so its shadow is lighter.",
+        },
+
+        {
+          question:
+            "What three things are needed for a shadow to form clearly?",
+
+          options: [
+            "Light source, object and screen",
+            "Only an object",
+            "Only a screen",
+            "Water, mirror and screen",
+          ],
+
+          correct: 0,
+
+          explanation:
+            "A clear shadow needs a light source, an object that blocks light, and a screen.",
+        },
+
+        {
+          question: "Which material blocks light completely?",
+
+          options: [
+            "Transparent material",
+            "Translucent material",
+            "Opaque material",
+            "Clean glass",
+          ],
+
+          correct: 2,
+
+          explanation:
+            "Opaque materials block light from passing through them.",
+        },
+
+        {
+          question:
+            "If the opaque object is made larger, what usually happens to its shadow on the screen?",
+
+          options: [
+            "It becomes smaller",
+            "It becomes larger",
+            "It disappears",
+            "It becomes transparent",
+          ],
+
+          correct: 1,
+
+          explanation:
+            "A larger object blocks a larger region of light, producing a larger shadow.",
+        },
+
+        {
+          question:
+            "What happens to the shadow when the torch is moved closer to the object?",
+
+          options: [
+            "It can become larger",
+            "It always disappears",
+            "It becomes completely transparent",
+            "It stops light from existing",
+          ],
+
+          correct: 0,
+
+          explanation:
+            "Moving the light source closer can make the projected shadow larger.",
+        },
+
+        {
+          question: "Which observation shows that an object is translucent?",
+
+          options: [
+            "No light passes through",
+            "Some light passes through",
+            "All light is blocked",
+            "The object produces light",
+          ],
+
+          correct: 1,
+
+          explanation:
+            "Translucent materials allow some light to pass through them.",
+        },
+
+        {
+          question: "What is the main reason a shadow appears on the screen?",
+
+          options: [
+            "The screen creates darkness",
+            "The object blocks light",
+            "The torch creates a black object",
+            "The screen absorbs the object",
+          ],
+
+          correct: 1,
+
+          explanation:
+            "A shadow appears because an object blocks light from reaching a region of the screen.",
+        },
+
+        {
+          question: "Which comparison is correct?",
+
+          options: [
+            "Opaque blocks most light, translucent allows some, transparent allows most",
+            "Opaque allows most light, transparent blocks all light",
+            "All three types block exactly the same amount of light",
+            "Transparent always produces the darkest shadow",
+          ],
+
+          correct: 0,
+
+          explanation:
+            "Opaque blocks light, translucent allows some light through, and transparent allows most light through.",
+        },
+      ];
+
+      /* =====================================================
+   SELECT OBJECT
+===================================================== */
+
+      function selectObject(type, button) {
+        currentObject = type;
+
+        document
+          .querySelectorAll(".object-btn")
+          .forEach((btn) => btn.classList.remove("active"));
+
+        button.classList.add("active");
+
+        const object = document.getElementById("object");
+
+        const screen = document.getElementById("screen");
+
+        const objectLabel = document.getElementById("objectLabel");
+
+        object.className = "object " + type;
+
+        screen.className = "screen " + type + "-screen";
+
+        objectLabel.innerText = type.toUpperCase();
+
+        if (type === "opaque") {
+          updateObservation(
+            "🧱 Opaque object selected. It blocks the light. Run the experiment and watch the screen for a dark shadow.",
+          );
+        } else if (type === "translucent") {
+          updateObservation(
+            "🧊 Translucent object selected. Some light can pass through it. Watch for a faint shadow on the screen.",
+          );
+        } else {
+          updateObservation(
+            "🪟 Transparent object selected. Most light passes through it. Look closely at the screen.",
+          );
+        }
+
+        updateScreen();
+      }
+
+      /* =====================================================
+   DISTANCE
+===================================================== */
+
+      function changeDistance(value) {
+        document.getElementById("distanceValue").innerText = value + " cm";
+
+        const torch = document.getElementById("torch");
+
+        const newPosition = 40 + (value - 20) * 2.3;
+
+        torch.style.left = Math.min(newPosition, 300) + "px";
+
+        updateScreen();
+      }
+
+      /* =====================================================
+   OBJECT SIZE
+===================================================== */
+
+      function changeSize(value) {
+        const object = document.getElementById("object");
+
+        if (value == 1) {
+          object.style.width = "55px";
+
+          object.style.height = "100px";
+
+          document.getElementById("sizeValue").innerText = "Small";
+        } else if (value == 2) {
+          object.style.width = "90px";
+
+          object.style.height = "150px";
+
+          document.getElementById("sizeValue").innerText = "Medium";
+        } else {
+          object.style.width = "125px";
+
+          object.style.height = "190px";
+
+          document.getElementById("sizeValue").innerText = "Large";
+        }
+
+        updateScreen();
+      }
+
+      /* =====================================================
+   SCREEN EFFECT
+===================================================== */
+
+      function updateScreen() {
+        const distance = Number(document.getElementById("distance").value);
+
+        const size = Number(document.getElementById("objectSize").value);
+
+        const shadow = document.getElementById("shadow");
+
+        const screenShadow = document.getElementById("screenShadow");
+
+        const screenLight = document.getElementById("screenLight");
+
+        const screenStatus = document.getElementById("screenStatus");
+
+        /*
+       Calculate projected shadow size.
+    */
+
+        let shadowWidth = 60 + size * 35;
+
+        let shadowHeight = 75 + size * 35;
+
+        /*
+       Closer torch = larger projection.
+    */
+
+        if (distance < 40) {
+          shadowWidth += 35;
+          shadowHeight += 35;
+        } else if (distance > 70) {
+          shadowWidth -= 15;
+          shadowHeight -= 15;
+        }
+
+        shadow.style.width = shadowWidth + "px";
+
+        shadow.style.height = "30px";
+
+        /*
+       Screen shadow.
+    */
+
+        screenShadow.style.width = Math.max(45, shadowWidth * 0.65) + "px";
+
+        screenShadow.style.height = Math.max(70, shadowHeight * 0.65) + "px";
+
+        if (currentObject === "opaque") {
+          screenShadow.style.opacity = ".85";
+
+          screenLight.style.background =
+            "radial-gradient(ellipse,rgba(250,204,21,.35),rgba(255,255,255,.2))";
+
+          screenStatus.innerText = "🌑 DARK SHADOW";
+        } else if (currentObject === "translucent") {
+          screenShadow.style.opacity = ".38";
+
+          screenLight.style.background =
+            "radial-gradient(ellipse,rgba(250,204,21,.55),rgba(255,255,255,.4))";
+
+          screenStatus.innerText = "🌥️ FAINT SHADOW";
+        } else {
+          screenShadow.style.opacity = ".05";
+
+          screenLight.style.background =
+            "radial-gradient(ellipse,rgba(250,204,21,.8),rgba(255,255,255,.65))";
+
+          screenStatus.innerText = "☀️ VERY LITTLE SHADOW";
+        }
+      }
+
+      /* =====================================================
+   RUN EXPERIMENT
+===================================================== */
+
+      function runExperiment() {
+        experiments++;
+
+        updateScreen();
+
+        const beam = document.getElementById("beam");
+
+        beam.classList.add("active");
+
+        let message = "";
+
+        if (currentObject === "opaque") {
+          message =
+            "🌑 <strong>Dark shadow observed!</strong><br><br>" +
+            "The opaque object is blocking the light. " +
+            "Look at the screen — a dark shadow is clearly visible.";
+
+          addScore(10);
+        } else if (currentObject === "translucent") {
+          message =
+            "🌥️ <strong>Faint shadow observed!</strong><br><br>" +
+            "Some light passes through the translucent object. " +
+            "Therefore, the shadow on the screen is lighter.";
+
+          addScore(10);
+        } else {
+          message =
+            "☀️ <strong>Very little shadow observed!</strong><br><br>" +
+            "Most light passes through the transparent object. " +
+            "The screen therefore remains bright.";
+
+          addScore(10);
+        }
+
+        updateObservation(message);
+
+        checkBadges();
+      }
+
+      /* =====================================================
+   OBSERVATION
+===================================================== */
+
+      function updateObservation(text) {
+        document.getElementById("observation").innerHTML =
+          "<strong>Observation:</strong> " + text;
+      }
+
+      /* =====================================================
+   SCORE
+===================================================== */
+
+      function addScore(points) {
+        score += points;
+
+        document.getElementById("score").innerText = score;
+
+        let progress = Math.min(score, 100);
+
+        document.getElementById("progress").style.width = progress + "%";
+      }
+
+      /* =====================================================
+   HINT
+===================================================== */
+
+      function giveHint() {
+        const hints = {
+          opaque:
+            "💡 Hint: Think about what happens when an object completely blocks the torch's light.",
+
+          translucent:
+            "💡 Hint: Some light can pass through this material. Think about whether the shadow should be dark or light.",
+
+          transparent:
+            "💡 Hint: Most of the light can pass through this material. Watch the brightness of the screen.",
+        };
+
+        updateObservation(hints[currentObject]);
+      }
+
+      /* =====================================================
+   LIGHT PATH
+===================================================== */
+
+      function toggleLightPath() {
+        lightPathVisible = !lightPathVisible;
+
+        const rays = document.getElementById("rays");
+
+        const beam = document.getElementById("beam");
+
+        if (lightPathVisible) {
+          rays.classList.add("active");
+
+          beam.style.opacity = ".8";
+
+          updateObservation(
+            "🔦 Light path is visible. Follow the yellow rays from the torch toward the object and screen.",
+          );
+        } else {
+          rays.classList.remove("active");
+
+          beam.style.opacity = "0";
+
+          updateObservation(
+            "🔦 Light path hidden. Turn it on again to observe how light travels.",
+          );
+        }
+      }
+
+      /* =====================================================
+   BADGES
+===================================================== */
+
+      function checkBadges() {
+        if (experiments >= 1) {
+          document.getElementById("badgeObserver").classList.add("earned");
+        }
+
+        if (experiments >= 3) {
+          document.getElementById("badgeScientist").classList.add("earned");
+        }
+
+        if (experiments >= 5) {
+          document.getElementById("badgeExpert").classList.add("earned");
+        }
+      }
+
+      /* =====================================================
+   QUIZ LOAD
+===================================================== */
+
+      function loadQuiz() {
+        const q = quizQuestions[quizIndex];
+
+        document.getElementById("question").innerText = q.question;
+
+        document.getElementById("quizProgress").innerText =
+          "Question " + (quizIndex + 1) + " of " + quizQuestions.length;
+
+        const container = document.getElementById("quizOptions");
+
+        container.innerHTML = "";
+
+        q.options.forEach((option, index) => {
+          const button = document.createElement("button");
+
+          button.className = "quiz-option";
+
+          button.innerText = option;
+
+          button.onclick = function () {
+            answerQuiz(button, index);
+          };
+
+          container.appendChild(button);
+        });
+
+        document.getElementById("quizResult").style.display = "none";
+
+        document.getElementById("nextQuestion").style.display = "none";
+
+        quizAnswered = false;
+      }
+
+      /* =====================================================
+   ANSWER QUIZ
+===================================================== */
+
+      function answerQuiz(button, index) {
+        if (quizAnswered) {
+          return;
+        }
+
+        quizAnswered = true;
+
+        const q = quizQuestions[quizIndex];
+
+        const result = document.getElementById("quizResult");
+
+        const buttons = document.querySelectorAll(".quiz-option");
+
+        buttons.forEach((btn, i) => {
+          if (i === q.correct) {
+            btn.classList.add("correct-answer");
+          }
+        });
+
+        result.style.display = "block";
+
+        if (index === q.correct) {
+          button.classList.add("correct-answer");
+
+          result.className = "quiz-result correct";
+
+          result.innerHTML = "🎉 <strong>Correct!</strong><br>" + q.explanation;
+
+          addScore(20);
+        } else {
+          button.classList.add("wrong-answer");
+
+          result.className = "quiz-result wrong";
+
+          result.innerHTML =
+            "❌ <strong>Not quite!</strong><br>" + q.explanation;
+        }
+
+        document.getElementById("nextQuestion").style.display = "block";
+
+        checkBadges();
+      }
+
+      /* =====================================================
+   NEXT QUESTION
+===================================================== */
+
+      function nextQuizQuestion() {
+        quizIndex++;
+
+        if (quizIndex >= quizQuestions.length) {
+          quizIndex = 0;
+
+          updateObservation(
+            "🏆 Quiz completed! You can start the quiz again and try to improve your score.",
+          );
+        }
+
+        loadQuiz();
+      }
+
+      /* =====================================================
+   STUDENT MODE
+===================================================== */
+
+      function showStudentMode() {
+        document.getElementById("teacherPanel").classList.remove("active");
+
+        updateObservation(
+          "👩‍🎓 <strong>Student Mode active!</strong> Make a prediction, perform experiments and answer the quiz.",
+        );
+      }
+
+      /* =====================================================
+   TEACHER MODE
+===================================================== */
+
+      function showTeacherMode() {
+        document.getElementById("teacherPanel").classList.add("active");
+
+        document.getElementById("teacherFeedback").innerHTML =
+          " <strong>Teacher Mode activated.</strong><br><br>" +
+          "You can give challenges, provide hints and reveal the scientific explanation.";
+      }
+
+      /* =====================================================
+   TEACHER CHALLENGE
+===================================================== */
+
+      function teacherChallenge() {
+        const challenges = [
+          "🧱 Ask students to predict the shadow produced by an opaque object before running the experiment.",
+
+          "🧊 Ask students to compare the shadow of an opaque and translucent object.",
+
+          "🪟 Ask students why the transparent object produces almost no visible shadow.",
+
+          "📏 Ask students to move the torch and observe how the shadow size changes.",
+
+          "📦 Ask students to make the object larger and predict what will happen to the shadow.",
+
+          "🔦 Ask students to trace the path of light from the torch to the screen.",
+
+          "👀 Ask students to observe the screen rather than only looking at the object.",
+
+          "🧪 Ask students to test all three materials and rank their shadows from darkest to lightest.",
+        ];
+
+        const random = Math.floor(Math.random() * challenges.length);
+
+        document.getElementById("teacherChallenge").innerText =
+          challenges[random];
+
+        document.getElementById("teacherFeedback").innerHTML =
+          "🎯 <strong>Challenge assigned!</strong><br><br>" +
+          "Ask the student to make a prediction before clicking Run Experiment.";
+      }
+
+      /* =====================================================
+   TEACHER HINT
+===================================================== */
+
+      function teacherHint() {
+        document.getElementById("teacherFeedback").innerHTML =
+          "💡 <strong>Teacher Hint:</strong><br><br>" +
+          "Ask the student:<br>" +
+          "1️⃣ Does the object block light?<br>" +
+          "2️⃣ How much light passes through it?<br>" +
+          "3️⃣ What happens to the brightness of the screen?<br>" +
+          "4️⃣ Is the shadow dark, faint or almost invisible?";
+      }
+
+      /* =====================================================
+   REVEAL ANSWER
+===================================================== */
+
+      function revealAnswer() {
+        document.getElementById("teacherFeedback").innerHTML =
+          "<strong>🔬 Scientific Explanation</strong><br><br>" +
+          "A shadow forms when an object blocks light from reaching a screen.<br><br>" +
+          "🧱 <strong>Opaque:</strong> Blocks light and produces a dark shadow.<br><br>" +
+          "🧊 <strong>Translucent:</strong> Allows some light through and produces a faint shadow.<br><br>" +
+          "🪟 <strong>Transparent:</strong> Allows most light through, so a clear shadow is usually not visible.<br><br>" +
+          "The amount of light passing through the object determines how dark the shadow appears.";
+      }
+
+      /* =====================================================
+   RESET LAB
+===================================================== */
+
+      function resetLab() {
+        currentObject = "opaque";
+
+        score = 0;
+
+        experiments = 0;
+
+        quizIndex = 0;
+
+        quizAnswered = false;
+
+        document.getElementById("score").innerText = "0";
+
+        document.getElementById("progress").style.width = "0%";
+
+        document.getElementById("distance").value = 50;
+
+        document.getElementById("objectSize").value = 2;
+
+        document.getElementById("distanceValue").innerText = "50 cm";
+
+        document.getElementById("sizeValue").innerText = "Medium";
+
+        document.getElementById("object").className = "object opaque";
+
+        document.getElementById("objectLabel").innerText = "OPAQUE";
+
+        document.getElementById("screen").className = "screen opaque-screen";
+
+        document
+          .querySelectorAll(".object-btn")
+          .forEach((btn) => btn.classList.remove("active"));
+
+        document.querySelector(".object-btn").classList.add("active");
+
+        document.getElementById("badgeObserver").classList.remove("earned");
+
+        document.getElementById("badgeScientist").classList.remove("earned");
+
+        document.getElementById("badgeExpert").classList.remove("earned");
+
+        updateObservation(
+          "🔄 Lab reset! Select an object, make a prediction and run a new experiment.",
+        );
+
+        updateScreen();
+
+        loadQuiz();
+      }
+
+      /* =====================================================
+   RESET CLASS
+===================================================== */
+
+      function resetClass() {
+        resetLab();
+
+        document.getElementById("teacherFeedback").innerHTML =
+          "🔄 Classroom activity has been reset.";
+      }
+
+      /* =====================================================
+   INITIAL SETUP
+===================================================== */
+
+      updateScreen();
+
+      loadQuiz();
+    </script>
+  </body>
+</html>
+```
