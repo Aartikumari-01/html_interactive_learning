@@ -1,0 +1,2830 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Simple Circuit Lab - Class VI Science</title>
+
+    <style>
+      /* =========================================================
+   GLOBAL
+========================================================= */
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Trebuchet MS", Arial, sans-serif;
+        min-height: 100vh;
+        color: #1e293b;
+
+        background:
+          radial-gradient(
+            circle at 10% 20%,
+            rgba(59, 130, 246, 0.15),
+            transparent 25%
+          ),
+          radial-gradient(
+            circle at 90% 10%,
+            rgba(168, 85, 247, 0.15),
+            transparent 25%
+          ),
+          radial-gradient(
+            circle at 50% 90%,
+            rgba(34, 197, 94, 0.12),
+            transparent 30%
+          ),
+          linear-gradient(135deg, #eff6ff, #f8fafc, #f5f3ff);
+
+        overflow-x: hidden;
+      }
+
+      /* =========================================================
+   FLOATING SCIENCE BACKGROUND
+========================================================= */
+
+      .science-particles {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+        z-index: -1;
+      }
+
+      .science-particles span {
+        position: absolute;
+        font-size: 25px;
+        opacity: 0.16;
+        animation: floatScience 12s infinite ease-in-out;
+      }
+
+      .science-particles span:nth-child(1) {
+        left: 5%;
+        top: 15%;
+      }
+
+      .science-particles span:nth-child(2) {
+        left: 18%;
+        top: 70%;
+        animation-delay: 2s;
+      }
+
+      .science-particles span:nth-child(3) {
+        left: 35%;
+        top: 20%;
+        animation-delay: 4s;
+      }
+
+      .science-particles span:nth-child(4) {
+        left: 55%;
+        top: 75%;
+        animation-delay: 1s;
+      }
+
+      .science-particles span:nth-child(5) {
+        left: 75%;
+        top: 25%;
+        animation-delay: 3s;
+      }
+
+      .science-particles span:nth-child(6) {
+        left: 90%;
+        top: 65%;
+        animation-delay: 5s;
+      }
+
+      .science-particles span:nth-child(7) {
+        left: 45%;
+        top: 50%;
+        animation-delay: 2s;
+      }
+
+      .science-particles span:nth-child(8) {
+        left: 82%;
+        top: 85%;
+        animation-delay: 4s;
+      }
+
+      @keyframes floatScience {
+        0%,
+        100% {
+          transform: translateY(0) rotate(0deg);
+        }
+
+        50% {
+          transform: translateY(-35px) rotate(15deg);
+        }
+      }
+
+      /* =========================================================
+   HEADER
+========================================================= */
+
+      header {
+        margin: 20px auto;
+        width: min(1200px, 94%);
+
+        padding: 28px 25px;
+
+        border-radius: 28px;
+
+        background: linear-gradient(135deg, #2563eb, #7c3aed, #9333ea);
+
+        color: white;
+
+        text-align: center;
+
+        box-shadow:
+          0 15px 35px rgba(37, 99, 235, 0.25),
+          inset 0 1px 0 rgba(255, 255, 255, 0.25);
+
+        position: relative;
+        overflow: hidden;
+      }
+
+      header::before {
+        content: "";
+        position: absolute;
+        width: 250px;
+        height: 250px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        left: -100px;
+        top: -100px;
+      }
+
+      header::after {
+        content: "";
+        position: absolute;
+        width: 180px;
+        height: 180px;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 50%;
+        right: -60px;
+        bottom: -80px;
+      }
+
+      header h1 {
+        font-size: clamp(30px, 5vw, 48px);
+        margin-bottom: 8px;
+        position: relative;
+        z-index: 1;
+
+        text-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+
+        animation: titleBounce 3s infinite ease-in-out;
+      }
+
+      header p {
+        font-size: 17px;
+        opacity: 0.95;
+        position: relative;
+        z-index: 1;
+      }
+
+      @keyframes titleBounce {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+
+        50% {
+          transform: translateY(-4px);
+        }
+      }
+
+      /* =========================================================
+   MODE BAR
+========================================================= */
+
+      .mode-bar {
+        width: min(1200px, 94%);
+        margin: 15px auto;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+
+        position: sticky;
+        top: 10px;
+        z-index: 100;
+      }
+
+      .mode-btn {
+        border: none;
+        padding: 12px 22px;
+
+        border-radius: 30px;
+
+        background: white;
+
+        color: #475569;
+
+        font-size: 15px;
+        font-weight: bold;
+
+        cursor: pointer;
+
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+
+        transition: all 0.3s ease;
+      }
+
+      .mode-btn:hover {
+        transform: translateY(-3px);
+      }
+
+      .mode-btn.active {
+        background: linear-gradient(135deg, #2563eb, #7c3aed);
+        color: white;
+
+        box-shadow: 0 7px 20px rgba(79, 70, 229, 0.35);
+      }
+
+      /* =========================================================
+   MAIN CONTAINER
+========================================================= */
+
+      .container {
+        width: min(1200px, 94%);
+        margin: auto;
+        padding-bottom: 50px;
+      }
+
+      /* =========================================================
+   CARDS
+========================================================= */
+
+      .card {
+        background: rgba(255, 255, 255, 0.88);
+
+        backdrop-filter: blur(12px);
+
+        border-radius: 24px;
+
+        padding: 24px;
+
+        margin: 20px 0;
+
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+
+        border: 1px solid rgba(255, 255, 255, 0.8);
+
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-3px);
+
+        box-shadow: 0 15px 35px rgba(15, 23, 42, 0.12);
+      }
+
+      .card h2 {
+        margin-bottom: 15px;
+
+        font-size: 23px;
+
+        color: #1e3a8a;
+      }
+
+      .card h3 {
+        margin-bottom: 10px;
+      }
+
+      /* =========================================================
+   MISSION
+========================================================= */
+
+      .mission {
+        display: flex;
+        gap: 18px;
+        align-items: center;
+
+        background: linear-gradient(135deg, #eff6ff, #f5f3ff);
+
+        border-left: 7px solid #2563eb;
+      }
+
+      .mission-icon {
+        width: 65px;
+        height: 65px;
+
+        min-width: 65px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 20px;
+
+        background: linear-gradient(135deg, #2563eb, #7c3aed);
+
+        font-size: 32px;
+
+        box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
+
+        animation: iconPulse 2s infinite;
+      }
+
+      @keyframes iconPulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+
+        50% {
+          transform: scale(1.08);
+        }
+      }
+
+      /* =========================================================
+   PROGRESS
+========================================================= */
+
+      .progress-container {
+        margin-top: 15px;
+      }
+
+      .progress-label {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+
+        font-weight: bold;
+      }
+
+      .progress-bar {
+        width: 100%;
+        height: 18px;
+
+        background: #e2e8f0;
+
+        border-radius: 20px;
+
+        overflow: hidden;
+
+        box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.08);
+      }
+
+      .progress-fill {
+        height: 100%;
+
+        width: 0%;
+
+        border-radius: 20px;
+
+        background: linear-gradient(90deg, #22c55e, #06b6d4, #3b82f6, #8b5cf6);
+
+        background-size: 200% 100%;
+
+        animation: progressFlow 3s linear infinite;
+
+        transition: width 0.6s ease;
+      }
+
+      @keyframes progressFlow {
+        0% {
+          background-position: 0% 50%;
+        }
+
+        100% {
+          background-position: 200% 50%;
+        }
+      }
+
+      /* =========================================================
+   SCORE
+========================================================= */
+
+      .score-panel {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 25px;
+
+        flex-wrap: wrap;
+      }
+
+      .score-box {
+        text-align: center;
+
+        padding: 18px 35px;
+
+        border-radius: 22px;
+
+        background: linear-gradient(135deg, #fff7ed, #fef3c7);
+
+        box-shadow: 0 8px 20px rgba(245, 158, 11, 0.15);
+      }
+
+      .score-number {
+        font-size: 38px;
+        font-weight: 900;
+
+        color: #ea580c;
+      }
+
+      .badge {
+        font-size: 45px;
+
+        animation: badgeFloat 2s infinite ease-in-out;
+      }
+
+      @keyframes badgeFloat {
+        0%,
+        100% {
+          transform: translateY(0) rotate(-5deg);
+        }
+
+        50% {
+          transform: translateY(-8px) rotate(5deg);
+        }
+      }
+
+      /* =========================================================
+   STEP BOXES
+========================================================= */
+
+      .steps {
+        display: grid;
+
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+
+        gap: 15px;
+      }
+
+      .step {
+        padding: 18px;
+
+        border-radius: 18px;
+
+        background: #f8fafc;
+
+        border: 2px solid transparent;
+
+        transition: all 0.3s ease;
+      }
+
+      .step:hover {
+        border-color: #60a5fa;
+
+        background: #eff6ff;
+
+        transform: translateY(-4px);
+      }
+
+      .step-number {
+        width: 38px;
+        height: 38px;
+
+        border-radius: 50%;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        background: linear-gradient(135deg, #2563eb, #7c3aed);
+
+        color: white;
+
+        font-weight: bold;
+
+        margin-bottom: 10px;
+      }
+
+      /* =========================================================
+   BUTTONS
+========================================================= */
+
+      button {
+        font-family: inherit;
+      }
+
+      .action-btn {
+        border: none;
+
+        padding: 13px 20px;
+
+        margin: 6px;
+
+        border-radius: 16px;
+
+        background: linear-gradient(135deg, #2563eb, #4f46e5);
+
+        color: white;
+
+        font-weight: bold;
+
+        cursor: pointer;
+
+        box-shadow: 0 7px 15px rgba(37, 99, 235, 0.22);
+
+        transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+
+      .action-btn:hover {
+        transform: translateY(-3px) scale(1.02);
+
+        box-shadow: 0 10px 22px rgba(37, 99, 235, 0.32);
+      }
+
+      .action-btn:active {
+        transform: scale(0.96);
+      }
+
+      .action-btn.green {
+        background: linear-gradient(135deg, #16a34a, #22c55e);
+      }
+
+      .action-btn.red {
+        background: linear-gradient(135deg, #dc2626, #f43f5e);
+      }
+
+      .action-btn.orange {
+        background: linear-gradient(135deg, #ea580c, #f59e0b);
+      }
+
+      .action-btn.purple {
+        background: linear-gradient(135deg, #7c3aed, #a855f7);
+      }
+
+      /* =========================================================
+   PREDICTION
+========================================================= */
+
+      .prediction-options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .prediction-option {
+        flex: 1;
+
+        min-width: 180px;
+
+        padding: 18px;
+
+        border: 2px solid #cbd5e1;
+
+        border-radius: 18px;
+
+        background: white;
+
+        cursor: pointer;
+
+        text-align: center;
+
+        font-weight: bold;
+
+        transition: all 0.3s ease;
+      }
+
+      .prediction-option:hover {
+        border-color: #3b82f6;
+
+        transform: translateY(-3px);
+
+        background: #eff6ff;
+      }
+
+      .prediction-option.selected {
+        border-color: #22c55e;
+
+        background: #dcfce7;
+
+        color: #166534;
+      }
+
+      /* =========================================================
+   CIRCUIT AREA
+========================================================= */
+
+      .circuit-area {
+        position: relative;
+
+        min-height: 470px;
+
+        margin-top: 20px;
+
+        border-radius: 25px;
+
+        overflow: hidden;
+
+        background: radial-gradient(circle at center, #ffffff, #eef2ff);
+
+        border: 3px dashed #c7d2fe;
+
+        box-shadow: inset 0 0 35px rgba(37, 99, 235, 0.06);
+      }
+
+      /* Decorative board dots */
+
+      .circuit-area::before {
+        content: "• • • • • • • • • • • • • • • • • • • •";
+
+        position: absolute;
+
+        top: 15px;
+        left: 20px;
+        right: 20px;
+
+        color: #c7d2fe;
+
+        letter-spacing: 14px;
+
+        pointer-events: none;
+      }
+
+      /* =========================================================
+   CIRCUIT COMPONENTS
+========================================================= */
+
+      .cell {
+        position: absolute;
+
+        left: 8%;
+        top: 42%;
+
+        width: 100px;
+        height: 80px;
+
+        background: linear-gradient(135deg, #475569, #1e293b);
+
+        border-radius: 16px;
+
+        color: white;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-weight: bold;
+
+        box-shadow: 0 10px 20px rgba(15, 23, 42, 0.25);
+
+        z-index: 3;
+      }
+
+      .cell::before {
+        content: "+";
+        position: absolute;
+
+        right: -8px;
+        top: 8px;
+
+        width: 20px;
+        height: 20px;
+
+        background: #ef4444;
+
+        border-radius: 50%;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        font-size: 13px;
+      }
+
+      .cell::after {
+        content: "−";
+        position: absolute;
+
+        left: -8px;
+        bottom: 8px;
+
+        width: 20px;
+        height: 20px;
+
+        background: #3b82f6;
+
+        border-radius: 50%;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        font-size: 13px;
+      }
+
+      /* =========================================================
+   SWITCH
+========================================================= */
+
+      .switch {
+        position: absolute;
+
+        left: 42%;
+        top: 42%;
+
+        width: 110px;
+        height: 75px;
+
+        background: white;
+
+        border-radius: 18px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.12);
+
+        border: 3px solid #94a3b8;
+
+        cursor: pointer;
+
+        z-index: 3;
+
+        transition: all 0.3s ease;
+      }
+
+      .switch:hover {
+        transform: scale(1.05);
+
+        border-color: #2563eb;
+      }
+
+      .switch-lever {
+        width: 65px;
+        height: 8px;
+
+        background: #64748b;
+
+        border-radius: 10px;
+
+        transform: rotate(-25deg);
+
+        transition: all 0.4s ease;
+      }
+
+      .switch.on {
+        background: #dcfce7;
+
+        border-color: #22c55e;
+      }
+
+      .switch.on .switch-lever {
+        transform: rotate(25deg);
+
+        background: #16a34a;
+      }
+
+      /* =========================================================
+   BULB
+========================================================= */
+
+      .bulb {
+        position: absolute;
+
+        right: 9%;
+        top: 38%;
+
+        width: 110px;
+        height: 120px;
+
+        z-index: 4;
+
+        display: flex;
+        flex-direction: column;
+
+        align-items: center;
+        justify-content: center;
+      }
+
+      .bulb-glass {
+        width: 75px;
+        height: 75px;
+
+        border-radius: 50% 50% 45% 45%;
+
+        background: radial-gradient(circle, #fef3c7, #fde68a);
+
+        border: 4px solid #f59e0b;
+
+        box-shadow: 0 5px 15px rgba(245, 158, 11, 0.2);
+
+        position: relative;
+
+        transition: all 0.4s ease;
+      }
+
+      .bulb-glass::before {
+        content: "";
+
+        position: absolute;
+
+        width: 28px;
+        height: 32px;
+
+        border-left: 4px solid #92400e;
+        border-right: 4px solid #92400e;
+
+        left: 20px;
+        top: 18px;
+
+        border-radius: 50%;
+      }
+
+      .bulb-base {
+        width: 42px;
+        height: 28px;
+
+        margin-top: -4px;
+
+        background: repeating-linear-gradient(
+          0deg,
+          #64748b 0px,
+          #64748b 4px,
+          #cbd5e1 4px,
+          #cbd5e1 7px
+        );
+
+        border-radius: 5px 5px 10px 10px;
+      }
+
+      .bulb.glowing .bulb-glass {
+        background: radial-gradient(circle, #ffffff, #fde047, #f59e0b);
+
+        box-shadow:
+          0 0 20px #fde047,
+          0 0 45px #facc15,
+          0 0 80px rgba(250, 204, 21, 0.7);
+
+        transform: scale(1.08);
+      }
+
+      .bulb.glowing::before {
+        content: "✨";
+
+        position: absolute;
+
+        font-size: 30px;
+
+        animation: sparkle 1s infinite;
+      }
+
+      @keyframes sparkle {
+        0%,
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+
+        50% {
+          transform: scale(1.3);
+          opacity: 0.6;
+        }
+      }
+
+      /* =========================================================
+   WIRES
+========================================================= */
+
+      .wire {
+        position: absolute;
+
+        height: 10px;
+
+        border-radius: 10px;
+
+        background: linear-gradient(90deg, #ef4444, #f97316);
+
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+
+        z-index: 2;
+
+        transition: all 0.3s ease;
+      }
+
+      .wire1 {
+        left: 15%;
+        top: 47%;
+        width: 28%;
+      }
+
+      .wire2 {
+        left: 52%;
+        top: 47%;
+        width: 31%;
+      }
+
+      .wire3 {
+        left: 13%;
+        top: 65%;
+        width: 73%;
+
+        background: linear-gradient(90deg, #3b82f6, #06b6d4);
+      }
+
+      .wire.active {
+        box-shadow:
+          0 0 8px #22c55e,
+          0 0 20px rgba(34, 197, 94, 0.5);
+
+        background: linear-gradient(90deg, #22c55e, #06b6d4);
+      }
+
+      .wire.wrong {
+        background: linear-gradient(90deg, #dc2626, #f43f5e);
+
+        animation: wireShake 0.35s infinite;
+      }
+
+      .wire.guide {
+        animation: guidePulse 1s infinite;
+      }
+
+      @keyframes wireShake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+
+        25% {
+          transform: translateX(-4px);
+        }
+
+        75% {
+          transform: translateX(4px);
+        }
+      }
+
+      @keyframes guidePulse {
+        0%,
+        100% {
+          opacity: 0.5;
+        }
+
+        50% {
+          opacity: 1;
+          box-shadow: 0 0 15px #facc15;
+        }
+      }
+
+      /* =========================================================
+   TERMINALS
+========================================================= */
+
+      .terminal {
+        position: absolute;
+
+        width: 18px;
+        height: 18px;
+
+        border-radius: 50%;
+
+        background: #334155;
+
+        border: 3px solid white;
+
+        z-index: 5;
+
+        animation: terminalPulse 2s infinite;
+      }
+
+      @keyframes terminalPulse {
+        0%,
+        100% {
+          box-shadow: 0 0 0 2px #334155;
+        }
+
+        50% {
+          box-shadow:
+            0 0 0 5px rgba(37, 99, 235, 0.15),
+            0 0 15px rgba(37, 99, 235, 0.3);
+        }
+      }
+
+      /* =========================================================
+   ELECTRONS
+========================================================= */
+
+      .electron {
+        position: absolute;
+
+        width: 13px;
+        height: 13px;
+
+        border-radius: 50%;
+
+        background: #fde047;
+
+        box-shadow:
+          0 0 10px #facc15,
+          0 0 20px #f59e0b;
+
+        z-index: 8;
+
+        display: none;
+      }
+
+      .electron.moving {
+        display: block;
+
+        animation: electronMove 2.2s linear infinite;
+      }
+
+      @keyframes electronMove {
+        0% {
+          left: 14%;
+          top: 65%;
+        }
+
+        25% {
+          left: 85%;
+          top: 65%;
+        }
+
+        50% {
+          left: 85%;
+          top: 47%;
+        }
+
+        75% {
+          left: 42%;
+          top: 47%;
+        }
+
+        100% {
+          left: 14%;
+          top: 65%;
+        }
+      }
+
+      /* =========================================================
+   CONNECTION GUIDE
+========================================================= */
+
+      .connection-guide {
+        display: grid;
+
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+
+        gap: 12px;
+
+        margin-top: 20px;
+      }
+
+      .guide-step {
+        padding: 16px;
+
+        background: #f8fafc;
+
+        border-radius: 16px;
+
+        border: 2px solid #e2e8f0;
+
+        text-align: center;
+
+        transition: all 0.3s ease;
+      }
+
+      .guide-step.active {
+        background: #eff6ff;
+
+        border-color: #3b82f6;
+
+        transform: translateY(-4px);
+
+        box-shadow: 0 8px 20px rgba(59, 130, 246, 0.15);
+      }
+
+      /* =========================================================
+   TEXT AREA
+========================================================= */
+
+      textarea {
+        width: 100%;
+
+        min-height: 110px;
+
+        resize: vertical;
+
+        padding: 15px;
+
+        border-radius: 16px;
+
+        border: 2px solid #cbd5e1;
+
+        font-family: inherit;
+
+        font-size: 15px;
+
+        outline: none;
+
+        transition: all 0.3s ease;
+      }
+
+      textarea:focus {
+        border-color: #6366f1;
+
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+      }
+
+      /* =========================================================
+   CHALLENGE
+========================================================= */
+
+      .challenge {
+        background: linear-gradient(135deg, #fff7ed, #fefce8);
+
+        border-left: 7px solid #f59e0b;
+      }
+
+      /* =========================================================
+   EXPERIMENTS
+========================================================= */
+
+      .experiment-grid {
+        display: grid;
+
+        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+
+        gap: 15px;
+      }
+
+      .experiment {
+        padding: 20px;
+
+        border-radius: 20px;
+
+        background: white;
+
+        border: 2px solid #e2e8f0;
+
+        transition: all 0.3s ease;
+      }
+
+      .experiment:hover {
+        transform: translateY(-5px);
+
+        border-color: #60a5fa;
+
+        box-shadow: 0 10px 25px rgba(37, 99, 235, 0.1);
+      }
+
+      .experiment-icon {
+        font-size: 35px;
+
+        margin-bottom: 10px;
+      }
+
+      /* =========================================================
+   QUIZ
+========================================================= */
+
+      .quiz-question {
+        padding: 20px;
+
+        margin-bottom: 18px;
+
+        border-radius: 18px;
+
+        background: #f8fafc;
+
+        border: 2px solid #e2e8f0;
+      }
+
+      .quiz-options {
+        display: grid;
+
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+
+        gap: 10px;
+
+        margin-top: 12px;
+      }
+
+      .quiz-option {
+        padding: 14px;
+
+        border-radius: 14px;
+
+        background: white;
+
+        border: 2px solid #cbd5e1;
+
+        cursor: pointer;
+
+        transition: all 0.25s ease;
+
+        font-weight: bold;
+      }
+
+      .quiz-option:hover {
+        transform: translateY(-2px);
+
+        border-color: #6366f1;
+
+        background: #eef2ff;
+      }
+
+      .quiz-option.correct {
+        background: #dcfce7;
+
+        border-color: #22c55e;
+
+        color: #166534;
+      }
+
+      .quiz-option.incorrect {
+        background: #fee2e2;
+
+        border-color: #ef4444;
+
+        color: #991b1b;
+      }
+
+      /* =========================================================
+   FEEDBACK
+========================================================= */
+
+      .feedback {
+        margin-top: 12px;
+
+        padding: 13px 16px;
+
+        border-radius: 14px;
+
+        display: none;
+
+        font-weight: bold;
+      }
+
+      .feedback.show {
+        display: block;
+
+        animation: feedbackPop 0.4s ease;
+      }
+
+      @keyframes feedbackPop {
+        from {
+          opacity: 0;
+          transform: scale(0.9);
+        }
+
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      .feedback.success {
+        background: #dcfce7;
+
+        color: #166534;
+      }
+
+      .feedback.error {
+        background: #fee2e2;
+
+        color: #991b1b;
+      }
+
+      /* =========================================================
+   TEACHER DASHBOARD
+========================================================= */
+
+      .teacher-dashboard {
+        display: none;
+      }
+
+      .teacher-grid {
+        display: grid;
+
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+
+        gap: 16px;
+      }
+
+      .teacher-box {
+        padding: 20px;
+
+        border-radius: 20px;
+
+        background: linear-gradient(135deg, #faf5ff, #eff6ff);
+
+        border: 2px solid #ddd6fe;
+      }
+
+      .teacher-box h3 {
+        color: #6d28d9;
+      }
+
+      /* =========================================================
+   MISTAKE MONITOR
+========================================================= */
+
+      .mistake-monitor {
+        background: #fff7ed;
+
+        border: 2px solid #fed7aa;
+      }
+
+      .mistake-count {
+        font-size: 38px;
+
+        font-weight: 900;
+
+        color: #ea580c;
+      }
+
+      /* =========================================================
+   HINT BOX
+========================================================= */
+
+      .hint-box {
+        padding: 15px;
+
+        margin-top: 12px;
+
+        border-radius: 15px;
+
+        background: #eff6ff;
+
+        color: #1e40af;
+
+        display: none;
+      }
+
+      .hint-box.show {
+        display: block;
+
+        animation: feedbackPop 0.4s ease;
+      }
+
+      /* =========================================================
+   FOOTER
+========================================================= */
+
+      footer {
+        text-align: center;
+
+        padding: 30px 15px;
+
+        color: #64748b;
+
+        font-size: 14px;
+      }
+
+      /* =========================================================
+   RESPONSIVE
+========================================================= */
+
+      @media (max-width: 700px) {
+        header {
+          margin-top: 10px;
+          padding: 22px 15px;
+        }
+
+        .card {
+          padding: 18px;
+        }
+
+        .circuit-area {
+          min-height: 520px;
+        }
+
+        .cell {
+          left: 5%;
+          top: 40%;
+          width: 75px;
+          height: 65px;
+          font-size: 12px;
+        }
+
+        .switch {
+          left: 38%;
+          top: 40%;
+          width: 85px;
+          height: 65px;
+        }
+
+        .bulb {
+          right: 4%;
+          top: 36%;
+          transform: scale(0.8);
+        }
+
+        .wire1 {
+          left: 12%;
+          width: 27%;
+        }
+
+        .wire2 {
+          left: 50%;
+          width: 32%;
+        }
+
+        .wire3 {
+          left: 10%;
+          width: 80%;
+          top: 64%;
+        }
+
+        .electron {
+          transform: scale(0.8);
+        }
+
+        .mode-bar {
+          top: 5px;
+        }
+
+        .score-panel {
+          gap: 12px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- =====================================================
+     FLOATING SCIENCE ICONS
+===================================================== -->
+
+    <div class="science-particles">
+      <span>⚡</span>
+      <span>🔬</span>
+      <span>✨</span>
+      <span>💡</span>
+      <span>🔋</span>
+      <span>⚙️</span>
+      <span>⭐</span>
+      <span>🧪</span>
+    </div>
+
+    <!-- =====================================================
+     HEADER
+===================================================== -->
+
+    <header>
+      <h1>🔬 Simple Circuit Lab</h1>
+
+      <p>
+        Class VI Science • How Things Work
+        <br />
+        Become a Young Electricity Scientist!
+      </p>
+    </header>
+
+    <!-- =====================================================
+     MODE BAR
+===================================================== -->
+
+    <div class="mode-bar">
+      <button
+        id="studentModeBtn"
+        class="mode-btn active"
+        onclick="showStudentMode()"
+      >
+        Student Mode
+      </button>
+
+      <button id="teacherModeBtn" class="mode-btn" onclick="showTeacherMode()">
+        Teacher Mode
+      </button>
+    </div>
+
+    <!-- =====================================================
+     MAIN CONTAINER
+===================================================== -->
+
+    <div class="container">
+      <!-- =====================================================
+     STUDENT CONTENT
+===================================================== -->
+
+      <div id="studentContent">
+        <!-- MISSION -->
+
+        <div class="card mission">
+          <div class="mission-icon">🎯</div>
+
+          <div>
+            <h2>Your Mission</h2>
+
+            <p>
+              Build a complete electric circuit and make the bulb glow! Connect
+              the cell, switch and bulb correctly.
+            </p>
+          </div>
+        </div>
+
+        <!-- PROGRESS -->
+
+        <div class="card">
+          <div class="progress-label">
+            <span> Mission Progress </span>
+
+            <span id="progressText"> 0% </span>
+          </div>
+
+          <div class="progress-bar">
+            <div id="progressFill" class="progress-fill"></div>
+          </div>
+        </div>
+
+        <!-- SCORE -->
+
+        <div class="card score-panel">
+          <div class="score-box">
+            <div>🏆 SCORE</div>
+
+            <div id="score" class="score-number">0</div>
+          </div>
+
+          <div>
+            <div id="badge" class="badge">🌱</div>
+
+            <strong id="badgeText"> Circuit Beginner </strong>
+          </div>
+        </div>
+
+        <!-- STEPS -->
+
+        <div class="card">
+          <h2>How to Build Your Circuit</h2>
+
+          <div class="steps">
+            <div class="step">
+              <div class="step-number">1</div>
+
+              <h3>Start with the Cell</h3>
+
+              <p>The cell provides electrical energy.</p>
+            </div>
+
+            <div class="step">
+              <div class="step-number">2</div>
+
+              <h3>Connect the Wires</h3>
+
+              <p>Wires provide a path for electric current.</p>
+            </div>
+
+            <div class="step">
+              <div class="step-number">3</div>
+
+              <h3>Use the Switch</h3>
+
+              <p>A closed switch completes the circuit.</p>
+            </div>
+
+            <div class="step">
+              <div class="step-number">4</div>
+
+              <h3>Light the Bulb</h3>
+
+              <p>Complete the circuit and watch the bulb glow!</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- DEMO -->
+
+        <div class="card">
+          <h2>Watch the Circuit Demo</h2>
+
+          <p>
+            Follow the glowing path to understand how electricity travels
+            through the circuit.
+          </p>
+
+          <br />
+
+          <button class="action-btn purple" onclick="startDemo()">
+            ▶ Start Demo
+          </button>
+
+          <div id="demoText" class="hint-box">
+            Watch carefully! Electricity needs a complete path.
+          </div>
+        </div>
+
+        <!-- PREDICTION -->
+
+        <div class="card">
+          <h2>Make Your Prediction</h2>
+
+          <p>What do you think will happen when we close the switch?</p>
+
+          <br />
+
+          <div class="prediction-options">
+            <div
+              class="prediction-option"
+              onclick="makePrediction(this, 'glow')"
+            >
+              The bulb will glow
+            </div>
+
+            <div
+              class="prediction-option"
+              onclick="makePrediction(this, 'notglow')"
+            >
+              The bulb will stay off
+            </div>
+
+            <div
+              class="prediction-option"
+              onclick="makePrediction(this, 'explode')"
+            >
+              The bulb will explode
+            </div>
+          </div>
+
+          <div id="predictionFeedback" class="feedback"></div>
+        </div>
+
+        <!-- CIRCUIT -->
+
+        <div class="card">
+          <h2>⚡ Build Your Circuit</h2>
+
+          <p>
+            Click the switch to open or close the circuit. Your goal is to make
+            the bulb glow.
+          </p>
+
+          <div class="circuit-area">
+            <!-- CELL -->
+
+            <div class="cell">🔋 CELL</div>
+
+            <!-- WIRES -->
+
+            <div id="wire1" class="wire wire1"></div>
+
+            <div id="wire2" class="wire wire2"></div>
+
+            <div id="wire3" class="wire wire3"></div>
+
+            <!-- SWITCH -->
+
+            <div id="switch" class="switch" onclick="toggleSwitch()">
+              <div id="switchLever" class="switch-lever"></div>
+            </div>
+
+            <!-- BULB -->
+
+            <div id="bulb" class="bulb">
+              <div class="bulb-glass"></div>
+
+              <div class="bulb-base"></div>
+            </div>
+
+            <!-- ELECTRON -->
+
+            <div id="electron" class="electron"></div>
+          </div>
+
+          <!-- CONNECTION GUIDE -->
+
+          <div class="connection-guide">
+            <div id="guide1" class="guide-step">
+              🔋
+              <br />
+              <strong>Cell</strong>
+              <br />
+              Energy source
+            </div>
+
+            <div id="guide2" class="guide-step">
+              🔌
+              <br />
+              <strong>Wire</strong>
+              <br />
+              Current path
+            </div>
+
+            <div id="guide3" class="guide-step">
+              🔘
+              <br />
+              <strong>Switch</strong>
+              <br />
+              Control
+            </div>
+
+            <div id="guide4" class="guide-step">
+              💡
+              <br />
+              <strong>Bulb</strong>
+              <br />
+              Uses energy
+            </div>
+          </div>
+
+          <br />
+
+          <button class="action-btn orange" onclick="showWrongConnection()">
+            Try Wrong Connection
+          </button>
+
+          <button class="action-btn green" onclick="fixCircuit()">
+            Fix Circuit
+          </button>
+
+          <button class="action-btn purple" onclick="showNextConnection()">
+            What Should I Connect Next?
+          </button>
+
+          <div id="connectionFeedback" class="feedback"></div>
+        </div>
+
+        <!-- THINK -->
+
+        <div class="card">
+          <h2>Think Like a Scientist</h2>
+
+          <p>Why does the bulb glow only when the switch is closed?</p>
+
+          <br />
+
+          <textarea
+            id="scientistAnswer"
+            placeholder="Write your scientific idea here..."
+          >
+          </textarea>
+
+          <br />
+
+          <button class="action-btn" onclick="checkScientistAnswer()">
+            Submit My Idea
+          </button>
+
+          <div id="scientistFeedback" class="feedback"></div>
+        </div>
+
+        <!-- CHALLENGE -->
+
+        <div class="card challenge">
+          <h2>Circuit Detective Challenge</h2>
+
+          <p>The bulb is not glowing! Find the problem.</p>
+
+          <br />
+
+          <button class="action-btn red" onclick="breakCircuit()">
+            Create a Problem
+          </button>
+
+          <button class="action-btn green" onclick="fixCircuit()">
+            Repair Circuit
+          </button>
+
+          <div id="challengeFeedback" class="feedback"></div>
+        </div>
+
+        <!-- EXPERIMENTS -->
+
+        <div class="card">
+          <h2>Extra Experiments</h2>
+
+          <div class="experiment-grid">
+            <div class="experiment">
+              <div class="experiment-icon">🔘</div>
+
+              <h3>Open Switch</h3>
+
+              <p>Open the switch and observe the bulb.</p>
+
+              <button class="action-btn" onclick="experimentOpenSwitch()">
+                Try It
+              </button>
+            </div>
+
+            <div class="experiment">
+              <div class="experiment-icon">💡</div>
+
+              <h3>Close Switch</h3>
+
+              <p>Close the switch and observe what changes.</p>
+
+              <button
+                class="action-btn green"
+                onclick="experimentCloseSwitch()"
+              >
+                Try It
+              </button>
+            </div>
+
+            <div class="experiment">
+              <div class="experiment-icon">🔌</div>
+
+              <h3>Remove a Wire</h3>
+
+              <p>Break the path and observe the result.</p>
+
+              <button class="action-btn red" onclick="experimentRemoveWire()">
+                Try It
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- QUIZ -->
+
+        <div class="card">
+          <h2>Electricity Quiz</h2>
+
+          <!-- Q1 -->
+
+          <div class="quiz-question">
+            <strong> 1. What provides energy in a simple circuit? </strong>
+
+            <div class="quiz-options">
+              <div class="quiz-option" onclick="answerQuiz(this, false)">
+                Bulb
+              </div>
+
+              <div class="quiz-option" onclick="answerQuiz(this, true)">
+                Cell
+              </div>
+
+              <div class="quiz-option" onclick="answerQuiz(this, false)">
+                Switch
+              </div>
+            </div>
+          </div>
+
+          <!-- Q2 -->
+
+          <div class="quiz-question">
+            <strong> 2. When does the bulb glow? </strong>
+
+            <div class="quiz-options">
+              <div class="quiz-option" onclick="answerQuiz(this, true)">
+                Complete circuit
+              </div>
+
+              <div class="quiz-option" onclick="answerQuiz(this, false)">
+                Broken circuit
+              </div>
+
+              <div class="quiz-option" onclick="answerQuiz(this, false)">
+                No wires
+              </div>
+            </div>
+          </div>
+
+          <!-- Q3 -->
+
+          <div class="quiz-question">
+            <strong> 3. What is the job of a switch? </strong>
+
+            <div class="quiz-options">
+              <div class="quiz-option" onclick="answerQuiz(this, false)">
+                Store energy
+              </div>
+
+              <div class="quiz-option" onclick="answerQuiz(this, true)">
+                Open or close the circuit
+              </div>
+
+              <div class="quiz-option" onclick="answerQuiz(this, false)">
+                Produce light
+              </div>
+            </div>
+          </div>
+
+          <!-- Q4 -->
+
+          <div class="quiz-question">
+            <strong> 4. What do wires provide? </strong>
+
+            <div class="quiz-options">
+              <div class="quiz-option" onclick="answerQuiz(this, true)">
+                A path for electric current
+              </div>
+
+              <div class="quiz-option" onclick="answerQuiz(this, false)">
+                Light
+              </div>
+
+              <div class="quiz-option" onclick="answerQuiz(this, false)">
+                Energy
+              </div>
+            </div>
+          </div>
+
+          <!-- Q5 -->
+
+          <div class="quiz-question">
+            <strong> 5. What happens when the circuit is broken? </strong>
+
+            <div class="quiz-options">
+              <div class="quiz-option" onclick="answerQuiz(this, false)">
+                Bulb becomes brighter
+              </div>
+
+              <div class="quiz-option" onclick="answerQuiz(this, true)">
+                Bulb goes off
+              </div>
+
+              <div class="quiz-option" onclick="answerQuiz(this, false)">
+                Battery disappears
+              </div>
+            </div>
+          </div>
+
+          <div id="quizFeedback" class="feedback"></div>
+        </div>
+
+        <!-- RESET -->
+
+        <div style="text-align: center">
+          <button class="action-btn red" onclick="resetLab()">
+            🔄 Reset Lab
+          </button>
+        </div>
+      </div>
+
+      <!-- =====================================================
+     TEACHER CONTENT
+===================================================== -->
+
+      <div id="teacherContent" class="teacher-dashboard">
+        <div class="card">
+          <h2>Teacher Dashboard</h2>
+
+          <p>Monitor student learning and guide the activity.</p>
+        </div>
+
+        <div class="teacher-grid">
+          <div class="teacher-box">
+            <h3>Learning Objectives</h3>
+
+            <br />
+
+            <p>• Identify parts of a simple circuit</p>
+
+            <p>• Understand open and closed circuits</p>
+
+            <p>• Explain why a bulb glows</p>
+          </div>
+
+          <div class="teacher-box">
+            <h3>Student Progress</h3>
+
+            <br />
+
+            <p>
+              Progress:
+              <strong id="teacherProgress"> 0% </strong>
+            </p>
+
+            <br />
+
+            <p>
+              Score:
+              <strong id="teacherScore"> 0 </strong>
+            </p>
+          </div>
+
+          <div class="teacher-box">
+            <h3>Teacher Help</h3>
+
+            <br />
+
+            <button class="action-btn" onclick="teacherHint()">
+              Give Hint
+            </button>
+
+            <button class="action-btn purple" onclick="teacherExplain()">
+              Explain
+            </button>
+
+            <button class="action-btn green" onclick="teacherEncourage()">
+              Encourage
+            </button>
+
+            <div id="teacherMessage" class="hint-box"></div>
+          </div>
+
+          <div class="teacher-box mistake-monitor">
+            <h3>Mistake Monitor</h3>
+
+            <br />
+
+            <div id="mistakeCount" class="mistake-count">0</div>
+
+            <p>mistakes detected</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Teacher Correction Tools</h2>
+
+          <button class="action-btn red" onclick="teacherCorrect()">
+            Correct Circuit
+          </button>
+
+          <button class="action-btn purple" onclick="teacherNextStep()">
+            Show Next Step
+          </button>
+
+          <div id="teacherCorrection" class="hint-box"></div>
+        </div>
+
+        <div class="card">
+          <h2>Answer Key</h2>
+
+          <div class="teacher-grid">
+            <div class="teacher-box">
+              <h3>Question 1</h3>
+
+              <p>Cell</p>
+            </div>
+
+            <div class="teacher-box">
+              <h3>Question 2</h3>
+
+              <p>Complete circuit</p>
+            </div>
+
+            <div class="teacher-box">
+              <h3>Question 3</h3>
+
+              <p>Switch opens/closes circuit</p>
+            </div>
+
+            <div class="teacher-box">
+              <h3>Question 4</h3>
+
+              <p>Wires provide a path</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      Simple Circuit Lab • Class VI Science
+
+      <br /><br />
+
+      Learn • Experiment • Discover • Have Fun!
+    </footer>
+
+    <!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+    <script>
+      /* =========================================================
+   VARIABLES
+========================================================= */
+
+      let switchOn = false;
+
+      let broken = false;
+
+      let score = 0;
+
+      let predictionDone = false;
+
+      let switchDone = false;
+
+      let challengeDone = false;
+
+      let quizDone = false;
+
+      let mistakes = 0;
+
+      let demoStep = 0;
+
+      let currentConnectionStep = 1;
+
+      /* =========================================================
+   ELEMENTS
+========================================================= */
+
+      const bulb = document.getElementById("bulb");
+
+      const switchElement = document.getElementById("switch");
+
+      const electron = document.getElementById("electron");
+
+      const wire1 = document.getElementById("wire1");
+
+      const wire2 = document.getElementById("wire2");
+
+      const wire3 = document.getElementById("wire3");
+
+      const scoreElement = document.getElementById("score");
+
+      const badge = document.getElementById("badge");
+
+      const badgeText = document.getElementById("badgeText");
+
+      const progressFill = document.getElementById("progressFill");
+
+      const progressText = document.getElementById("progressText");
+
+      /* =========================================================
+   UPDATE SCORE
+========================================================= */
+
+      function updateScore(points) {
+        score += points;
+
+        if (score < 0) {
+          score = 0;
+        }
+
+        scoreElement.textContent = score;
+
+        updateBadge();
+
+        updateProgress();
+
+        document.getElementById("teacherScore").textContent = score;
+      }
+
+      /* =========================================================
+   UPDATE BADGE
+========================================================= */
+
+      function updateBadge() {
+        if (score >= 50) {
+          badge.textContent = "🏆";
+
+          badgeText.textContent = "Master Circuit Scientist";
+        } else if (score >= 30) {
+          badge.textContent = "🥇";
+
+          badgeText.textContent = "Circuit Expert";
+        } else if (score >= 15) {
+          badge.textContent = "🥈";
+
+          badgeText.textContent = "Electricity Explorer";
+        } else if (score >= 5) {
+          badge.textContent = "🥉";
+
+          badgeText.textContent = "Young Scientist";
+        } else {
+          badge.textContent = "🌱";
+
+          badgeText.textContent = "Circuit Beginner";
+        }
+      }
+
+      /* =========================================================
+   PROGRESS
+========================================================= */
+
+      function updateProgress() {
+        let completed = 0;
+
+        if (predictionDone) completed++;
+
+        if (switchDone) completed++;
+
+        if (challengeDone) completed++;
+
+        if (quizDone) completed++;
+
+        if (score >= 15) completed++;
+
+        let progress = Math.min(100, completed * 20);
+
+        progressFill.style.width = progress + "%";
+
+        progressText.textContent = progress + "%";
+
+        document.getElementById("teacherProgress").textContent = progress + "%";
+      }
+
+      /* =========================================================
+   SWITCH
+========================================================= */
+
+      function toggleSwitch() {
+        if (broken) {
+          showFeedback(
+            "connectionFeedback",
+            "⚠️ The circuit is broken. Fix the wire first!",
+            false,
+          );
+
+          return;
+        }
+
+        switchOn = !switchOn;
+
+        switchElement.classList.toggle("on", switchOn);
+
+        if (switchOn) {
+          bulb.classList.add("glowing");
+
+          electron.classList.add("moving");
+
+          wire1.classList.add("active");
+          wire2.classList.add("active");
+          wire3.classList.add("active");
+
+          if (!switchDone) {
+            switchDone = true;
+
+            updateScore(10);
+
+            showFeedback(
+              "connectionFeedback",
+              "🎉 Amazing! You completed the circuit and made the bulb glow!",
+              true,
+            );
+          }
+        } else {
+          bulb.classList.remove("glowing");
+
+          electron.classList.remove("moving");
+
+          wire1.classList.remove("active");
+          wire2.classList.remove("active");
+          wire3.classList.remove("active");
+
+          showFeedback(
+            "connectionFeedback",
+            "💡 The switch is open. The path is broken, so the bulb is off.",
+            false,
+          );
+        }
+
+        updateProgress();
+      }
+
+      /* =========================================================
+   PREDICTION
+========================================================= */
+
+      function makePrediction(element, answer) {
+        document.querySelectorAll(".prediction-option").forEach((option) => {
+          option.classList.remove("selected");
+        });
+
+        element.classList.add("selected");
+
+        predictionDone = true;
+
+        if (answer === "glow") {
+          updateScore(5);
+
+          showFeedback(
+            "predictionFeedback",
+            "🎯 Correct prediction! A closed circuit allows current to flow and the bulb can glow.",
+            true,
+          );
+        } else {
+          showFeedback(
+            "predictionFeedback",
+            "💡 Think again! When the circuit is complete, the bulb can glow.",
+            false,
+          );
+        }
+
+        updateProgress();
+      }
+
+      /* =========================================================
+   WRONG CONNECTION
+========================================================= */
+
+      function showWrongConnection() {
+        broken = true;
+
+        switchOn = false;
+
+        bulb.classList.remove("glowing");
+
+        electron.classList.remove("moving");
+
+        switchElement.classList.remove("on");
+
+        wire1.classList.add("wrong");
+        wire2.classList.add("wrong");
+        wire3.classList.add("wrong");
+
+        mistakes++;
+
+        document.getElementById("mistakeCount").textContent = mistakes;
+
+        showFeedback(
+          "connectionFeedback",
+          "⚠️ Oops! Something is wrong with the connection. Can you fix it?",
+          false,
+        );
+      }
+
+      /* =========================================================
+   BREAK CIRCUIT
+========================================================= */
+
+      function breakCircuit() {
+        broken = true;
+
+        switchOn = false;
+
+        bulb.classList.remove("glowing");
+
+        electron.classList.remove("moving");
+
+        switchElement.classList.remove("on");
+
+        wire2.classList.add("wrong");
+
+        mistakes++;
+
+        document.getElementById("mistakeCount").textContent = mistakes;
+
+        showFeedback(
+          "challengeFeedback",
+          "🕵️ Detective alert! One wire is broken. Find and repair it.",
+          false,
+        );
+      }
+
+      /* =========================================================
+   FIX CIRCUIT
+========================================================= */
+
+      function fixCircuit() {
+        broken = false;
+
+        wire1.classList.remove("wrong");
+
+        wire2.classList.remove("wrong");
+
+        wire3.classList.remove("wrong");
+
+        wire2.classList.remove("guide");
+
+        showFeedback(
+          "connectionFeedback",
+          "🛠️ Great repair! The circuit path is complete again.",
+          true,
+        );
+
+        showFeedback(
+          "challengeFeedback",
+          "🎉 Excellent detective work! You repaired the circuit.",
+          true,
+        );
+
+        if (!challengeDone) {
+          challengeDone = true;
+
+          updateScore(10);
+        }
+
+        updateProgress();
+      }
+
+      /* =========================================================
+   SHOW NEXT CONNECTION
+========================================================= */
+
+      function showNextConnection() {
+        document.querySelectorAll(".guide-step").forEach((step) => {
+          step.classList.remove("active");
+        });
+
+        if (currentConnectionStep === 1) {
+          document.getElementById("guide1").classList.add("active");
+
+          showFeedback(
+            "connectionFeedback",
+            "🔋 Start with the cell. It provides electrical energy.",
+            true,
+          );
+
+          currentConnectionStep = 2;
+        } else if (currentConnectionStep === 2) {
+          document.getElementById("guide2").classList.add("active");
+
+          showFeedback(
+            "connectionFeedback",
+            "🔌 Next, make sure the wires form a complete path.",
+            true,
+          );
+
+          currentConnectionStep = 3;
+        } else if (currentConnectionStep === 3) {
+          document.getElementById("guide3").classList.add("active");
+
+          showFeedback(
+            "connectionFeedback",
+            "🔘 Now close the switch to complete the circuit.",
+            true,
+          );
+
+          currentConnectionStep = 4;
+        } else {
+          document.getElementById("guide4").classList.add("active");
+
+          showFeedback(
+            "connectionFeedback",
+            "💡 Finally, the bulb receives electrical energy and glows!",
+            true,
+          );
+
+          currentConnectionStep = 1;
+        }
+      }
+
+      /* =========================================================
+   SCIENTIST ANSWER
+========================================================= */
+
+      function checkScientistAnswer() {
+        const answer = document.getElementById("scientistAnswer").value.trim();
+
+        if (answer.length < 5) {
+          showFeedback(
+            "scientistFeedback",
+            "✏️ Write a little more about why the bulb glows.",
+            false,
+          );
+
+          return;
+        }
+
+        updateScore(5);
+
+        showFeedback(
+          "scientistFeedback",
+          "🔬 Excellent scientific thinking! A complete circuit provides a continuous path for electric current.",
+          true,
+        );
+      }
+
+      /* =========================================================
+   EXTRA EXPERIMENTS
+========================================================= */
+
+      function experimentOpenSwitch() {
+        broken = false;
+
+        switchOn = false;
+
+        switchElement.classList.remove("on");
+
+        bulb.classList.remove("glowing");
+
+        electron.classList.remove("moving");
+
+        showFeedback(
+          "connectionFeedback",
+          "🔘 The switch is open, so the circuit is incomplete and the bulb is off.",
+          false,
+        );
+      }
+
+      function experimentCloseSwitch() {
+        broken = false;
+
+        switchOn = true;
+
+        switchElement.classList.add("on");
+
+        bulb.classList.add("glowing");
+
+        electron.classList.add("moving");
+
+        wire1.classList.add("active");
+        wire2.classList.add("active");
+        wire3.classList.add("active");
+
+        showFeedback(
+          "connectionFeedback",
+          "💡 The switch is closed! The complete circuit allows current to flow.",
+          true,
+        );
+      }
+
+      function experimentRemoveWire() {
+        broken = true;
+
+        switchOn = false;
+
+        switchElement.classList.remove("on");
+
+        bulb.classList.remove("glowing");
+
+        electron.classList.remove("moving");
+
+        wire2.classList.add("wrong");
+
+        showFeedback(
+          "connectionFeedback",
+          "🔌 A wire is removed. The circuit is broken, so the bulb cannot glow.",
+          false,
+        );
+      }
+
+      /* =========================================================
+   QUIZ
+========================================================= */
+
+      let quizCorrect = 0;
+
+      function answerQuiz(element, correct) {
+        const question = element.closest(".quiz-question");
+
+        const options = question.querySelectorAll(".quiz-option");
+
+        options.forEach((option) => {
+          option.style.pointerEvents = "none";
+        });
+
+        if (correct) {
+          element.classList.add("correct");
+
+          quizCorrect++;
+
+          updateScore(3);
+
+          showFeedback(
+            "quizFeedback",
+            "🎉 Correct! Great job, scientist!",
+            true,
+          );
+        } else {
+          element.classList.add("incorrect");
+
+          showFeedback(
+            "quizFeedback",
+            "💡 Not quite. Think about how a complete circuit works.",
+            false,
+          );
+        }
+
+        if (quizCorrect >= 5) {
+          quizDone = true;
+
+          updateScore(5);
+
+          showFeedback(
+            "quizFeedback",
+            "🏆 AMAZING! You answered all quiz questions correctly!",
+            true,
+          );
+
+          updateProgress();
+        }
+      }
+
+      /* =========================================================
+   FEEDBACK
+========================================================= */
+
+      function showFeedback(id, message, success) {
+        const box = document.getElementById(id);
+
+        box.textContent = message;
+
+        box.className = "feedback show " + (success ? "success" : "error");
+      }
+
+      /* =========================================================
+   DEMO
+========================================================= */
+
+      function startDemo() {
+        const demoBox = document.getElementById("demoText");
+
+        demoBox.classList.add("show");
+
+        demoStep = 0;
+
+        const steps = [
+          "🔋 Step 1: The cell provides electrical energy.",
+
+          "🔌 Step 2: The wires provide a path for current.",
+
+          "🔘 Step 3: Closing the switch completes the path.",
+
+          "💡 Step 4: Current can flow and the bulb glows!",
+        ];
+
+        function nextDemo() {
+          if (demoStep >= steps.length) {
+            demoBox.textContent =
+              "🎉 Demo complete! Now try building the circuit yourself.";
+
+            return;
+          }
+
+          demoBox.textContent = steps[demoStep];
+
+          demoStep++;
+
+          setTimeout(nextDemo, 1700);
+        }
+
+        nextDemo();
+      }
+
+      /* =========================================================
+   TEACHER MODE
+========================================================= */
+
+      function showStudentMode() {
+        document.getElementById("studentContent").style.display = "block";
+
+        document.getElementById("teacherContent").style.display = "none";
+
+        document.getElementById("studentModeBtn").classList.add("active");
+
+        document.getElementById("teacherModeBtn").classList.remove("active");
+      }
+
+      function showTeacherMode() {
+        document.getElementById("studentContent").style.display = "none";
+
+        document.getElementById("teacherContent").style.display = "block";
+
+        document.getElementById("studentModeBtn").classList.remove("active");
+
+        document.getElementById("teacherModeBtn").classList.add("active");
+
+        document.getElementById("teacherScore").textContent = score;
+      }
+
+      /* =========================================================
+   TEACHER HELP
+========================================================= */
+
+      function teacherHint() {
+        const box = document.getElementById("teacherMessage");
+
+        box.textContent =
+          "💡 Hint: Ask the student whether electricity has a complete path from the cell through the bulb and back to the cell.";
+
+        box.classList.add("show");
+      }
+
+      function teacherExplain() {
+        const box = document.getElementById("teacherMessage");
+
+        box.textContent =
+          "📚 Explanation: A circuit must be complete for electric current to flow. Closing the switch completes the path.";
+
+        box.classList.add("show");
+      }
+
+      function teacherEncourage() {
+        const box = document.getElementById("teacherMessage");
+
+        box.textContent =
+          "🌟 Excellent work! Keep experimenting and explaining your observations like a scientist.";
+
+        box.classList.add("show");
+      }
+
+      function teacherCorrect() {
+        broken = false;
+
+        wire1.classList.remove("wrong");
+
+        wire2.classList.remove("wrong");
+
+        wire3.classList.remove("wrong");
+
+        const box = document.getElementById("teacherCorrection");
+
+        box.textContent =
+          "🔧 The circuit has been corrected. Ask the student to close the switch and observe the bulb.";
+
+        box.classList.add("show");
+      }
+
+      function teacherNextStep() {
+        const box = document.getElementById("teacherCorrection");
+
+        box.textContent =
+          "➡️ Next step: Close the switch and observe whether the bulb glows.";
+
+        box.classList.add("show");
+      }
+
+      /* =========================================================
+   RESET
+========================================================= */
+
+      function resetLab() {
+        switchOn = false;
+
+        broken = false;
+
+        score = 0;
+
+        predictionDone = false;
+
+        switchDone = false;
+
+        challengeDone = false;
+
+        quizDone = false;
+
+        mistakes = 0;
+
+        demoStep = 0;
+
+        currentConnectionStep = 1;
+
+        quizCorrect = 0;
+
+        /* Reset switch */
+
+        switchElement.classList.remove("on");
+
+        /* Reset bulb */
+
+        bulb.classList.remove("glowing");
+
+        /* Reset electron */
+
+        electron.classList.remove("moving");
+
+        /* Reset wires */
+
+        wire1.className = "wire wire1";
+
+        wire2.className = "wire wire2";
+
+        wire3.className = "wire wire3";
+
+        /* Reset prediction */
+
+        document.querySelectorAll(".prediction-option").forEach((option) => {
+          option.classList.remove("selected");
+        });
+
+        /* Reset quiz */
+
+        document.querySelectorAll(".quiz-option").forEach((option) => {
+          option.classList.remove("correct", "incorrect");
+
+          option.style.pointerEvents = "auto";
+        });
+
+        /* Reset guide */
+
+        document.querySelectorAll(".guide-step").forEach((step) => {
+          step.classList.remove("active");
+        });
+
+        /* Reset feedback */
+
+        document.querySelectorAll(".feedback").forEach((box) => {
+          box.className = "feedback";
+
+          box.textContent = "";
+        });
+
+        /* Reset score */
+
+        scoreElement.textContent = "0";
+
+        badge.textContent = "🌱";
+
+        badgeText.textContent = "Circuit Beginner";
+
+        progressFill.style.width = "0%";
+
+        progressText.textContent = "0%";
+
+        document.getElementById("mistakeCount").textContent = "0";
+
+        document.getElementById("teacherScore").textContent = "0";
+
+        document.getElementById("teacherProgress").textContent = "0%";
+
+        document.getElementById("scientistAnswer").value = "";
+
+        document.getElementById("demoText").classList.remove("show");
+      }
+
+      /* =========================================================
+   INITIALIZE
+========================================================= */
+
+      updateScore(0);
+
+      updateProgress();
+
+      showStudentMode();
+    </script>
+  </body>
+</html>

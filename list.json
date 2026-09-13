@@ -37,9 +37,9 @@
       "topic": "Food",
       "activity_name": "Test for Carbohydrates (Starch)",
       "activity_details": "Place bread slice, potato slice, and soaked chickpea seeds on separate plates. Add 2-3 drops of iodine solution. Observe blue-black color change indicating the presence of starch in bread and potato.",
-      "activity_path":[
+      "activity_path": [
         {
-          "label":"Test for Carbohydrates",
+          "label": "Test for Carbohydrates",
           "path": "activities/Test for Carbohydrates/index.html"
         }
       ]
@@ -329,7 +329,14 @@
       "subject": "Science",
       "topic": "How Things Work",
       "activity_name": "Make a Bulb Glow with a Simple Circuit",
-      "activity_details": "Connect a cell, bulb, and switch with wires. Close the switch to complete the circuit and make the bulb glow."
+      "activity_details": "Connect a cell, bulb, and switch with wires. Close the switch to complete the circuit and make the bulb glow.",
+      "activity_path": [
+        {
+          "label": "Interactive Circuit",
+
+          "path": "activities/simple-circuit/index.html"
+        }
+      ]
     },
     {
       "class": "VI",
@@ -621,9 +628,8 @@
         {
           "label": "Water_Holding_Capacity",
           "path": "activities/Water Holding Capacity/index.html"
-
         }
-     ]
+      ]
     },
     {
       "class": "VII",
@@ -729,7 +735,7 @@
       "activity_name": "Convex Lens Image",
       "activity_details": "Place a candle at different distances from a convex lens and obtain the image on a screen."
     },
-       {
+    {
       "class": "VII",
       "subject": "Science",
       "topic": "Light",
@@ -739,8 +745,8 @@
         {
           "label": "Colour_Disc",
           "path": "activities/Colour Disc/index.html"
-       }
-     ]
+        }
+      ]
     },
     {
       "class": "VII",
@@ -1499,9 +1505,9 @@
       "topic": "Number System",
       "activity_name": "Even and Odd Numbers",
       "activity_details": "Two children pick pebbles turn by turn. Check if any pebble is left after equal distribution.",
-      "activity_path":[
+      "activity_path": [
         {
-          "label":"Even and Odd Numbers",
+          "label": "Even and Odd Numbers",
           "path": "activities/Even and Odd/index.html"
         }
       ]
@@ -1547,7 +1553,7 @@
       "topic": "Data Handling",
       "activity_name": "Collect, Display and Interpret Data",
       "activity_details": "Students drop pebbles in boxes labelled with their favourite fruits. Count and tabulate the data.",
-       "activity_path": [
+      "activity_path": [
         {
           "label": "Data Handling",
           "path": "activities/Data Handling/index.html"
@@ -1588,10 +1594,10 @@
       "topic": "Geometry",
       "activity_name": "Identify 2-D Shapes in 3-D Shapes",
       "activity_details": "Trace the faces of 3D objects (chalk box, bottle cap, etc.) to identify 2D shapes.",
-      "activity_path":[
+      "activity_path": [
         {
-          "label":"2D-3D Shape",
-          "path":"activities/Identify 2-D Shape in 3-D Shape/index.html"
+          "label": "2D-3D Shape",
+          "path": "activities/Identify 2-D Shape in 3-D Shape/index.html"
         }
       ]
     },
