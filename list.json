@@ -100,11 +100,11 @@
       "activity_name": "Classification of Materials",
       "activity_details": "Test materials (wax, glass, sugar, leaf, coal, wood, coin, sponge) for hardness, solubility in water, float/sink, and transparency (using a dark spot on paper).",
       "activity_path": [
-    {
-      "label": "Classification of Materials",
-      "path": "activities/classification_of_material/index.html"
-    }
-  ]
+        {
+          "label": "Classification of Materials",
+          "path": "activities/classification_of_material/index.html"
+        }
+      ]
     },
     {
       "class": "VI",
@@ -393,25 +393,22 @@
     },
     {
       "class": "VI",
+
       "subject": "Science",
+
       "topic": "Natural Phenomena",
+
       "activity_name": "Study Shadow Formation",
+
       "activity_details": "Use a torch, opaque/translucent/transparent objects, and a screen. Observe the formation and nature of shadows.",
+
       "activity_path": [
-<<<<<<< HEAD
         {
           "label": "Interactive Shadow Formation",
+
           "path": "activities/shadow-formation/index.html"
         }
       ]
-=======
-    {
-      "label": "Light Detective Lab",
-      "path": "activities/light_detective_lab/index.html"
-    }
-  ]
-
->>>>>>> 4e18148c2d102f28a256dec47af107a3b6ca943a
     },
     {
       "class": "VI",
@@ -567,11 +564,11 @@
       "activity_name": "Testing with Indicators",
       "activity_details": "Test shampoo, lemon juice, vinegar, soap solution with litmus, turmeric, and china rose extract. Record colour changes to identify acidic/basic nature.",
       "activity_path": [
-    {
-      "label": "Testing with Indicators",
-      "path": "activities/Testing_with_Indicator/index.html"
-    }
-  ]
+        {
+          "label": "Testing with Indicators",
+          "path": "activities/Testing_with_Indicator/index.html"
+        }
+      ]
     },
     {
       "class": "VII",
@@ -588,10 +585,10 @@
       "activity_details": "Heat ice to melt it, then heat water to evaporate it. Condense water vapour on an inverted watch glass to get water back (physical changes).",
       "activity_path": [
         {
-            "label": "Ice Melting and Water Evaporation",
-            "path": "activities/Physical_and_Chemical_Changes/index.html"
+          "label": "Ice Melting and Water Evaporation",
+          "path": "activities/Physical_and_Chemical_Changes/index.html"
         }
-    ]
+      ]
     },
     {
       "class": "VII",
@@ -787,10 +784,10 @@
       "activity_details": "Place a candle at different distances from a convex lens and obtain the image on a screen.",
       "activity_path": [
         {
-        "label": "Convex Lens Image",
-        "path": "activities/Convex Lens Image/index.html"
+          "label": "Convex Lens Image",
+          "path": "activities/Convex Lens Image/index.html"
         }
-    ]
+      ]
     },
     {
       "class": "VII",
