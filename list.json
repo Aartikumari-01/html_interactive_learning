@@ -352,7 +352,7 @@
         {
           "label": "Interactive Circuit",
 
-          "path": "activities/Simple-circuit/index.html"
+          "path": "activities/simple-circuit/index.html"
         }
       ]
     },
@@ -393,20 +393,18 @@
     },
     {
       "class": "VI",
-
       "subject": "Science",
-
       "topic": "Natural Phenomena",
-
       "activity_name": "Study Shadow Formation",
-
       "activity_details": "Use a torch, opaque/translucent/transparent objects, and a screen. Observe the formation and nature of shadows.",
-
       "activity_path": [
         {
           "label": "Interactive Shadow Formation",
-
           "path": "activities/shadow-formation/index.html"
+        },
+        {
+          "label": "Light Detective Lab",
+          "path": "activities/light_detective_lab/index.html"
         }
       ]
     },
